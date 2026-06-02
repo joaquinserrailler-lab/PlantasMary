@@ -309,64 +309,6 @@ function SelectCard({
   )
 }
 
-function DeliveryMap() {
-  return (
-    <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-lime-50 to-teal-50 p-6 ring-1 ring-emerald-100">
-      <div className="absolute inset-0 opacity-60">
-        <div className="absolute left-10 top-12 h-[2px] w-64 rotate-12 bg-emerald-300" />
-        <div className="absolute left-24 top-40 h-[2px] w-80 -rotate-6 bg-emerald-300" />
-        <div className="absolute right-10 top-24 h-[2px] w-56 rotate-45 bg-emerald-300" />
-        <div className="absolute bottom-20 left-12 h-[2px] w-72 -rotate-12 bg-emerald-300" />
-        <div className="absolute bottom-32 right-8 h-[2px] w-64 rotate-12 bg-emerald-300" />
-      </div>
-
-      <div className="absolute left-[18%] top-[28%]">
-        <div className="relative">
-          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/20" />
-          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-xl shadow-emerald-700/30">
-            🏡
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute right-[18%] bottom-[24%]">
-        <div className="relative">
-          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/25" />
-          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-600 text-2xl text-white shadow-xl shadow-lime-700/25">
-            🚇
-          </div>
-        </div>
-      </div>
-
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 360" fill="none">
-        <path
-          d="M145 130 C220 90, 310 110, 365 165 C400 200, 445 225, 495 255"
-          stroke="#047857"
-          strokeWidth="5"
-          strokeLinecap="round"
-          strokeDasharray="10 12"
-        />
-      </svg>
-
-      <div className="absolute left-6 top-6 rounded-3xl bg-white/85 p-4 shadow-lg backdrop-blur">
-        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Zona de entrega</p>
-        <p className="mt-1 text-lg font-semibold text-emerald-950">Maipú</p>
-      </div>
-
-      <div className="absolute bottom-6 left-6 right-6 grid gap-3 md:grid-cols-2">
-        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
-          <p className="text-sm font-semibold text-emerald-950">Domicilio en Maipú</p>
-          <p className="mt-1 text-xs leading-5 text-zinc-600">Coordinamos horario por WhatsApp.</p>
-        </div>
-        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
-          <p className="text-sm font-semibold text-emerald-950">Metro Plaza Maipú</p>
-          <p className="mt-1 text-xs leading-5 text-zinc-600">Punto de encuentro disponible.</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function HomeView({ setView }: { setView: (view: View) => void }) {
   const featured = plants[0]
 
