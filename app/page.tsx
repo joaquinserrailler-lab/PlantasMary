@@ -1,307 +1,264 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { useMemo, useState } from "react"
 
-type Goal = "energia" | "dormir" | "relajar" | "digestion" | "concentracion" | "muscular" | "estres" | "habitos"
-type Risk = "menor" | "medicamentos" | "embarazo" | "alergias" | "cafeina" | "higado" | "rinon" | "tiroides" | "presion" | "digestivo" | "ninguna"
-type Evidence = "Alta" | "Media-Alta" | "Media" | "Baja-Media" | "Limitada"
+type View = "inicio" | "catalogo" | "recomendador" | "entrega" | "comprar"
+type Category = "Todas" | "Interior" | "Fácil cuidado" | "Regalo"
+type Light = "baja" | "media" | "alta"
+type Care = "facil" | "media"
+type UseCase = "principiante" | "decorar" | "regalo"
 
-type Source = {
-  label: string
-  url: string
-}
-
-type NaturalOption = {
+type Plant = {
   id: string
   name: string
-  category: string
+  price: string
+  category: Exclude<Category, "Todas">
+  short: string
   description: string
-  evidence: Evidence
-  goals: Partial<Record<Goal, number>>
-  bestFor: string[]
-  why: string
-  commonUse: string
-  safety: string
-  foodFirst?: string
-  alternatives: string[]
-  avoidIf?: Risk[]
-  cautionIf?: Risk[]
-  sources: Source[]
+  image: string
+  light: Light
+  water: "Bajo" | "Medio"
+  care: Care
+  petNote: string
+  bestFor: UseCase[]
+  tags: string[]
 }
 
-const goals: Array<{ id: Goal; title: string; subtitle: string; icon: string }> = [
-  { id: "energia", title: "Más energía", subtitle: "Cansancio, baja vitalidad o falta de ánimo.", icon: "⚡" },
-  { id: "dormir", title: "Dormir mejor", subtitle: "Conciliar el sueño o regular horarios.", icon: "🌙" },
-  { id: "relajar", title: "Relajarme", subtitle: "Bajar tensión o sentir más calma.", icon: "🍃" },
-  { id: "digestion", title: "Mejor digestión", subtitle: "Regularidad, náuseas leves o malestar digestivo.", icon: "🌿" },
-  { id: "concentracion", title: "Concentrarme", subtitle: "Foco, claridad mental y rutina.", icon: "🎯" },
-  { id: "muscular", title: "Molestia muscular", subtitle: "Apoyo general para recuperación y función muscular.", icon: "💪" },
-  { id: "estres", title: "Estrés", subtitle: "Apoyo suave para momentos de tensión.", icon: "🧘" },
-  { id: "habitos", title: "Hábitos saludables", subtitle: "Opciones simples para mejorar la rutina.", icon: "✨" },
-]
-
-const risks: Array<{ id: Risk; label: string; description: string }> = [
-  { id: "menor", label: "Soy menor de edad", description: "Suplementos y extractos requieren especial cuidado." },
-  { id: "medicamentos", label: "Tomo medicamentos", description: "Puede haber interacciones." },
-  { id: "embarazo", label: "Estoy embarazada o lactando", description: "Requiere orientación profesional." },
-  { id: "alergias", label: "Tengo alergias alimentarias o a plantas", description: "Algunas hierbas pueden causar reacciones." },
-  { id: "cafeina", label: "Evito cafeína", description: "Filtraremos opciones estimulantes." },
-  { id: "higado", label: "Tengo problemas de hígado", description: "Evitar extractos concentrados sin supervisión." },
-  { id: "rinon", label: "Tengo problemas de riñón", description: "Cuidado con minerales o suplementos." },
-  { id: "tiroides", label: "Tengo problemas de tiroides", description: "Algunos suplementos pueden no ser adecuados." },
-  { id: "presion", label: "Tengo presión alta", description: "Cuidado con estimulantes." },
-  { id: "digestivo", label: "Tengo sensibilidad digestiva", description: "Algunas opciones pueden irritar." },
-  { id: "ninguna", label: "Ninguna de las anteriores", description: "No tengo restricciones relevantes por ahora." },
-]
-
-const sources = {
-  ginger: { label: "NCCIH — Ginger", url: "https://www.nccih.nih.gov/health/ginger" },
-  magnesium: { label: "NIH ODS — Magnesium", url: "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/" },
-  melatonin: { label: "NCCIH — Melatonin", url: "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know" },
-  sleep: { label: "NCCIH — Sleep disorders", url: "https://www.nccih.nih.gov/health/sleep-disorders-and-complementary-health-approaches" },
-  chamomile: { label: "NCCIH — Chamomile", url: "https://www.nccih.nih.gov/health/chamomile" },
-  lavender: { label: "NCCIH — Lavender", url: "https://www.nccih.nih.gov/health/lavender" },
-  peppermint: { label: "NCCIH — Peppermint oil", url: "https://www.nccih.nih.gov/health/peppermint-oil" },
-  turmeric: { label: "NCCIH — Turmeric", url: "https://www.nccih.nih.gov/health/turmeric" },
-  greenTea: { label: "NCCIH — Green tea", url: "https://www.nccih.nih.gov/health/green-tea" },
-  caffeine: { label: "FDA — Caffeine", url: "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much" },
-  psyllium: { label: "MedlinePlus — Psyllium", url: "https://medlineplus.gov/druginfo/natural/866.html" },
-  omega3: { label: "NIH ODS — Omega-3", url: "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/" },
+const BRAND = {
+  name: "Plantas Mary",
+  instagramUser: "@plantasmary",
+  instagramUrl: "https://instagram.com/plantasmary",
+  whatsappNumber: "56912345678",
+  delivery: "Entregamos en nuestro domicilio en Maipú y también en Metro Plaza Maipú.",
 }
 
-const options: NaturalOption[] = [
+const categories: Category[] = ["Todas", "Interior", "Fácil cuidado", "Regalo"]
+
+const plants: Plant[] = [
   {
-    id: "ginger",
-    name: "Jengibre",
-    category: "Raíz / alimento funcional",
-    description: "Opción tradicionalmente usada para náuseas y digestión.",
-    evidence: "Media",
-    goals: { digestion: 10, habitos: 4 },
-    bestFor: ["Náuseas leves", "Digestión", "Malestar digestivo puntual"],
-    why: "El jengibre ha sido estudiado especialmente para náuseas. La evidencia es más razonable para ese uso que para promesas generales de energía.",
-    commonUse: "Suele usarse en comida, infusión o preparaciones simples. Esta app no entrega dosis médicas.",
-    foodFirst: "Prioriza su uso como alimento o infusión suave antes de pensar en suplementos concentrados.",
-    safety: "Precaución si tomas anticoagulantes, tienes cirugía próxima, embarazo, lactancia o sensibilidad digestiva.",
-    alternatives: ["Psyllium", "Menta", "Hidratación"],
-    cautionIf: ["medicamentos", "embarazo", "digestivo"],
-    sources: [sources.ginger],
+    id: "chiflera",
+    name: "Chiflera",
+    price: "$12.990",
+    category: "Interior",
+    short: "Frondosa, brillante y decorativa.",
+    description:
+      "Ideal para living, entrada o comedor con buena luz indirecta. Sus hojas verdes dan una sensación fresca y elegante.",
+    image: "/plantas/chiflera.webp",
+    light: "media",
+    water: "Medio",
+    care: "media",
+    petNote: "Mejor mantener fuera del alcance de mascotas curiosas.",
+    bestFor: ["decorar", "regalo"],
+    tags: ["Luz indirecta", "Decorativa", "Interior"],
   },
   {
-    id: "magnesium",
-    name: "Magnesio",
-    category: "Mineral",
-    description: "Mineral importante para función muscular y nerviosa.",
-    evidence: "Media",
-    goals: { muscular: 9, dormir: 6, relajar: 5, energia: 5, estres: 5, habitos: 6 },
-    bestFor: ["Función muscular", "Sistema nervioso", "Apoyo si la ingesta es baja"],
-    why: "Participa en procesos del cuerpo como función muscular y nerviosa. No significa que todo cansancio sea falta de magnesio.",
-    commonUse: "Se obtiene en alimentos como frutos secos, legumbres, semillas y verduras de hoja. Los suplementos requieren cuidado.",
-    foodFirst: "Primero revisa alimentos ricos en magnesio antes de usar suplementos.",
-    safety: "Los suplementos pueden causar molestias digestivas y no son ideales sin orientación si hay enfermedad renal o medicamentos.",
-    alternatives: ["Legumbres", "Semillas", "Verduras de hoja", "Rutina de sueño"],
-    cautionIf: ["rinon", "medicamentos", "digestivo", "menor"],
-    sources: [sources.magnesium],
+    id: "peperomia",
+    name: "Peperomia",
+    price: "$7.990",
+    category: "Fácil cuidado",
+    short: "Compacta, linda y fácil de mantener.",
+    description:
+      "Perfecta para escritorios, repisas y espacios pequeños. Buena opción para quienes buscan una planta simple y bonita.",
+    image: "/plantas/peperomia.webp",
+    light: "media",
+    water: "Bajo",
+    care: "facil",
+    petNote: "Buena opción para hogares tranquilos. Igual recomendamos evitar que mascotas muerdan plantas.",
+    bestFor: ["principiante", "decorar", "regalo"],
+    tags: ["Fácil", "Compacta", "Regalo"],
   },
   {
-    id: "melatonin",
-    name: "Melatonina",
-    category: "Hormona / suplemento",
-    description: "Puede apoyar el ajuste del ciclo de sueño en algunos casos.",
-    evidence: "Media",
-    goals: { dormir: 10 },
-    bestFor: ["Horario de sueño", "Jet lag", "Apoyo de corto plazo"],
-    why: "Puede tener utilidad para algunos problemas de horario de sueño, pero no debe tratarse como solución permanente.",
-    commonUse: "Se usa como suplemento en algunos países. Esta app no entrega dosis ni instrucciones médicas.",
-    safety: "Especial cuidado en menores de edad. La seguridad a largo plazo no está clara y los productos pueden variar en contenido.",
-    alternatives: ["Higiene del sueño", "Luz natural en la mañana", "Manzanilla"],
-    avoidIf: ["menor", "embarazo"],
-    cautionIf: ["medicamentos"],
-    sources: [sources.melatonin, sources.sleep],
-  },
-  {
-    id: "chamomile",
-    name: "Manzanilla",
-    category: "Infusión herbal",
-    description: "Opción suave asociada a relajación y calma.",
-    evidence: "Baja-Media",
-    goals: { relajar: 9, dormir: 6, estres: 7, digestion: 4, habitos: 5 },
-    bestFor: ["Relajación leve", "Rutina nocturna", "Infusión suave"],
-    why: "Se usa tradicionalmente para calma y sueño, aunque la evidencia clínica no es igual de fuerte que en tratamientos médicos.",
-    commonUse: "Suele usarse como infusión. Evita mezclar muchas hierbas si tienes alergias o tomas medicamentos.",
-    foodFirst: "Puede funcionar como parte de un ritual tranquilo: apagar pantallas, luz baja e infusión.",
-    safety: "Evitar si tienes alergia a plantas de la familia Asteraceae, como ambrosía o similares.",
-    alternatives: ["Lavanda", "Respiración", "Higiene del sueño"],
-    avoidIf: ["alergias"],
-    cautionIf: ["medicamentos", "embarazo"],
-    sources: [sources.chamomile],
-  },
-  {
-    id: "lavender",
-    name: "Lavanda",
-    category: "Planta aromática",
-    description: "Asociada a relajación y manejo suave de tensión.",
-    evidence: "Baja-Media",
-    goals: { relajar: 8, estres: 8, dormir: 5 },
-    bestFor: ["Relajación", "Ambiente de descanso", "Estrés leve"],
-    why: "Puede ayudar a crear un ambiente de relajación. La evidencia existe, pero tiene limitaciones según forma de uso.",
-    commonUse: "Puede usarse como aroma ambiental. No se recomienda ingerir aceites esenciales sin indicación profesional.",
-    safety: "Evita ingerir aceites esenciales. Precaución con piel sensible, alergias, embarazo o menores.",
-    alternatives: ["Manzanilla", "Respiración guiada", "Rutina de desconexión"],
-    cautionIf: ["alergias", "embarazo", "menor"],
-    sources: [sources.lavender],
-  },
-  {
-    id: "peppermint",
-    name: "Aceite de menta",
-    category: "Extracto herbal",
-    description: "Puede apoyar ciertos malestares digestivos en adultos.",
-    evidence: "Media",
-    goals: { digestion: 8 },
-    bestFor: ["Malestar tipo colon irritable en adultos", "Digestión específica"],
-    why: "Ha sido estudiado para síntomas digestivos tipo intestino irritable, pero no es para cualquier persona.",
-    commonUse: "Cuando se usa, suele ser en formulaciones específicas. No es lo mismo que consumir aceite esencial directo.",
-    safety: "Puede empeorar reflujo o acidez. No usar aceites esenciales de forma insegura.",
-    alternatives: ["Jengibre", "Psyllium", "Revisión de comidas gatillantes"],
-    avoidIf: ["digestivo", "menor"],
-    cautionIf: ["medicamentos", "embarazo"],
-    sources: [sources.peppermint],
-  },
-  {
-    id: "turmeric",
-    name: "Cúrcuma / curcumina",
-    category: "Especia / extracto",
-    description: "Puede apoyar molestias inflamatorias leves, con evidencia moderada/limitada.",
-    evidence: "Baja-Media",
-    goals: { muscular: 7, habitos: 4 },
-    bestFor: ["Molestia articular leve", "Alimentación antiinflamatoria general"],
-    why: "Es popular, pero no debe venderse como cura. Puede ser más razonable como parte de alimentación que como promesa de suplemento.",
-    commonUse: "Suele usarse como especia en comida. Los extractos concentrados requieren más cuidado.",
-    foodFirst: "Úsala como alimento/especia antes de pensar en cápsulas o extractos.",
-    safety: "Precaución con problemas hepáticos, medicamentos, anticoagulantes o molestias digestivas.",
-    alternatives: ["Omega-3", "Descanso", "Actividad física suave"],
-    cautionIf: ["higado", "medicamentos", "digestivo", "embarazo"],
-    sources: [sources.turmeric],
-  },
-  {
-    id: "green-tea",
-    name: "Té verde",
-    category: "Bebida con cafeína",
-    description: "Puede apoyar alerta suave por su contenido de cafeína.",
-    evidence: "Media",
-    goals: { energia: 9, concentracion: 8, habitos: 4 },
-    bestFor: ["Alerta suave", "Concentración puntual", "Rutina matinal"],
-    why: "Puede ayudar a la alerta por cafeína. No aumenta mágicamente el ATP ni reemplaza sueño, comida o hidratación.",
-    commonUse: "Suele tomarse como bebida. Evitar exceso, especialmente si afecta sueño o ansiedad.",
-    safety: "Contiene cafeína. Precaución en menores, ansiedad, presión alta, problemas de sueño o sensibilidad a cafeína.",
-    alternatives: ["Luz natural", "Agua", "Pausa activa", "Sueño suficiente"],
-    avoidIf: ["cafeina", "presion", "menor"],
-    cautionIf: ["medicamentos", "higado"],
-    sources: [sources.greenTea, sources.caffeine],
-  },
-  {
-    id: "psyllium",
-    name: "Psyllium / fibra soluble",
-    category: "Fibra soluble",
-    description: "Apoyo para regularidad intestinal.",
-    evidence: "Media-Alta",
-    goals: { digestion: 9, habitos: 5 },
-    bestFor: ["Estreñimiento", "Regularidad digestiva", "Fibra diaria"],
-    why: "La fibra soluble puede ayudar a la regularidad intestinal. Debe usarse con suficiente agua.",
-    commonUse: "Suele mezclarse con líquido o alimentos, siguiendo indicaciones del producto o profesional.",
-    foodFirst: "También puedes aumentar fibra con avena, frutas, verduras, legumbres y agua.",
-    safety: "Debe tomarse con suficiente agua. Puede interferir con algunos medicamentos si se toma al mismo tiempo.",
-    alternatives: ["Avena", "Frutas", "Verduras", "Agua"],
-    cautionIf: ["medicamentos", "digestivo"],
-    sources: [sources.psyllium],
-  },
-  {
-    id: "omega3",
-    name: "Omega-3",
-    category: "Grasa esencial",
-    description: "Apoyo nutricional para salud cardiovascular y dieta general.",
-    evidence: "Media",
-    goals: { habitos: 8, concentracion: 4, muscular: 4, energia: 3 },
-    bestFor: ["Salud cardiovascular", "Nutrición general", "Dieta equilibrada"],
-    why: "Es más razonable verlo como parte de alimentación saludable que como solución rápida para energía o concentración.",
-    commonUse: "Puede venir de pescados grasos o suplementos. Esta app prioriza alimentación primero.",
-    foodFirst: "Considera fuentes alimentarias como pescados grasos, nueces o semillas según tu dieta.",
-    safety: "Precaución con anticoagulantes, cirugía próxima o suplementos de dosis alta.",
-    alternatives: ["Pescados grasos", "Semillas", "Frutos secos", "Dieta equilibrada"],
-    cautionIf: ["medicamentos", "embarazo"],
-    sources: [sources.omega3],
+    id: "sansevieria",
+    name: "Sansevieria",
+    price: "$9.990",
+    category: "Fácil cuidado",
+    short: "Resistente, moderna y de bajo riego.",
+    description:
+      "Una de las mejores plantas para empezar. Tolera más descuidos y se ve muy bien en espacios modernos.",
+    image: "/plantas/sansevieria.webp",
+    light: "baja",
+    water: "Bajo",
+    care: "facil",
+    petNote: "No ideal si tu mascota suele morder plantas. Mantener en altura o zona segura.",
+    bestFor: ["principiante", "decorar", "regalo"],
+    tags: ["Muy resistente", "Poca luz", "Bajo riego"],
   },
 ]
 
-function evidenceStyle(evidence: Evidence) {
-  const map: Record<Evidence, string> = {
-    Alta: "bg-emerald-50 text-emerald-700 ring-emerald-100",
-    "Media-Alta": "bg-teal-50 text-teal-700 ring-teal-100",
-    Media: "bg-blue-50 text-blue-700 ring-blue-100",
-    "Baja-Media": "bg-amber-50 text-amber-700 ring-amber-100",
-    Limitada: "bg-zinc-100 text-zinc-700 ring-zinc-200",
-  }
-
-  return map[evidence]
+function whatsappLink(plant?: Plant) {
+  const message = plant
+    ? `Hola, quiero consultar por la planta ${plant.name} de Plantas Mary. ¿Hay stock disponible?`
+    : "Hola, quiero consultar por las plantas disponibles de Plantas Mary."
+  return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`
 }
 
-function goalTitle(goal: Goal | null) {
-  if (!goal) return "Selecciona un objetivo"
-  return goals.find((item) => item.id === goal)?.title ?? "Objetivo"
+function lightLabel(light: Light) {
+  if (light === "baja") return "Poca luz"
+  if (light === "media") return "Luz indirecta"
+  return "Mucha luz"
 }
 
-function getRiskWarnings(option: NaturalOption, selectedRisks: Risk[]) {
-  const warnings: string[] = []
-
-  for (const risk of selectedRisks) {
-    if (risk === "ninguna") continue
-    if (option.avoidIf?.includes(risk)) warnings.push("No aparece como primera opción por una precaución seleccionada.")
-    if (option.cautionIf?.includes(risk)) warnings.push("Requiere revisión adicional por una condición o restricción seleccionada.")
-  }
-
-  return Array.from(new Set(warnings))
+function careLabel(care: Care) {
+  return care === "facil" ? "Fácil" : "Cuidado medio"
 }
 
-function scoreOption(option: NaturalOption, goal: Goal, selectedRisks: Risk[]) {
-  let score = option.goals[goal] ?? 0
+function normalize(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+}
 
-  for (const risk of selectedRisks) {
-    if (risk === "ninguna") continue
-    if (option.avoidIf?.includes(risk)) score -= 6
-    if (option.cautionIf?.includes(risk)) score -= 2
-  }
+function scorePlant(plant: Plant, light: Light, care: Care, useCase: UseCase, hasPets: boolean) {
+  let score = 0
 
-  if (selectedRisks.includes("menor")) {
-    if (option.category.toLowerCase().includes("suplemento")) score -= 4
-    if (option.name.includes("Melatonina")) score -= 8
-    if (option.name.includes("Té verde")) score -= 4
-  }
+  if (plant.light === light) score += 5
+  if (plant.care === care) score += 4
+  if (plant.bestFor.includes(useCase)) score += 5
+  if (light === "baja" && plant.light === "media") score += 1
+  if (care === "facil" && plant.care === "media") score -= 2
+  if (hasPets && plant.petNote.toLowerCase().includes("no ideal")) score -= 2
 
   return score
 }
 
-function getRecommendations(goal: Goal | null, selectedRisks: Risk[]) {
-  if (!goal) return []
+function Button({
+  children,
+  onClick,
+  href,
+  variant = "dark",
+  className = "",
+}: {
+  children: ReactNode
+  onClick?: () => void
+  href?: string
+  variant?: "dark" | "light" | "green"
+  className?: string
+}) {
+  const variants = {
+    dark: "bg-emerald-950 text-white hover:bg-emerald-900 shadow-lg shadow-emerald-950/10",
+    light: "bg-white text-emerald-950 hover:bg-emerald-50 ring-1 ring-emerald-100 shadow-sm",
+    green: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20",
+  }
 
-  return options
-    .map((option) => ({
-      option,
-      score: scoreOption(option, goal, selectedRisks),
-      warnings: getRiskWarnings(option, selectedRisks),
-    }))
-    .filter((item) => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
+  const classes = `inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition active:scale-[0.98] ${variants[variant]} ${className}`
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel={href.startsWith("http") ? "noreferrer" : undefined}
+        className={classes}
+      >
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <button onClick={onClick} className={classes}>
+      {children}
+    </button>
+  )
 }
 
-function ToggleCard({
+function NavButton({
   active,
-  icon,
+  children,
+  onClick,
+}: {
+  active: boolean
+  children: ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={[
+        "rounded-full px-4 py-2 text-sm font-semibold transition",
+        active ? "bg-emerald-950 text-white" : "text-zinc-600 hover:bg-white hover:text-emerald-950",
+      ].join(" ")}
+    >
+      {children}
+    </button>
+  )
+}
+
+function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean }) {
+  return (
+    <article className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-200/60">
+      <div className={compact ? "relative h-52 overflow-hidden" : "relative h-64 overflow-hidden"}>
+        <img src={plant.image} alt={plant.name} className="h-full w-full object-cover" />
+        <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
+          {plant.category}
+        </div>
+        <div className="absolute right-4 top-4 rounded-full bg-emerald-950 px-3 py-1 text-sm font-semibold text-white shadow-sm">
+          {plant.price}
+        </div>
+      </div>
+
+      <div className={compact ? "p-5" : "p-6"}>
+        <h3 className="text-xl font-semibold tracking-tight text-zinc-950">{plant.name}</h3>
+        <p className="mt-1 text-sm text-zinc-500">{plant.short}</p>
+        {!compact && <p className="mt-4 text-sm leading-6 text-zinc-600">{plant.description}</p>}
+
+        <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-2xl bg-emerald-50 p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Luz</p>
+            <p className="mt-1 text-xs font-semibold text-emerald-950">{lightLabel(plant.light)}</p>
+          </div>
+          <div className="rounded-2xl bg-emerald-50 p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Riego</p>
+            <p className="mt-1 text-xs font-semibold text-emerald-950">{plant.water}</p>
+          </div>
+          <div className="rounded-2xl bg-emerald-50 p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Cuidado</p>
+            <p className="mt-1 text-xs font-semibold text-emerald-950">{careLabel(plant.care)}</p>
+          </div>
+        </div>
+
+        {!compact && (
+          <>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {plant.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-lime-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-lime-100"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-5 rounded-2xl bg-zinc-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Mascotas</p>
+              <p className="mt-1 text-sm leading-6 text-zinc-600">{plant.petNote}</p>
+            </div>
+          </>
+        )}
+
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <Button href={whatsappLink(plant)} variant="green" className="w-full">
+            Consultar
+          </Button>
+          <Button href={BRAND.instagramUrl} variant="light" className="w-full">
+            Instagram
+          </Button>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function SelectCard({
+  active,
   title,
   subtitle,
   onClick,
 }: {
   active: boolean
-  icon: string
   title: string
   subtitle: string
   onClick: () => void
@@ -310,439 +267,466 @@ function ToggleCard({
     <button
       onClick={onClick}
       className={[
-        "group rounded-[1.6rem] border p-5 text-left transition-all duration-200",
+        "rounded-[1.4rem] border p-4 text-left transition",
         active
-          ? "border-zinc-950 bg-zinc-950 text-white shadow-xl shadow-zinc-300"
-          : "border-zinc-200 bg-white text-zinc-950 shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-200",
+          ? "border-emerald-800 bg-emerald-950 text-white shadow-xl shadow-emerald-200"
+          : "border-emerald-100 bg-white text-zinc-950 hover:bg-emerald-50",
       ].join(" ")}
     >
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-100 text-xl group-hover:scale-105">{icon}</div>
-      <h3 className="text-base font-semibold">{title}</h3>
-      <p className={["mt-2 text-sm leading-6", active ? "text-zinc-300" : "text-zinc-500"].join(" ")}>{subtitle}</p>
+      <p className="text-sm font-semibold">{title}</p>
+      <p className={["mt-1 text-xs leading-5", active ? "text-emerald-100" : "text-zinc-500"].join(" ")}>
+        {subtitle}
+      </p>
     </button>
   )
 }
 
-function StepPill({ number, label, active }: { number: number; label: string; active: boolean }) {
+function DeliveryMap() {
   return (
-    <div className={["flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold transition", active ? "bg-zinc-950 text-white" : "bg-white text-zinc-500 ring-1 ring-zinc-200"].join(" ")}>
-      <span className={["flex h-5 w-5 items-center justify-center rounded-full text-[11px]", active ? "bg-white text-zinc-950" : "bg-zinc-100 text-zinc-500"].join(" ")}>
-        {number}
-      </span>
-      {label}
+    <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-lime-50 to-teal-50 p-6 ring-1 ring-emerald-100">
+      <div className="absolute inset-0 opacity-60">
+        <div className="absolute left-10 top-12 h-[2px] w-64 rotate-12 bg-emerald-300" />
+        <div className="absolute left-24 top-40 h-[2px] w-80 -rotate-6 bg-emerald-300" />
+        <div className="absolute right-10 top-24 h-[2px] w-56 rotate-45 bg-emerald-300" />
+        <div className="absolute bottom-20 left-12 h-[2px] w-72 -rotate-12 bg-emerald-300" />
+        <div className="absolute bottom-32 right-8 h-[2px] w-64 rotate-12 bg-emerald-300" />
+      </div>
+
+      <div className="absolute left-[18%] top-[28%]">
+        <div className="relative">
+          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/20" />
+          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-xl shadow-emerald-700/30">
+            🏡
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute right-[18%] bottom-[24%]">
+        <div className="relative">
+          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/25" />
+          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-600 text-2xl text-white shadow-xl shadow-lime-700/25">
+            🚇
+          </div>
+        </div>
+      </div>
+
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 360" fill="none">
+        <path
+          d="M145 130 C220 90, 310 110, 365 165 C400 200, 445 225, 495 255"
+          stroke="#047857"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeDasharray="10 12"
+        />
+      </svg>
+
+      <div className="absolute left-6 top-6 rounded-3xl bg-white/85 p-4 shadow-lg backdrop-blur">
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Zona de entrega</p>
+        <p className="mt-1 text-lg font-semibold text-emerald-950">Maipú</p>
+      </div>
+
+      <div className="absolute bottom-6 left-6 right-6 grid gap-3 md:grid-cols-2">
+        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
+          <p className="text-sm font-semibold text-emerald-950">Domicilio en Maipú</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">Coordinamos horario por WhatsApp.</p>
+        </div>
+        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
+          <p className="text-sm font-semibold text-emerald-950">Metro Plaza Maipú</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">Punto de encuentro disponible.</p>
+        </div>
+      </div>
     </div>
   )
 }
 
-function SafetyBanner({ selectedRisks }: { selectedRisks: Risk[] }) {
-  const hasImportantRisk = selectedRisks.some((risk) => risk !== "ninguna")
-
-  if (!hasImportantRisk) {
-    return (
-      <div className="rounded-[1.7rem] border border-emerald-100 bg-emerald-50 p-5 text-emerald-900">
-        <p className="text-sm font-semibold">Sin restricciones marcadas</p>
-        <p className="mt-1 text-sm leading-6 text-emerald-800">Aun así, Raíz entrega información educativa y no reemplaza una evaluación profesional.</p>
-      </div>
-    )
-  }
+function HomeView({ setView }: { setView: (view: View) => void }) {
+  const featured = plants[0]
 
   return (
-    <div className="rounded-[1.7rem] border border-amber-200 bg-amber-50 p-5 text-amber-950">
-      <p className="text-sm font-semibold">Revisar con un profesional</p>
-      <p className="mt-1 text-sm leading-6 text-amber-900">Marcaste una o más condiciones que pueden cambiar la seguridad de suplementos, hierbas o extractos. Las recomendaciones aparecerán con más precauciones y no deben usarse como indicación médica.</p>
-    </div>
+    <section className="mx-auto grid max-w-7xl items-center gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <div>
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          Página oficial de ejemplo
+        </div>
+
+        <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.055em] text-emerald-950 sm:text-7xl">
+          Plantas lindas para darle vida a tu espacio.
+        </h1>
+
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600">
+          En {BRAND.name} encuentras plantas de interior fáciles de cuidar, con información simple
+          para elegir bien y comprar directo por Instagram o WhatsApp.
+        </p>
+
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <Button onClick={() => setView("catalogo")} variant="dark">
+            Ver catálogo
+          </Button>
+          <Button onClick={() => setView("recomendador")} variant="light">
+            Ayúdame a elegir
+          </Button>
+          <Button onClick={() => setView("entrega")} variant="light">
+            Método de entrega
+          </Button>
+        </div>
+      </div>
+
+      <div className="rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-emerald-200/60 backdrop-blur-xl">
+        <div className="overflow-hidden rounded-[2rem] bg-white">
+          <div className="relative h-[26rem] overflow-hidden">
+            <img src={featured.image} alt={featured.name} className="h-full w-full object-cover" />
+            <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-950 shadow-sm backdrop-blur">
+              Planta destacada
+            </div>
+            <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] bg-white/90 p-5 shadow-lg backdrop-blur">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-semibold tracking-tight text-emerald-950">{featured.name}</h2>
+                  <p className="mt-1 text-sm text-zinc-600">{featured.short}</p>
+                </div>
+                <p className="rounded-full bg-emerald-950 px-3 py-1 text-sm font-semibold text-white">
+                  {featured.price}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
-function RecommendationCard({ rank, option, warnings }: { rank: number; option: NaturalOption; warnings: string[] }) {
+function CatalogView() {
+  const [category, setCategory] = useState<Category>("Todas")
+  const [query, setQuery] = useState("")
+
+  const filteredPlants = useMemo(() => {
+    const search = normalize(query)
+
+    return plants.filter((plant) => {
+      const matchesCategory = category === "Todas" || plant.category === category
+      const matchesSearch =
+        !search ||
+        normalize(plant.name).includes(search) ||
+        normalize(plant.category).includes(search) ||
+        plant.tags.some((tag) => normalize(tag).includes(search))
+
+      return matchesCategory && matchesSearch
+    })
+  }, [category, query])
+
   return (
-    <article className="overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-sm">
-      <div className="border-b border-zinc-100 bg-gradient-to-br from-white to-zinc-50 p-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div className="mb-3 inline-flex items-center rounded-full bg-zinc-950 px-3 py-1 text-xs font-semibold text-white">#{rank} sugerencia</div>
-            <h3 className="text-2xl font-semibold tracking-tight text-zinc-950">{option.name}</h3>
-            <p className="mt-2 text-sm text-zinc-500">{option.category}</p>
-          </div>
-
-          <span className={["rounded-full px-3 py-1 text-xs font-semibold ring-1", evidenceStyle(option.evidence)].join(" ")}>
-            Evidencia: {option.evidence}
-          </span>
+    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">
+            Plantas disponibles
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
+            Productos de ejemplo. Después editamos precios, stock, nombres y cuidados reales.
+          </p>
         </div>
 
-        <p className="mt-5 text-sm leading-7 text-zinc-600">{option.description}</p>
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Buscar planta..."
+          className="w-full rounded-full border border-emerald-100 bg-white px-5 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100 md:max-w-sm"
+        />
       </div>
 
-      <div className="grid gap-5 p-6 lg:grid-cols-[1fr_0.85fr]">
-        <div className="space-y-5">
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-950">Para qué podría servir</h4>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {option.bestFor.map((item) => (
-                <span key={item} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700">{item}</span>
-              ))}
+      <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
+        {categories.map((item) => (
+          <button
+            key={item}
+            onClick={() => setCategory(item)}
+            className={[
+              "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
+              category === item
+                ? "bg-emerald-950 text-white"
+                : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
+            ].join(" ")}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {filteredPlants.map((plant) => (
+          <PlantCard key={plant.id} plant={plant} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function RecommenderView() {
+  const [light, setLight] = useState<Light>("media")
+  const [care, setCare] = useState<Care>("facil")
+  const [useCase, setUseCase] = useState<UseCase>("principiante")
+  const [hasPets, setHasPets] = useState(false)
+
+  const recommended = useMemo(() => {
+    return [...plants]
+      .map((plant) => ({ plant, score: scorePlant(plant, light, care, useCase, hasPets) }))
+      .sort((a, b) => b.score - a.score)
+  }, [light, care, useCase, hasPets])
+
+  return (
+    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <div className="rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-emerald-200/60 backdrop-blur-xl sm:p-6">
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-7 text-white">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">
+              Recomendador
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight">Te ayudamos a elegir.</h2>
+            <p className="mt-4 text-sm leading-7 text-emerald-50">
+              Responde estas preguntas y te mostramos las plantas que podrían calzar mejor con tu espacio.
+            </p>
+
+            <div className="mt-8 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+              <p className="text-sm font-semibold">Tip rápido</p>
+              <p className="mt-2 text-sm leading-7 text-emerald-50">
+                Si es tu primera planta, elige una de bajo riego y cuidado fácil.
+              </p>
             </div>
           </div>
 
-          <div className="rounded-3xl bg-zinc-50 p-5">
-            <h4 className="text-sm font-semibold text-zinc-950">Por qué podría ayudar</h4>
-            <p className="mt-2 text-sm leading-7 text-zinc-600">{option.why}</p>
-          </div>
-
-          <div className="rounded-3xl bg-zinc-50 p-5">
-            <h4 className="text-sm font-semibold text-zinc-950">Uso común, sin dosis médica</h4>
-            <p className="mt-2 text-sm leading-7 text-zinc-600">{option.commonUse}</p>
-          </div>
-
-          {option.foodFirst && (
-            <div className="rounded-3xl border border-emerald-100 bg-emerald-50 p-5">
-              <h4 className="text-sm font-semibold text-emerald-950">Primero como alimento</h4>
-              <p className="mt-2 text-sm leading-7 text-emerald-800">{option.foodFirst}</p>
+          <div className="rounded-[2rem] border border-emerald-100 bg-white p-5 sm:p-7">
+            <div>
+              <p className="text-sm font-semibold text-emerald-950">¿Cuánta luz tiene el lugar?</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                <SelectCard active={light === "baja"} title="Poca luz" subtitle="Pieza u oficina con luz suave." onClick={() => setLight("baja")} />
+                <SelectCard active={light === "media"} title="Luz indirecta" subtitle="Claro, sin sol fuerte." onClick={() => setLight("media")} />
+                <SelectCard active={light === "alta"} title="Mucha luz" subtitle="Balcón o sol suave." onClick={() => setLight("alta")} />
+              </div>
             </div>
-          )}
+
+            <div className="mt-6">
+              <p className="text-sm font-semibold text-emerald-950">¿Qué tan fácil la quieres?</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <SelectCard active={care === "facil"} title="Muy fácil" subtitle="Ideal para principiantes." onClick={() => setCare("facil")} />
+                <SelectCard active={care === "media"} title="Cuidado medio" subtitle="Puedo estar más pendiente." onClick={() => setCare("media")} />
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <p className="text-sm font-semibold text-emerald-950">¿Para qué la quieres?</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                <SelectCard active={useCase === "principiante"} title="Empezar" subtitle="Algo resistente." onClick={() => setUseCase("principiante")} />
+                <SelectCard active={useCase === "decorar"} title="Decorar" subtitle="Que se vea linda." onClick={() => setUseCase("decorar")} />
+                <SelectCard active={useCase === "regalo"} title="Regalar" subtitle="Simple y bonita." onClick={() => setUseCase("regalo")} />
+              </div>
+            </div>
+
+            <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-3xl bg-emerald-50 p-5">
+              <input
+                checked={hasPets}
+                onChange={(event) => setHasPets(event.target.checked)}
+                type="checkbox"
+                className="mt-1 h-4 w-4 rounded border-zinc-300 accent-emerald-600"
+              />
+              <span>
+                <span className="block text-sm font-semibold text-emerald-950">Tengo mascotas curiosas</span>
+                <span className="mt-1 block text-sm leading-6 text-zinc-600">
+                  Mostraremos con más cuidado las plantas que conviene dejar fuera de su alcance.
+                </span>
+              </span>
+            </label>
+          </div>
         </div>
 
-        <div className="space-y-5">
-          {warnings.length > 0 && (
-            <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5">
-              <h4 className="text-sm font-semibold text-amber-950">Precaución por tu selección</h4>
-              <ul className="mt-3 space-y-2">
-                {warnings.map((warning) => (
-                  <li key={warning} className="text-sm leading-6 text-amber-900">• {warning}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div className="rounded-3xl border border-zinc-200 bg-white p-5">
-            <h4 className="text-sm font-semibold text-zinc-950">Notas de seguridad</h4>
-            <p className="mt-2 text-sm leading-7 text-zinc-600">{option.safety}</p>
-          </div>
-
-          <div className="rounded-3xl border border-zinc-200 bg-white p-5">
-            <h4 className="text-sm font-semibold text-zinc-950">Alternativas</h4>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {option.alternatives.map((item) => (
-                <span key={item} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700">{item}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-zinc-200 bg-white p-5">
-            <h4 className="text-sm font-semibold text-zinc-950">Fuentes para revisar</h4>
-            <div className="mt-3 space-y-2">
-              {option.sources.map((source) => (
-                <a key={source.url} href={source.url} target="_blank" rel="noreferrer" className="block rounded-2xl bg-zinc-50 px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950">
-                  {source.label} ↗
-                </a>
-              ))}
-            </div>
+        <div className="mt-6">
+          <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Recomendadas para ti</h3>
+          <div className="grid gap-5 md:grid-cols-3">
+            {recommended.map(({ plant }) => (
+              <PlantCard key={plant.id} plant={plant} compact />
+            ))}
           </div>
         </div>
       </div>
-    </article>
+    </section>
+  )
+}
+
+function DeliveryView() {
+  return (
+    <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">
+          Método de entrega
+        </p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
+          Entregas simples dentro de Maipú.
+        </h2>
+        <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50">
+          Coordinamos por mensaje para que puedas retirar tu planta en un punto cómodo.
+        </p>
+
+        <div className="mt-8 grid gap-4">
+          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p className="text-lg font-semibold">🏡 Domicilio en Maipú</p>
+            <p className="mt-2 text-sm leading-6 text-emerald-50">
+              Coordinamos día y horario por WhatsApp según disponibilidad.
+            </p>
+          </div>
+          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p className="text-lg font-semibold">🚇 Metro Plaza Maipú</p>
+            <p className="mt-2 text-sm leading-6 text-emerald-50">
+              También podemos coordinar entrega en Metro Plaza Maipú.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Button href={whatsappLink()} variant="green">
+            Coordinar entrega
+          </Button>
+          <Button href={BRAND.instagramUrl} variant="light">
+            Ver Instagram
+          </Button>
+        </div>
+      </div>
+
+      <DeliveryMap />
+    </section>
+  )
+}
+
+function BuyView({ setView }: { setView: (view: View) => void }) {
+  return (
+    <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[1fr_0.9fr]">
+      <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">Cómo comprar</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
+          Compra simple por Instagram o WhatsApp.
+        </h2>
+        <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50">
+          Elige una planta, consulta stock y coordinamos la entrega.
+        </p>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p className="text-2xl font-semibold">1</p>
+            <p className="mt-2 text-sm leading-6 text-emerald-50">Elige una planta del catálogo.</p>
+          </div>
+          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p className="text-2xl font-semibold">2</p>
+            <p className="mt-2 text-sm leading-6 text-emerald-50">Consulta stock por WhatsApp o Instagram.</p>
+          </div>
+          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p className="text-2xl font-semibold">3</p>
+            <p className="mt-2 text-sm leading-6 text-emerald-50">Coordinamos entrega en Maipú.</p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Button href={whatsappLink()} variant="green">
+            Escribir por WhatsApp
+          </Button>
+          <Button href={BRAND.instagramUrl} variant="light">
+            Ver Instagram
+          </Button>
+          <Button onClick={() => setView("entrega")} variant="light">
+            Ver entregas
+          </Button>
+        </div>
+      </div>
+
+      <div className="rounded-[2.5rem] border border-emerald-100 bg-white p-8 shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Información</p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-emerald-950">Datos de Plantas Mary</h3>
+
+        <div className="mt-6 space-y-4">
+          <div className="rounded-3xl bg-emerald-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-500">Instagram</p>
+            <p className="mt-1 text-sm font-semibold text-emerald-950">{BRAND.instagramUser}</p>
+          </div>
+          <div className="rounded-3xl bg-emerald-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-500">Entrega</p>
+            <p className="mt-1 text-sm font-semibold text-emerald-950">{BRAND.delivery}</p>
+          </div>
+          <div className="rounded-3xl bg-lime-50 p-5 ring-1 ring-lime-100">
+            <p className="text-sm font-semibold text-emerald-950">Pendiente de editar</p>
+            <p className="mt-2 text-sm leading-6 text-zinc-600">
+              Luego cambiamos número real de WhatsApp, usuario real de Instagram, precios y stock.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
 export default function Home() {
-  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null)
-  const [selectedRisks, setSelectedRisks] = useState<Risk[]>([])
-  const [showResults, setShowResults] = useState(false)
-
-  const recommendations = useMemo(() => getRecommendations(selectedGoal, selectedRisks), [selectedGoal, selectedRisks])
-  const currentStep = showResults ? 3 : selectedGoal ? 2 : 1
-
-  const toggleRisk = (risk: Risk) => {
-    setShowResults(false)
-
-    if (risk === "ninguna") {
-      setSelectedRisks((current) => (current.includes("ninguna") ? [] : ["ninguna"]))
-      return
-    }
-
-    setSelectedRisks((current) => {
-      const withoutNone = current.filter((item) => item !== "ninguna")
-      if (withoutNone.includes(risk)) return withoutNone.filter((item) => item !== risk)
-      return [...withoutNone, risk]
-    })
-  }
-
-  const reset = () => {
-    setSelectedGoal(null)
-    setSelectedRisks([])
-    setShowResults(false)
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+  const [view, setView] = useState<View>("inicio")
 
   return (
     <main
-      className="min-h-screen bg-[#f5f5f7] text-zinc-950"
-      style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", sans-serif' }}
+      className="min-h-screen bg-[#f3f8f4] text-zinc-950"
+      style={{
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", sans-serif',
+      }}
     >
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-emerald-200/35 blur-3xl" />
-        <div className="absolute right-[-12rem] top-[18rem] h-[30rem] w-[30rem] rounded-full bg-sky-200/30 blur-3xl" />
-        <div className="absolute bottom-[-14rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-lime-200/30 blur-3xl" />
+        <div className="absolute left-1/2 top-[-16rem] h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-emerald-200/50 blur-3xl" />
+        <div className="absolute right-[-12rem] top-[20rem] h-[30rem] w-[30rem] rounded-full bg-lime-200/50 blur-3xl" />
+        <div className="absolute bottom-[-16rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-teal-200/40 blur-3xl" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f5f5f7]/75 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/75 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-          <button onClick={reset} className="flex items-center gap-3 text-left">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-zinc-950/15">R</div>
+          <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
+              🌿
+            </div>
             <div>
-              <p className="text-lg font-semibold tracking-tight">Raíz</p>
-              <p className="-mt-1 text-xs text-zinc-500">Bienestar con evidencia</p>
+              <p className="text-lg font-semibold tracking-tight text-emerald-950">{BRAND.name}</p>
+              <p className="-mt-1 text-xs text-zinc-500">Tienda de plantas</p>
             </div>
           </button>
 
           <nav className="hidden items-center gap-2 md:flex">
-            <a href="#como-funciona" className="rounded-full px-4 py-2 text-sm font-medium text-zinc-600 transition hover:bg-white hover:text-zinc-950">Cómo funciona</a>
-            <a href="#evidencia" className="rounded-full px-4 py-2 text-sm font-medium text-zinc-600 transition hover:bg-white hover:text-zinc-950">Evidencia</a>
-            <a href="#evaluacion" className="rounded-full bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800">Empezar</a>
+            <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
+            <NavButton active={view === "catalogo"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
+            <NavButton active={view === "recomendador"} onClick={() => setView("recomendador")}>Elegir</NavButton>
+            <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
+            <NavButton active={view === "comprar"} onClick={() => setView("comprar")}>Comprar</NavButton>
           </nav>
+
+          <div className="hidden md:block">
+            <Button href={BRAND.instagramUrl} variant="dark">Instagram</Button>
+          </div>
+        </div>
+
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8 md:hidden">
+          <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
+          <NavButton active={view === "catalogo"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
+          <NavButton active={view === "recomendador"} onClick={() => setView("recomendador")}>Elegir</NavButton>
+          <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
+          <NavButton active={view === "comprar"} onClick={() => setView("comprar")}>Comprar</NavButton>
         </div>
       </header>
 
-      <section className="relative px-5 pb-10 pt-16 sm:px-8 sm:pb-16 sm:pt-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm ring-1 ring-zinc-200">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              Guía educativa, no diagnóstico médico
-            </div>
+      <div className="relative">
+        {view === "inicio" && <HomeView setView={setView} />}
+        {view === "catalogo" && <CatalogView />}
+        {view === "recomendador" && <RecommenderView />}
+        {view === "entrega" && <DeliveryView />}
+        {view === "comprar" && <BuyView setView={setView} />}
+      </div>
 
-            <h1 className="text-5xl font-semibold tracking-[-0.055em] text-zinc-950 sm:text-7xl">
-              Bienestar natural, explicado con evidencia.
-            </h1>
-
-            <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-zinc-600">
-              Cuéntanos qué buscas mejorar y descubre opciones naturales con beneficios, precauciones y fuentes para revisar.
-            </p>
-
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href="#evaluacion" className="rounded-full bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-zinc-950/15 transition hover:bg-zinc-800 active:scale-[0.98]">Empezar evaluación</a>
-              <a href="#evidencia" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-50 active:scale-[0.98]">Ver cómo usamos evidencia</a>
-            </div>
-          </div>
-
-          <div id="evaluacion" className="mx-auto mt-14 max-w-6xl scroll-mt-28 rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-zinc-300/60 backdrop-blur-xl sm:p-6">
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap gap-2">
-                <StepPill number={1} label="Objetivo" active={currentStep === 1} />
-                <StepPill number={2} label="Seguridad" active={currentStep === 2} />
-                <StepPill number={3} label="Resultados" active={currentStep === 3} />
-              </div>
-
-              <button onClick={reset} className="rounded-full bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-600 transition hover:bg-zinc-200 hover:text-zinc-950">
-                Reiniciar
-              </button>
-            </div>
-
-            {!showResults && (
-              <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-                <div className="rounded-[2rem] bg-zinc-950 p-7 text-white">
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-400">Paso {selectedGoal ? "2" : "1"}</p>
-                  <h2 className="mt-4 text-3xl font-semibold tracking-tight">
-                    {selectedGoal ? "Antes de sugerir opciones, revisemos precauciones." : "¿Qué quieres mejorar hoy?"}
-                  </h2>
-                  <p className="mt-4 text-sm leading-7 text-zinc-300">
-                    {selectedGoal
-                      ? "Esto ayuda a ordenar mejor el ranking. Si marcas una condición de riesgo, Raíz mostrará advertencias y bajará opciones que no convienen como primera sugerencia."
-                      : "Elige un objetivo. La app usará ese objetivo para ordenar las opciones naturales según utilidad, evidencia y seguridad."}
-                  </p>
-
-                  <div className="mt-8 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-                    <p className="text-sm font-semibold text-white">Importante</p>
-                    <p className="mt-2 text-sm leading-7 text-zinc-300">Raíz entrega información educativa. No diagnostica, no trata enfermedades y no reemplaza a un profesional de salud.</p>
-                  </div>
-                </div>
-
-                <div className="rounded-[2rem] border border-zinc-200 bg-white p-5 sm:p-7">
-                  {!selectedGoal && (
-                    <>
-                      <div className="mb-5">
-                        <h3 className="text-xl font-semibold tracking-tight text-zinc-950">Selecciona tu objetivo</h3>
-                        <p className="mt-2 text-sm leading-6 text-zinc-500">Puedes cambiarlo después.</p>
-                      </div>
-
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {goals.map((goal) => (
-                          <ToggleCard
-                            key={goal.id}
-                            active={selectedGoal === goal.id}
-                            icon={goal.icon}
-                            title={goal.title}
-                            subtitle={goal.subtitle}
-                            onClick={() => {
-                              setSelectedGoal(goal.id)
-                              setShowResults(false)
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
-
-                  {selectedGoal && (
-                    <>
-                      <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                          <h3 className="text-xl font-semibold tracking-tight text-zinc-950">Precauciones para “{goalTitle(selectedGoal)}”</h3>
-                          <p className="mt-2 text-sm leading-6 text-zinc-500">Marca lo que aplique. Si tienes dudas, elige la opción más cautelosa.</p>
-                        </div>
-
-                        <button onClick={() => setSelectedGoal(null)} className="rounded-full bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-600 transition hover:bg-zinc-200">
-                          Cambiar objetivo
-                        </button>
-                      </div>
-
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {risks.map((risk) => {
-                          const active = selectedRisks.includes(risk.id)
-
-                          return (
-                            <button
-                              key={risk.id}
-                              onClick={() => toggleRisk(risk.id)}
-                              className={[
-                                "rounded-[1.4rem] border p-4 text-left transition-all duration-200",
-                                active ? "border-zinc-950 bg-zinc-950 text-white" : "border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-50",
-                              ].join(" ")}
-                            >
-                              <div className="flex items-start gap-3">
-                                <div className={["mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border", active ? "border-white bg-white text-zinc-950" : "border-zinc-300 bg-white"].join(" ")}>
-                                  {active ? "✓" : ""}
-                                </div>
-                                <div>
-                                  <p className="text-sm font-semibold">{risk.label}</p>
-                                  <p className={["mt-1 text-xs leading-5", active ? "text-zinc-300" : "text-zinc-500"].join(" ")}>
-                                    {risk.description}
-                                  </p>
-                                </div>
-                              </div>
-                            </button>
-                          )
-                        })}
-                      </div>
-
-                      <div className="mt-6">
-                        <button onClick={() => setShowResults(true)} className="w-full rounded-full bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-zinc-950/15 transition hover:bg-zinc-800 active:scale-[0.98]">
-                          Ver ranking con evidencia
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {showResults && selectedGoal && (
-              <div>
-                <div className="mb-6 grid gap-4 lg:grid-cols-[1fr_0.8fr]">
-                  <div className="rounded-[2rem] bg-zinc-950 p-7 text-white">
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-400">Resultado</p>
-                    <h2 className="mt-4 text-3xl font-semibold tracking-tight">Opciones para “{goalTitle(selectedGoal)}”</h2>
-                    <p className="mt-4 text-sm leading-7 text-zinc-300">Este ranking prioriza utilidad probable, evidencia disponible y seguridad. No reemplaza consulta profesional ni indica dosis.</p>
-                  </div>
-
-                  <SafetyBanner selectedRisks={selectedRisks} />
-                </div>
-
-                <div className="space-y-5">
-                  {recommendations.map((item, index) => (
-                    <RecommendationCard key={item.option.id} rank={index + 1} option={item.option} warnings={item.warnings} />
-                  ))}
-                </div>
-
-                <div className="mt-6 rounded-[2rem] border border-zinc-200 bg-white p-6">
-                  <h3 className="text-lg font-semibold text-zinc-950">Mitos que Raíz no recomendaría sin respaldo</h3>
-                  <div className="mt-4 grid gap-3 md:grid-cols-3">
-                    <div className="rounded-3xl bg-zinc-50 p-5">
-                      <p className="text-sm font-semibold text-zinc-950">“Limón con sal aumenta el ATP”</p>
-                      <p className="mt-2 text-sm leading-6 text-zinc-500">No lo pondríamos como recomendación sin evidencia clínica sólida y fuente verificable.</p>
-                    </div>
-                    <div className="rounded-3xl bg-zinc-50 p-5">
-                      <p className="text-sm font-semibold text-zinc-950">“Si tienes sueño, te falta magnesio”</p>
-                      <p className="mt-2 text-sm leading-6 text-zinc-500">El cansancio puede tener muchas causas. Raíz evita diagnosticar deficiencias.</p>
-                    </div>
-                    <div className="rounded-3xl bg-zinc-50 p-5">
-                      <p className="text-sm font-semibold text-zinc-950">“Natural significa seguro”</p>
-                      <p className="mt-2 text-sm leading-6 text-zinc-500">Natural no siempre significa adecuado. Por eso mostramos precauciones.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section id="como-funciona" className="relative px-5 py-16 sm:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-3 inline-flex rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-600 ring-1 ring-zinc-200">Cómo funciona</div>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">Una guía simple, no una promesa mágica.</h2>
-            <p className="mt-4 text-base leading-7 text-zinc-600">Raíz combina objetivo, precauciones y evidencia para mostrar opciones educativas, con fuentes abiertas para que cualquiera pueda revisar.</p>
-          </div>
-
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <div className="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-zinc-200">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-xl">1</div>
-              <h3 className="text-lg font-semibold text-zinc-950">Eliges un objetivo</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Energía, sueño, relajación, digestión, concentración, estrés o hábitos.</p>
-            </div>
-
-            <div className="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-zinc-200">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-xl">2</div>
-              <h3 className="text-lg font-semibold text-zinc-950">Marcamos precauciones</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Medicamentos, alergias, cafeína, presión, embarazo, hígado, riñón o menor de edad.</p>
-            </div>
-
-            <div className="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-zinc-200">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-xl">3</div>
-              <h3 className="text-lg font-semibold text-zinc-950">Ves opciones citadas</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Cada tarjeta muestra beneficios posibles, seguridad, alternativas y fuentes.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="evidencia" className="relative px-5 py-16 sm:px-8">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-zinc-950 p-8 text-white shadow-2xl shadow-zinc-400/60 sm:p-12">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-zinc-400">Cómo leemos la evidencia</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">Más transparente que perfecto.</h2>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-zinc-300 sm:text-base">
-            En esta primera versión, los niveles de evidencia son orientativos y conservadores. La idea no es reemplazar a un profesional, sino evitar afirmaciones exageradas y mostrar fuentes revisables.
-          </p>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <h3 className="font-semibold">Alta / Media-Alta</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-300">Uso con respaldo más consistente para un objetivo específico.</p>
-            </div>
-            <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <h3 className="font-semibold">Media</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-300">Evidencia razonable, pero con límites según persona, forma de uso o contexto.</p>
-            </div>
-            <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <h3 className="font-semibold">Baja-Media</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-300">Puede ser prometedor o tradicional, pero no debe venderse como solución segura.</p>
-            </div>
-            <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <h3 className="font-semibold">Limitada</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-300">Se muestra con cuidado o se deja como alternativa, no como recomendación principal.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="relative border-t border-zinc-200 px-5 py-8 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between">
-          <p>© Raíz — Guía educativa de bienestar natural.</p>
-          <p className="max-w-2xl leading-6">No diagnostica, no indica dosis, no reemplaza atención médica. Si tienes síntomas persistentes, tomas medicamentos, eres menor de edad, estás embarazada o tienes una condición médica, consulta a un profesional.</p>
+      <footer className="relative border-t border-emerald-100 px-5 py-6 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between">
+          <p>© {BRAND.name} — Página oficial de ejemplo.</p>
+          <p>{BRAND.delivery}</p>
         </div>
       </footer>
     </main>
   )
 }
-
