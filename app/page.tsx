@@ -30,7 +30,8 @@ const BRAND = {
   name: "Plantas Mary",
   instagramUser: "@plantasmary",
   instagramUrl: "https://instagram.com/plantasmary",
-  whatsappNumber: "56912345678",
+  logo: "/logo-plantas-mary.webp",
+  whatsappNumber: "56984560468",
   delivery: "Entregamos en nuestro domicilio en Maipú y también en Metro Plaza Maipú.",
 }
 
@@ -595,7 +596,7 @@ function BuyView({ setView }: { setView: (view: View) => void }) {
           <div className="rounded-3xl bg-lime-50 p-5 ring-1 ring-lime-100">
             <p className="text-sm font-semibold text-emerald-950">Pendiente de editar</p>
             <p className="mt-2 text-sm leading-6 text-zinc-600">
-              Luego cambiamos número real de WhatsApp, usuario real de Instagram, precios y stock.
+              Luego cambiamos usuario real de Instagram, precios y stock.
             </p>
           </div>
         </div>
@@ -726,8 +727,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/75 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
-              🌿
+            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
+              <img src={BRAND.logo} alt="Logo Plantas Mary" className="h-full w-full object-cover" />
             </div>
             <div>
               <p className="text-lg font-semibold tracking-tight text-emerald-950">{BRAND.name}</p>
