@@ -44,7 +44,7 @@ const plants: Plant[] = [
     short: "Frondosa, brillante y decorativa.",
     description:
       "Ideal para living, entrada o comedor con buena luz indirecta. Sus hojas verdes dan una sensación fresca y elegante.",
-    image: "/plantas/chiflera.webp",
+    image: "/chiflera.webp",
     light: "media",
     water: "Medio",
     care: "media",
@@ -60,7 +60,7 @@ const plants: Plant[] = [
     short: "Compacta, linda y fácil de mantener.",
     description:
       "Perfecta para escritorios, repisas y espacios pequeños. Buena opción para quienes buscan una planta simple y bonita.",
-    image: "/plantas/peperomia.webp",
+    image: "/peperomia.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
@@ -76,7 +76,7 @@ const plants: Plant[] = [
     short: "Resistente, moderna y de bajo riego.",
     description:
       "Una de las mejores plantas para empezar. Tolera más descuidos y se ve muy bien en espacios modernos.",
-    image: "/plantas/sansevieria.webp",
+    image: "/sansevieria.webp",
     light: "baja",
     water: "Bajo",
     care: "facil",
