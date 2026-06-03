@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 import { useMemo, useState } from "react"
 
-type View = "inicio" | "catalogo" | "recomendador" | "comprar" | "entrega"
+type View = "inicio" | "catalogo" | "recomendador" | "entrega"
 type Category = "Todas" | "Interior" | "Exterior" | "Fácil cuidado"
 type Light = "baja" | "media" | "alta"
 type Care = "facil" | "media"
@@ -23,15 +23,15 @@ type Plant = {
   care: Care
   bestFor: UseCase[]
   tags: string[]
-  offer?: string
+  badge?: string
 }
 
 const BRAND = {
   name: "Plantas Mary",
   instagramUser: "@plantasmary.cl",
   instagramUrl: "https://www.instagram.com/plantasmary.cl/",
-  logo: "/logo-plantas-mary.webp",
   whatsappNumber: "56984560468",
+  logo: "/logo-plantas-mary.webp",
   delivery: "Entregamos en nuestro domicilio en Maipú y también en Metro Plaza Maipú.",
 }
 
@@ -44,32 +44,32 @@ const plants: Plant[] = [
     price: "$12.990",
     oldPrice: "$14.990",
     category: "Exterior",
-    short: "Frondosa, brillante y decorativa.",
+    short: "Frondosa y decorativa.",
     description:
-      "Ideal para terraza protegida, entrada, patio luminoso o interior con buena luz indirecta. Sus hojas verdes dan una sensación fresca y elegante.",
+      "Ideal para terrazas protegidas, entradas o espacios iluminados. Aporta mucho verde y presencia.",
     image: "/chiflera.webp",
     light: "media",
     water: "Medio",
     care: "media",
     bestFor: ["decorar", "terraza", "regalo"],
-    tags: ["Terraza protegida", "Decorativa", "Luz indirecta"],
-    offer: "Oferta semana",
+    tags: ["Decorativa", "Luz indirecta", "Exterior protegido"],
+    badge: "Oferta",
   },
   {
     id: "peperomia",
     name: "Peperomia",
     price: "$7.990",
     category: "Interior",
-    short: "Compacta, linda y fácil de mantener.",
+    short: "Compacta y fácil de amar.",
     description:
-      "Perfecta para escritorios, repisas y espacios pequeños. Buena opción para quienes buscan una planta simple y bonita.",
+      "Perfecta para escritorios, repisas y espacios pequeños. Muy linda para regalar o empezar.",
     image: "/peperomia.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar", "regalo"],
     tags: ["Interior", "Compacta", "Regalo"],
-    offer: "Más consultada",
+    badge: "Top",
   },
   {
     id: "sansevieria",
@@ -77,37 +77,16 @@ const plants: Plant[] = [
     price: "$9.990",
     oldPrice: "$11.990",
     category: "Fácil cuidado",
-    short: "Resistente, moderna y de bajo riego.",
+    short: "Resistente y moderna.",
     description:
-      "Una de las mejores plantas para empezar. Tolera más descuidos y se ve muy bien en espacios modernos.",
+      "Una excelente opción para quienes quieren una planta bonita y de bajo mantenimiento.",
     image: "/sansevieria.webp",
     light: "baja",
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar", "regalo"],
-    tags: ["Muy resistente", "Poca luz", "Bajo riego"],
-    offer: "Ideal principiantes",
-  },
-]
-
-const weeklyOffers = [
-  {
-    title: "Oferta de la semana",
-    text: "Chiflera con precio especial por stock limitado.",
-    action: "Ver oferta",
-    plantId: "chiflera",
-  },
-  {
-    title: "Pack inicio verde",
-    text: "Elige una planta fácil y te orientamos con sus cuidados básicos.",
-    action: "Ayúdame a elegir",
-    plantId: "sansevieria",
-  },
-  {
-    title: "Entrega en Maipú",
-    text: "Coordina retiro en domicilio o Metro Plaza Maipú.",
-    action: "Ver entrega",
-    plantId: "peperomia",
+    tags: ["Poca luz", "Bajo riego", "Fácil"],
+    badge: "Favorita",
   },
 ]
 
@@ -116,16 +95,6 @@ function whatsappLink(plant?: Plant) {
     ? `Hola, quiero consultar por la planta ${plant.name} de Plantas Mary. ¿Hay stock disponible?`
     : "Hola, quiero consultar por las plantas disponibles de Plantas Mary."
   return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`
-}
-
-function lightLabel(light: Light) {
-  if (light === "baja") return "Poca luz"
-  if (light === "media") return "Luz indirecta"
-  return "Mucha luz"
-}
-
-function careLabel(care: Care) {
-  return care === "facil" ? "Fácil" : "Cuidado medio"
 }
 
 function normalize(value: string) {
@@ -137,14 +106,22 @@ function normalize(value: string) {
 
 function scorePlant(plant: Plant, light: Light, care: Care, useCase: UseCase) {
   let score = 0
-
   if (plant.light === light) score += 5
   if (plant.care === care) score += 4
   if (plant.bestFor.includes(useCase)) score += 5
   if (light === "baja" && plant.light === "media") score += 1
   if (care === "facil" && plant.care === "media") score -= 2
-
   return score
+}
+
+function lightLabel(light: Light) {
+  if (light === "baja") return "Poca luz"
+  if (light === "media") return "Luz indirecta"
+  return "Mucha luz"
+}
+
+function careLabel(care: Care) {
+  return care === "facil" ? "Fácil" : "Media"
 }
 
 function Button({
@@ -157,14 +134,13 @@ function Button({
   children: ReactNode
   onClick?: () => void
   href?: string
-  variant?: "dark" | "light" | "green" | "soft"
+  variant?: "dark" | "light" | "green"
   className?: string
 }) {
   const variants = {
     dark: "bg-emerald-950 text-white hover:bg-emerald-900 shadow-lg shadow-emerald-950/10",
-    light: "bg-white text-emerald-950 hover:bg-emerald-50 ring-1 ring-emerald-100 shadow-sm",
+    light: "bg-white text-emerald-950 hover:bg-emerald-50 ring-1 ring-emerald-100",
     green: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20",
-    soft: "bg-emerald-50 text-emerald-900 hover:bg-emerald-100 ring-1 ring-emerald-100",
   }
 
   const classes = `inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition active:scale-[0.98] ${variants[variant]} ${className}`
@@ -202,11 +178,44 @@ function NavButton({
     <button
       onClick={onClick}
       className={[
-        "rounded-full px-4 py-2 text-sm font-semibold transition",
+        "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
         active ? "bg-emerald-950 text-white" : "text-zinc-600 hover:bg-white hover:text-emerald-950",
       ].join(" ")}
     >
       {children}
+    </button>
+  )
+}
+
+function TinyPlantCard({
+  plant,
+  onOpenCatalog,
+}: {
+  plant: Plant
+  onOpenCatalog: () => void
+}) {
+  return (
+    <button
+      onClick={onOpenCatalog}
+      className="w-[11.5rem] shrink-0 overflow-hidden rounded-[1.8rem] border border-emerald-100 bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+    >
+      <div className="relative h-36 overflow-hidden">
+        <img src={plant.image} alt={plant.name} className="h-full w-full object-cover" />
+        {plant.badge && (
+          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 backdrop-blur">
+            {plant.badge}
+          </div>
+        )}
+      </div>
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="text-base font-semibold tracking-tight text-emerald-950">{plant.name}</p>
+            <p className="mt-1 text-xs text-zinc-500">{plant.category}</p>
+          </div>
+          <p className="text-sm font-semibold text-emerald-800">{plant.price}</p>
+        </div>
+      </div>
     </button>
   )
 }
@@ -219,9 +228,9 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
           {plant.category}
         </div>
-        {plant.offer && (
-          <div className="absolute bottom-4 left-4 rounded-full bg-lime-200 px-3 py-1 text-xs font-bold text-emerald-950 shadow-sm">
-            {plant.offer}
+        {plant.badge && (
+          <div className="absolute bottom-4 left-4 rounded-full bg-lime-100 px-3 py-1 text-xs font-semibold text-emerald-900 shadow-sm">
+            {plant.badge}
           </div>
         )}
       </div>
@@ -310,92 +319,136 @@ function SelectCard({
   )
 }
 
-function HomeView({ setView }: { setView: (view: View) => void }) {
-  const featured = plants[0]
-
+function DeliveryMap() {
   return (
-    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-      <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Nuevas plantas disponibles esta semana
-          </div>
+    <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-lime-50 to-teal-50 p-6 ring-1 ring-emerald-100">
+      <div className="absolute inset-0 opacity-60">
+        <div className="absolute left-10 top-12 h-[2px] w-64 rotate-12 bg-emerald-300" />
+        <div className="absolute left-24 top-40 h-[2px] w-80 -rotate-6 bg-emerald-300" />
+        <div className="absolute right-10 top-24 h-[2px] w-56 rotate-45 bg-emerald-300" />
+        <div className="absolute bottom-20 left-12 h-[2px] w-72 -rotate-12 bg-emerald-300" />
+      </div>
 
-          <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.055em] text-emerald-950 sm:text-7xl">
-            Plantas lindas para darle vida a tu espacio.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600">
-            En {BRAND.name} encuentras plantas de interior, exterior y fácil cuidado, con compra directa
-            por Instagram o WhatsApp.
-          </p>
-
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Button onClick={() => setView("catalogo")} variant="dark">
-              Ver catálogo
-            </Button>
-            <Button onClick={() => setView("recomendador")} variant="light">
-              Ayúdame a elegir
-            </Button>
-            <Button href={whatsappLink()} variant="green">
-              Consultar stock
-            </Button>
-          </div>
-        </div>
-
-        <div className="rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-emerald-200/60 backdrop-blur-xl">
-          <div className="overflow-hidden rounded-[2rem] bg-white">
-            <div className="relative h-[26rem] overflow-hidden">
-              <img src={featured.image} alt={featured.name} className="h-full w-full object-cover" />
-              <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-950 shadow-sm backdrop-blur">
-                Oferta de la semana
-              </div>
-              <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] bg-white/90 p-5 shadow-lg backdrop-blur">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-2xl font-semibold tracking-tight text-emerald-950">{featured.name}</h2>
-                    <p className="mt-1 text-sm text-zinc-600">{featured.short}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs font-medium text-zinc-400 line-through">{featured.oldPrice}</p>
-                    <p className="rounded-full bg-emerald-950 px-3 py-1 text-sm font-semibold text-white">
-                      {featured.price}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="absolute left-[18%] top-[28%]">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-xl shadow-emerald-700/30">
+          🏡
         </div>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
-        {weeklyOffers.map((offer) => {
-          const plant = plants.find((item) => item.id === offer.plantId) ?? plants[0]
+      <div className="absolute right-[18%] bottom-[24%]">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-600 text-2xl text-white shadow-xl shadow-lime-700/25">
+          🚇
+        </div>
+      </div>
 
-          return (
-            <button
-              key={offer.title}
-              onClick={() => {
-                if (offer.title.includes("Entrega")) setView("entrega")
-                else if (offer.title.includes("Pack")) setView("recomendador")
-                else setView("catalogo")
-              }}
-              className="group overflow-hidden rounded-[2rem] border border-emerald-100 bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-200/60"
-            >
-              <div className="flex gap-4 p-4">
-                <img src={plant.image} alt={plant.name} className="h-24 w-24 rounded-3xl object-cover" />
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Ofertas de la semana</p>
-                  <h3 className="mt-1 text-lg font-semibold text-emerald-950">{offer.title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-zinc-600">{offer.text}</p>
-                  <p className="mt-2 text-sm font-semibold text-emerald-700">{offer.action} →</p>
-                </div>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 340" fill="none">
+        <path
+          d="M145 130 C220 90, 310 110, 365 165 C400 200, 445 225, 495 255"
+          stroke="#047857"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeDasharray="10 12"
+        />
+      </svg>
+
+      <div className="absolute left-6 top-6 rounded-3xl bg-white/85 p-4 shadow-lg backdrop-blur">
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Zona de entrega</p>
+        <p className="mt-1 text-lg font-semibold text-emerald-950">Maipú</p>
+      </div>
+
+      <div className="absolute bottom-6 left-6 right-6 grid gap-3 md:grid-cols-2">
+        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
+          <p className="text-sm font-semibold text-emerald-950">Domicilio en Maipú</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">Coordinamos por WhatsApp.</p>
+        </div>
+        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
+          <p className="text-sm font-semibold text-emerald-950">Metro Plaza Maipú</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">Punto de encuentro disponible.</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HomeView({ setView }: { setView: (view: View) => void }) {
+  return (
+    <section className="mx-auto max-w-7xl px-5 py-6 sm:px-8 sm:py-8">
+      <div className="grid items-center gap-7 lg:grid-cols-[0.96fr_1.04fr]">
+        <div>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100 sm:text-sm">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            Plantas listas para alegrar tu espacio
+          </div>
+
+          <h1 className="max-w-3xl text-[2.85rem] font-semibold leading-[0.95] tracking-[-0.06em] text-emerald-950 sm:text-6xl">
+            Más plantas, menos texto.
+          </h1>
+
+          <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
+            Plantas de interior, exterior y fácil cuidado. Compra directo por Instagram o WhatsApp.
+          </p>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <Button onClick={() => setView("catalogo")} variant="dark" className="w-full sm:w-auto">
+              Ver catálogo
+            </Button>
+            <Button onClick={() => setView("recomendador")} variant="light" className="w-full sm:w-auto">
+              Te ayudamos a elegir
+            </Button>
+          </div>
+
+          <div className="mt-6 rounded-[1.7rem] border border-emerald-100 bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-emerald-950">Entrega en Maipú</p>
+                <p className="mt-1 text-sm text-zinc-500">Domicilio y Metro Plaza Maipú.</p>
               </div>
+              <Button onClick={() => setView("entrega")} variant="light" className="px-4 py-2 text-xs">
+                Ver más
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">
+                Destacadas
+              </p>
+              <h2 className="mt-1 text-2xl font-semibold tracking-tight text-emerald-950">
+                Favoritas de la semana
+              </h2>
+            </div>
+            <button
+              onClick={() => setView("catalogo")}
+              className="text-sm font-semibold text-emerald-700 transition hover:text-emerald-900"
+            >
+              Ver todas
             </button>
-          )
-        })}
+          </div>
+
+          <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
+            <div className="flex gap-4">
+              {plants.map((plant) => (
+                <TinyPlantCard key={plant.id} plant={plant} onOpenCatalog={() => setView("catalogo")} />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-[1.8rem] bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/10">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">Oferta</p>
+              <p className="mt-2 text-xl font-semibold">Chiflera en promoción</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-50">Bonita, frondosa y perfecta para dar vida a tu entrada o terraza.</p>
+            </div>
+            <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-emerald-100">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Fácil cuidado</p>
+              <p className="mt-2 text-xl font-semibold text-emerald-950">Empieza con una sansevieria</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">Ideal si quieres una planta linda y resistente para comenzar.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -429,7 +482,7 @@ function CatalogView() {
             Plantas disponibles
           </h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-            Interior, exterior y plantas de fácil cuidado. Precios de ejemplo editables.
+            Explora nuestras plantas de interior, exterior y fácil cuidado.
           </p>
         </div>
 
@@ -483,16 +536,16 @@ function RecommenderView() {
       <div className="rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-emerald-200/60 backdrop-blur-xl sm:p-6">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-7 text-white">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">Recomendador</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight">Te ayudamos a elegir.</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">Te ayudamos a elegir</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight">Encuentra la ideal para ti.</h2>
             <p className="mt-4 text-sm leading-7 text-emerald-50">
-              Responde estas preguntas y te mostramos las plantas que podrían calzar mejor con tu espacio.
+              Elige tus preferencias y te mostramos las plantas que mejor pueden calzar con tu espacio.
             </p>
 
             <div className="mt-8 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <p className="text-sm font-semibold">Tip rápido</p>
+              <p className="text-sm font-semibold">Consejo rápido</p>
               <p className="mt-2 text-sm leading-7 text-emerald-50">
-                Si es tu primera planta, elige una de bajo riego y cuidado fácil.
+                Si estás empezando, prioriza plantas de bajo riego y cuidado fácil.
               </p>
             </div>
           </div>
@@ -501,9 +554,9 @@ function RecommenderView() {
             <div>
               <p className="text-sm font-semibold text-emerald-950">¿Cuánta luz tiene el lugar?</p>
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                <SelectCard active={light === "baja"} title="Poca luz" subtitle="Pieza u oficina con luz suave." onClick={() => setLight("baja")} />
+                <SelectCard active={light === "baja"} title="Poca luz" subtitle="Pieza u oficina suave." onClick={() => setLight("baja")} />
                 <SelectCard active={light === "media"} title="Luz indirecta" subtitle="Claro, sin sol fuerte." onClick={() => setLight("media")} />
-                <SelectCard active={light === "alta"} title="Mucha luz" subtitle="Terraza o exterior protegido." onClick={() => setLight("alta")} />
+                <SelectCard active={light === "alta"} title="Mucha luz" subtitle="Terraza o exterior." onClick={() => setLight("alta")} />
               </div>
             </div>
 
@@ -540,141 +593,16 @@ function RecommenderView() {
   )
 }
 
-function BuyView({ setView }: { setView: (view: View) => void }) {
-  return (
-    <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[1fr_0.9fr]">
-      <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">Cómo comprar</p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
-          Compra simple por Instagram o WhatsApp.
-        </h2>
-        <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50">
-          Elige una planta, consulta stock y coordinamos la entrega.
-        </p>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-            <p className="text-2xl font-semibold">1</p>
-            <p className="mt-2 text-sm leading-6 text-emerald-50">Elige una planta del catálogo.</p>
-          </div>
-          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-            <p className="text-2xl font-semibold">2</p>
-            <p className="mt-2 text-sm leading-6 text-emerald-50">Consulta stock por WhatsApp o Instagram.</p>
-          </div>
-          <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-            <p className="text-2xl font-semibold">3</p>
-            <p className="mt-2 text-sm leading-6 text-emerald-50">Coordinamos entrega en Maipú.</p>
-          </div>
-        </div>
-
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button href={whatsappLink()} variant="green">
-            Escribir por WhatsApp
-          </Button>
-          <Button href={BRAND.instagramUrl} variant="light">
-            Ver Instagram
-          </Button>
-          <Button onClick={() => setView("entrega")} variant="light">
-            Ver entregas
-          </Button>
-        </div>
-      </div>
-
-      <div className="rounded-[2.5rem] border border-emerald-100 bg-white p-8 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Información</p>
-        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-emerald-950">Datos de Plantas Mary</h3>
-
-        <div className="mt-6 space-y-4">
-          <div className="rounded-3xl bg-emerald-50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-500">Instagram</p>
-            <p className="mt-1 text-sm font-semibold text-emerald-950">{BRAND.instagramUser}</p>
-          </div>
-          <div className="rounded-3xl bg-emerald-50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-500">Entrega</p>
-            <p className="mt-1 text-sm font-semibold text-emerald-950">{BRAND.delivery}</p>
-          </div>
-          <div className="rounded-3xl bg-lime-50 p-5 ring-1 ring-lime-100">
-            <p className="text-sm font-semibold text-emerald-950">Pendiente de editar</p>
-            <p className="mt-2 text-sm leading-6 text-zinc-600">
-              Luego cambiamos usuario real de Instagram, precios y stock.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function DeliveryMap() {
-  return (
-    <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-lime-50 to-teal-50 p-6 ring-1 ring-emerald-100">
-      <div className="absolute inset-0 opacity-60">
-        <div className="absolute left-10 top-12 h-[2px] w-64 rotate-12 bg-emerald-300" />
-        <div className="absolute left-24 top-40 h-[2px] w-80 -rotate-6 bg-emerald-300" />
-        <div className="absolute right-10 top-24 h-[2px] w-56 rotate-45 bg-emerald-300" />
-        <div className="absolute bottom-20 left-12 h-[2px] w-72 -rotate-12 bg-emerald-300" />
-        <div className="absolute bottom-32 right-8 h-[2px] w-64 rotate-12 bg-emerald-300" />
-      </div>
-
-      <div className="absolute left-[18%] top-[28%]">
-        <div className="relative">
-          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/20" />
-          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-xl shadow-emerald-700/30">
-            🏡
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute right-[18%] bottom-[24%]">
-        <div className="relative">
-          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/25" />
-          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-600 text-2xl text-white shadow-xl shadow-lime-700/25">
-            🚇
-          </div>
-        </div>
-      </div>
-
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 360" fill="none">
-        <path
-          d="M145 130 C220 90, 310 110, 365 165 C400 200, 445 225, 495 255"
-          stroke="#047857"
-          strokeWidth="5"
-          strokeLinecap="round"
-          strokeDasharray="10 12"
-        />
-      </svg>
-
-      <div className="absolute left-6 top-6 rounded-3xl bg-white/85 p-4 shadow-lg backdrop-blur">
-        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Zona de entrega</p>
-        <p className="mt-1 text-lg font-semibold text-emerald-950">Maipú</p>
-      </div>
-
-      <div className="absolute bottom-6 left-6 right-6 grid gap-3 md:grid-cols-2">
-        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
-          <p className="text-sm font-semibold text-emerald-950">Domicilio en Maipú</p>
-          <p className="mt-1 text-xs leading-5 text-zinc-600">Coordinamos horario por WhatsApp.</p>
-        </div>
-        <div className="rounded-3xl bg-white/90 p-4 shadow-lg backdrop-blur">
-          <p className="text-sm font-semibold text-emerald-950">Metro Plaza Maipú</p>
-          <p className="mt-1 text-xs leading-5 text-zinc-600">Punto de encuentro disponible.</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function DeliveryView() {
   return (
     <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">
       <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">
-          Método de entrega
-        </p>
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">Método de entrega</p>
         <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
           Entregas simples dentro de Maipú.
         </h2>
         <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50">
-          Coordinamos por mensaje para que puedas retirar tu planta en un punto cómodo.
+          Coordinamos por mensaje para que puedas recibir o retirar tu planta de forma cómoda.
         </p>
 
         <div className="mt-8 grid gap-4">
@@ -687,7 +615,7 @@ function DeliveryView() {
           <div className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
             <p className="text-lg font-semibold">🚇 Metro Plaza Maipú</p>
             <p className="mt-2 text-sm leading-6 text-emerald-50">
-              También podemos coordinar entrega en Metro Plaza Maipú.
+              También coordinamos entrega en Metro Plaza Maipú.
             </p>
           </div>
         </div>
@@ -724,36 +652,29 @@ export default function Home() {
         <div className="absolute bottom-[-16rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-teal-200/40 blur-3xl" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/75 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/85 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
-            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
+            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
               <img src={BRAND.logo} alt="Logo Plantas Mary" className="h-full w-full object-cover" />
             </div>
             <div>
-              <p className="text-lg font-semibold tracking-tight text-emerald-950">{BRAND.name}</p>
-              <p className="-mt-1 text-xs text-zinc-500">Tienda de plantas</p>
+              <p className="text-lg font-semibold tracking-tight text-emerald-950 sm:text-xl">{BRAND.name}</p>
+              <p className="-mt-1 text-xs text-zinc-500 sm:text-sm">Tienda de plantas</p>
             </div>
           </button>
 
-          <nav className="hidden items-center gap-2 md:flex">
-            <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
-            <NavButton active={view === "catalogo"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
-            <NavButton active={view === "recomendador"} onClick={() => setView("recomendador")}>Elegir</NavButton>
-            <NavButton active={view === "comprar"} onClick={() => setView("comprar")}>Comprar</NavButton>
-            <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
-          </nav>
-
           <div className="hidden md:block">
-            <Button href={BRAND.instagramUrl} variant="dark">Instagram</Button>
+            <Button href={BRAND.instagramUrl} variant="dark">
+              Instagram
+            </Button>
           </div>
         </div>
 
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8 md:hidden">
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8">
           <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
           <NavButton active={view === "catalogo"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
           <NavButton active={view === "recomendador"} onClick={() => setView("recomendador")}>Elegir</NavButton>
-          <NavButton active={view === "comprar"} onClick={() => setView("comprar")}>Comprar</NavButton>
           <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
         </div>
       </header>
@@ -762,7 +683,6 @@ export default function Home() {
         {view === "inicio" && <HomeView setView={setView} />}
         {view === "catalogo" && <CatalogView />}
         {view === "recomendador" && <RecommenderView />}
-        {view === "comprar" && <BuyView setView={setView} />}
         {view === "entrega" && <DeliveryView />}
       </div>
 
