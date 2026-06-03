@@ -38,137 +38,137 @@ const plants: Plant[] = [
   {
     id: "haworthia-verde",
     name: "Suculenta Haworthia",
-    price: "Consultar",
+    price: "$3.000",
     category: "Fácil cuidado",
-    short: "Pequeña, firme y resistente.",
+    short: "Macetero grande, firme y resistente.",
     description: "Suculenta compacta y decorativa, ideal para escritorios, repisas o rincones con buena luz.",
     image: "/suculenta-haworthia-verde.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar", "regalo"],
-    tags: ["Suculenta", "Bajo riego", "Fácil"],
-    badge: "Disponible",
+    tags: ["Macetero grande", "Bajo riego", "Fácil"],
+    badge: "Grande",
   },
   {
     id: "orejitas",
     name: "Suculenta Orejitas",
-    price: "Consultar",
+    price: "$3.000",
     category: "Interior",
-    short: "Suave, curiosa y decorativa.",
+    short: "Macetero grande, suave y decorativa.",
     description: "Planta pequeña con hojas redondeadas. Muy linda para regalar o decorar espacios chicos.",
     image: "/suculenta-orejitas.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo", "principiante"],
-    tags: ["Interior", "Regalo", "Compacta"],
-    badge: "Nueva",
+    tags: ["Macetero grande", "Interior", "Regalo"],
+    badge: "Grande",
   },
   {
     id: "rosada",
     name: "Suculenta Rosada",
-    price: "Consultar",
+    price: "$3.000",
     category: "Interior",
-    short: "Color suave y estilo delicado.",
+    short: "Macetero grande, color suave y delicado.",
     description: "Suculenta de tonos rosados, ideal para quienes buscan una planta diferente y decorativa.",
     image: "/suculenta-rosada.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo"],
-    tags: ["Rosada", "Decorativa", "Bajo riego"],
-    badge: "Especial",
+    tags: ["Macetero grande", "Rosada", "Decorativa"],
+    badge: "Grande",
   },
   {
     id: "haworthia-clara",
     name: "Haworthia Clara",
-    price: "Consultar",
+    price: "$2.000",
     category: "Fácil cuidado",
-    short: "Compacta y de bajo mantenimiento.",
+    short: "Macetero mediano, compacto y fácil.",
     description: "Perfecta para comenzar con plantas. Requiere poco riego y se adapta bien a espacios luminosos.",
     image: "/suculenta-haworthia-clara.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar"],
-    tags: ["Fácil", "Compacta", "Bajo riego"],
-    badge: "Fácil",
+    tags: ["Macetero mediano", "Fácil", "Bajo riego"],
+    badge: "Mediana",
   },
   {
     id: "haworthia-cebra",
     name: "Suculenta Cebra",
-    price: "Consultar",
+    price: "$3.000",
     category: "Fácil cuidado",
-    short: "Textura marcada y look moderno.",
+    short: "Macetero grande, textura marcada y moderna.",
     description: "Suculenta llamativa por sus líneas y textura. Buena opción para espacios modernos y luminosos.",
     image: "/suculenta-haworthia-cebra.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "principiante"],
-    tags: ["Moderna", "Resistente", "Bajo riego"],
-    badge: "Top",
+    tags: ["Macetero grande", "Moderna", "Resistente"],
+    badge: "Grande",
   },
   {
     id: "dorada",
     name: "Suculenta Dorada",
-    price: "Consultar",
+    price: "$2.000",
     category: "Exterior",
-    short: "Tonos claros y presencia alegre.",
+    short: "Macetero mediano, tonos claros y alegres.",
     description: "Ideal para lugares con buena luz. Sus tonos verdes y dorados aportan frescura y calidez.",
     image: "/suculenta-dorada.webp",
     light: "alta",
     water: "Bajo",
     care: "facil",
     bestFor: ["terraza", "decorar", "regalo"],
-    tags: ["Buena luz", "Exterior", "Color claro"],
-    badge: "Exterior",
+    tags: ["Macetero mediano", "Buena luz", "Exterior"],
+    badge: "Mediana",
   },
   {
     id: "colgante",
     name: "Suculenta Vertical",
-    price: "Consultar",
+    price: "$3.000",
     category: "Exterior",
-    short: "Forma alta y mucho carácter.",
+    short: "Macetero grande, forma alta y llamativa.",
     description: "Suculenta con silueta más alta, ideal para destacar en terraza, repisa o entrada luminosa.",
     image: "/suculenta-colgante.webp",
     light: "alta",
     water: "Bajo",
     care: "facil",
     bestFor: ["terraza", "decorar"],
-    tags: ["Vertical", "Luminosa", "Bajo riego"],
-    badge: "Destacada",
+    tags: ["Macetero grande", "Vertical", "Luminosa"],
+    badge: "Grande",
   },
   {
     id: "mini-verde",
     name: "Suculenta Mini Verde",
-    price: "Consultar",
+    price: "$1.000",
     category: "Interior",
-    short: "Pequeña, fresca y delicada.",
+    short: "Macetero chico, fresca y delicada.",
     description: "Opción mini para detalles decorativos, escritorios o regalos simples.",
     image: "/suculenta-mini-verde.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["regalo", "decorar", "principiante"],
-    tags: ["Mini", "Regalo", "Decorativa"],
-    badge: "Mini",
+    tags: ["Macetero chico", "Mini", "Regalo"],
+    badge: "Chica",
   },
   {
     id: "echeveria-clara",
     name: "Suculenta Echeveria",
-    price: "Consultar",
+    price: "$1.000",
     category: "Interior",
-    short: "Clara, suave y elegante.",
+    short: "Macetero chico, clara y elegante.",
     description: "Suculenta de tonos claros, perfecta para decorar con un estilo limpio y natural.",
     image: "/suculenta-echeveria-clara.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo"],
-    tags: ["Elegante", "Interior", "Bajo riego"],
-    badge: "Favorita",
+    tags: ["Macetero chico", "Elegante", "Interior"],
+    badge: "Chica",
   },
 ]
 
@@ -467,7 +467,7 @@ function CatalogView() {
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Plantas disponibles</h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">Estas son las plantas reales disponibles. Las fotos se muestran completas y los nombres/precios se pueden editar cuando quieras.</p>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">Estas son las plantas reales disponibles. Precios: grandes $3.000, medianas $2.000 y chicas $1.000.</p>
         </div>
 
         <input
@@ -508,8 +508,25 @@ function RecommenderView() {
   const [useCase, setUseCase] = useState<UseCase>("principiante")
 
   const recommended = useMemo(() => {
-    return [...plants].map((plant) => ({ plant, score: scorePlant(plant, light, care, useCase) })).sort((a, b) => b.score - a.score).slice(0, 6)
+    return [...plants]
+      .map((plant) => ({ plant, score: scorePlant(plant, light, care, useCase) }))
+      .sort((a, b) => b.score - a.score)
   }, [light, care, useCase])
+
+  const topScore = recommended[0]?.score ?? 0
+  const bestMatches = recommended.filter((item) => item.score >= topScore - 1).slice(0, 3)
+  const otherOptions = recommended.filter((item) => item.score < topScore - 1).slice(0, 6)
+
+  const lightText = light === "baja" ? "poca luz" : light === "media" ? "luz indirecta" : "mucha luz"
+  const careText = care === "facil" ? "muy fácil cuidado" : "cuidado medio"
+  const useText =
+    useCase === "principiante"
+      ? "empezar"
+      : useCase === "decorar"
+        ? "decorar"
+        : useCase === "terraza"
+          ? "terraza o exterior"
+          : "regalar"
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
@@ -517,8 +534,22 @@ function RecommenderView() {
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-7 text-white">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">Te ayudamos a elegir</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight">Encuentra la ideal para ti.</h2>
-            <p className="mt-4 text-sm leading-7 text-emerald-50">Elige tus preferencias y te mostramos las plantas que mejor pueden calzar con tu espacio.</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight">Elige según tu espacio.</h2>
+            <p className="mt-4 text-sm leading-7 text-emerald-50">
+              Esto no reemplaza una conversación por WhatsApp, pero ordena el catálogo según luz, facilidad y uso.
+            </p>
+
+            <div className="mt-8 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+              <p className="text-sm font-semibold">Tu búsqueda actual</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{lightText}</span>
+                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{careText}</span>
+                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{useText}</span>
+              </div>
+              <p className="mt-3 text-xs leading-5 text-emerald-50">
+                Como casi todas son suculentas de bajo riego, algunas opciones pueden repetirse; las primeras son las que mejor calzan.
+              </p>
+            </div>
           </div>
 
           <div className="rounded-[2rem] border border-emerald-100 bg-white p-5 sm:p-7">
@@ -545,12 +576,31 @@ function RecommenderView() {
           </div>
         </div>
 
+        <div className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Resultado</p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
+            Estas plantas calzan mejor con tus elecciones
+          </h3>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">
+            Priorizamos las opciones según lo que marcaste. Si quieres, también puedes escribir por WhatsApp y te ayudamos a confirmar stock y tamaño.
+          </p>
+        </div>
+
         <div className="mt-6">
-          <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Recomendadas para ti</h3>
+          <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Mejor calce</h3>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {recommended.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact />)}
+            {bestMatches.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact />)}
           </div>
         </div>
+
+        {otherOptions.length > 0 && (
+          <div className="mt-8">
+            <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">También podrían servirte</h3>
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {otherOptions.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact />)}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
