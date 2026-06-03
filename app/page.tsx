@@ -377,15 +377,15 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
         <div>
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100 sm:text-sm">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Plantas listas para alegrar tu espacio
+            Plantas que llenan de vida tu hogar
           </div>
 
           <h1 className="max-w-3xl text-[2.85rem] font-semibold leading-[0.95] tracking-[-0.06em] text-emerald-950 sm:text-6xl">
-            Más plantas, menos texto.
+            Dale vida a tu espacio.
           </h1>
 
           <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-            Plantas de interior, exterior y fácil cuidado. Compra directo por Instagram o WhatsApp.
+            Encuentra plantas de interior, exterior y fácil cuidado para hacer tu hogar más fresco, acogedor y vivo. Compra directo por Instagram o WhatsApp.
           </p>
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -440,12 +440,12 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
             <div className="rounded-[1.8rem] bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/10">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">Oferta</p>
               <p className="mt-2 text-xl font-semibold">Chiflera en promoción</p>
-              <p className="mt-2 text-sm leading-6 text-emerald-50">Bonita, frondosa y perfecta para dar vida a tu entrada o terraza.</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-50">Frondosa, luminosa y perfecta para transformar tu entrada o terraza.</p>
             </div>
             <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-emerald-100">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Fácil cuidado</p>
               <p className="mt-2 text-xl font-semibold text-emerald-950">Empieza con una sansevieria</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Ideal si quieres una planta linda y resistente para comenzar.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">Ideal si quieres empezar con una planta bonita, resistente y llena de vida.</p>
             </div>
           </div>
         </div>
