@@ -28,8 +28,8 @@ type Plant = {
 
 const BRAND = {
   name: "Plantas Mary",
-  instagramUser: "@plantasmary",
-  instagramUrl: "https://instagram.com/plantasmary",
+  instagramUser: "@plantasmary.cl",
+  instagramUrl: "https://www.instagram.com/plantasmary.cl/",
   logo: "/logo-plantas-mary.webp",
   whatsappNumber: "56984560468",
   delivery: "Entregamos en nuestro domicilio en Maipú y también en Metro Plaza Maipú.",
