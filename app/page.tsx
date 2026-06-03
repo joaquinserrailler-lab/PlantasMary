@@ -60,7 +60,7 @@ const plants: Plant[] = [
     name: "Peperomia",
     price: "$7.990",
     category: "Interior",
-    short: "Compacta y fácil de amar.",
+    short: "Compacta y fácil.",
     description:
       "Perfecta para escritorios, repisas y espacios pequeños. Muy linda para regalar o empezar.",
     image: "/peperomia.webp",
@@ -179,7 +179,7 @@ function NavButton({
       onClick={onClick}
       className={[
         "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-        active ? "bg-emerald-950 text-white" : "text-zinc-600 hover:bg-white hover:text-emerald-950",
+        active ? "bg-emerald-950 text-white shadow-sm" : "text-zinc-600 hover:bg-white hover:text-emerald-950",
       ].join(" ")}
     >
       {children}
@@ -187,33 +187,41 @@ function NavButton({
   )
 }
 
-function TinyPlantCard({
+function FeaturedMiniCard({
   plant,
-  onOpenCatalog,
+  large = false,
+  onClick,
 }: {
   plant: Plant
-  onOpenCatalog: () => void
+  large?: boolean
+  onClick: () => void
 }) {
   return (
     <button
-      onClick={onOpenCatalog}
-      className="w-[11.5rem] shrink-0 overflow-hidden rounded-[1.8rem] border border-emerald-100 bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+      onClick={onClick}
+      className={[
+        "group overflow-hidden rounded-[1.6rem] border border-emerald-100 bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-200/60",
+        large ? "col-span-2 sm:col-span-1" : "",
+      ].join(" ")}
     >
-      <div className="relative h-36 overflow-hidden">
-        <img src={plant.image} alt={plant.name} className="h-full w-full object-cover" />
+      <div className={large ? "relative h-44 overflow-hidden sm:h-40" : "relative h-32 overflow-hidden sm:h-40"}>
+        <img src={plant.image} alt={plant.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
         {plant.badge && (
-          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 backdrop-blur">
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-emerald-800 backdrop-blur">
             {plant.badge}
-          </div>
+          </span>
         )}
       </div>
       <div className="p-4">
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-base font-semibold tracking-tight text-emerald-950">{plant.name}</p>
+            <h3 className="text-base font-semibold tracking-tight text-emerald-950">{plant.name}</h3>
             <p className="mt-1 text-xs text-zinc-500">{plant.category}</p>
           </div>
-          <p className="text-sm font-semibold text-emerald-800">{plant.price}</p>
+          <div className="text-right">
+            {plant.oldPrice && <p className="text-[11px] text-zinc-400 line-through">{plant.oldPrice}</p>}
+            <p className="text-sm font-bold text-emerald-700">{plant.price}</p>
+          </div>
         </div>
       </div>
     </button>
@@ -373,22 +381,22 @@ function DeliveryMap() {
 function HomeView({ setView }: { setView: (view: View) => void }) {
   return (
     <section className="mx-auto max-w-7xl px-5 py-6 sm:px-8 sm:py-8">
-      <div className="grid items-center gap-7 lg:grid-cols-[0.96fr_1.04fr]">
+      <div className="grid items-start gap-8 lg:grid-cols-[0.78fr_1.22fr]">
         <div>
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100 sm:text-sm">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             Plantas que llenan de vida tu hogar
           </div>
 
-          <h1 className="max-w-3xl text-[2.85rem] font-semibold leading-[0.95] tracking-[-0.06em] text-emerald-950 sm:text-6xl">
-            Dale vida a tu espacio.
+          <h1 className="max-w-2xl text-[2.65rem] font-semibold leading-[0.96] tracking-[-0.055em] text-emerald-950 sm:text-6xl">
+            Dale vida a tu hogar.
           </h1>
 
-          <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-            Encuentra plantas de interior, exterior y fácil cuidado para hacer tu hogar más fresco, acogedor y vivo. Compra directo por Instagram o WhatsApp.
+          <p className="mt-4 max-w-xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
+            Elige una planta para hacer tu espacio más fresco, acogedor y vivo.
           </p>
 
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-5 grid gap-3 sm:flex">
             <Button onClick={() => setView("catalogo")} variant="dark" className="w-full sm:w-auto">
               Ver catálogo
             </Button>
@@ -397,7 +405,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
             </Button>
           </div>
 
-          <div className="mt-6 rounded-[1.7rem] border border-emerald-100 bg-white p-4 shadow-sm">
+          <div className="mt-5 rounded-[1.7rem] border border-emerald-100 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold text-emerald-950">Entrega en Maipú</p>
@@ -411,7 +419,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
         </div>
 
         <div>
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">
                 Destacadas
@@ -422,30 +430,37 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
             </div>
             <button
               onClick={() => setView("catalogo")}
-              className="text-sm font-semibold text-emerald-700 transition hover:text-emerald-900"
+              className="shrink-0 text-sm font-semibold text-emerald-700 transition hover:text-emerald-900"
             >
               Ver todas
             </button>
           </div>
 
-          <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
-            <div className="flex gap-4">
-              {plants.map((plant) => (
-                <TinyPlantCard key={plant.id} plant={plant} onOpenCatalog={() => setView("catalogo")} />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            {plants.map((plant, index) => (
+              <FeaturedMiniCard
+                key={plant.id}
+                plant={plant}
+                large={index === 0}
+                onClick={() => setView("catalogo")}
+              />
+            ))}
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-[1.8rem] bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/10">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">Oferta</p>
               <p className="mt-2 text-xl font-semibold">Chiflera en promoción</p>
-              <p className="mt-2 text-sm leading-6 text-emerald-50">Frondosa, luminosa y perfecta para transformar tu entrada o terraza.</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-50">
+                Frondosa, luminosa y perfecta para transformar tu entrada o terraza.
+              </p>
             </div>
             <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-emerald-100">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Fácil cuidado</p>
               <p className="mt-2 text-xl font-semibold text-emerald-950">Empieza con una sansevieria</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Ideal si quieres empezar con una planta bonita, resistente y llena de vida.</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                Ideal si quieres una planta bonita, resistente y llena de vida.
+              </p>
             </div>
           </div>
         </div>
@@ -640,7 +655,7 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen bg-[#f3f8f4] text-zinc-950"
+      className="min-h-screen overflow-x-hidden bg-[#f3f8f4] text-zinc-950"
       style={{
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", sans-serif',
@@ -652,7 +667,7 @@ export default function Home() {
         <div className="absolute bottom-[-16rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-teal-200/40 blur-3xl" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/85 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/90 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
