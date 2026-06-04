@@ -282,8 +282,8 @@ const categories: Category[] = ["Todas", "Interior", "Exterior", "Fácil cuidado
 
 function whatsappLink(plant?: Plant) {
   const message = plant
-    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) de Plantas Mary. ¿Hay stock disponible?`
-    : "Hola, quiero consultar por las plantas disponibles de Plantas Mary."
+    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) de Plantas Mary. ¿Hay stock disponible? También me interesa el instructivo de cuidado.`
+    : "Hola, quiero consultar por las plantas disponibles de Plantas Mary. También vi que entregan un instructivo de cuidado."
   return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`
 }
 
@@ -433,6 +433,10 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
           </div>
         )}
 
+        <div className="mt-4 rounded-2xl bg-emerald-50 p-3 text-xs leading-5 text-emerald-800 ring-1 ring-emerald-100">
+          <span className="font-semibold">Incluye guía de cuidado:</span> ubicación, riego y consejos simples para mantenerla bonita.
+        </div>
+
         <div className="mt-5 grid gap-2 sm:grid-cols-2">
           <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
           <Button href={BRAND.instagramUrl} variant="light" className="w-full">Instagram</Button>
@@ -510,6 +514,18 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
             <p className="mt-1 text-sm leading-6 text-zinc-600">Suculentas y plantas seleccionadas para decorar, regalar o darle vida a tu hogar.</p>
           </div>
 
+          <div className="mt-4 rounded-[1.7rem] border border-emerald-100 bg-emerald-950 p-4 text-white shadow-lg shadow-emerald-900/10">
+            <div className="flex gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-lg">🌿</div>
+              <div>
+                <p className="text-sm font-semibold">Incluye instructivo de cuidado</p>
+                <p className="mt-1 text-sm leading-6 text-emerald-50">
+                  Con tu compra te entregamos una guía simple para saber dónde ponerla, cada cuánto regarla y cómo mantenerla bonita.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-5 grid gap-3 sm:flex">
             <Button onClick={() => setView("catalogo")} variant="dark" className="w-full sm:w-auto">Ver catálogo</Button>
             <Button onClick={() => setView("elegir")} variant="light" className="w-full sm:w-auto">Te ayudamos a elegir</Button>
@@ -550,9 +566,9 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
               <p className="mt-2 text-sm leading-6 text-emerald-50">Elige entre modelos pequeños, decorativos y fáciles de cuidar.</p>
             </div>
             <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-emerald-100">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Importante</p>
-              <p className="mt-2 text-xl font-semibold text-emerald-950">El cm corresponde al macetero</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">La medida indicada es el diámetro del macetero, no la altura total de la planta.</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Cuidado incluido</p>
+              <p className="mt-2 text-xl font-semibold text-emerald-950">Te llevas tu planta + guía</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">Cada compra incluye un instructivo simple para cuidar mejor tu planta desde el primer día.</p>
             </div>
           </div>
         </div>
