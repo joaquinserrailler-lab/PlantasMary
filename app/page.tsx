@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 import { useMemo, useState } from "react"
 
-type View = "inicio" | "catalogo" | "elegir" | "entrega"
+type View = "inicio" | "catalogo" | "elegir" | "entrega" | "detalle"
 type Category = "Todas" | "Interior" | "Exterior" | "Fácil cuidado"
 type Light = "baja" | "media" | "alta"
 type Care = "facil" | "media"
@@ -17,6 +17,7 @@ type Plant = {
   category: Exclude<Category, "Todas">
   short: string
   description: string
+  story: string
   image: string
   light: Light
   water: "Bajo" | "Medio"
@@ -44,6 +45,7 @@ const plants: Plant[] = [
     category: "Fácil cuidado",
     short: "Firme, compacta y resistente.",
     description: "Suculenta compacta y decorativa, ideal para escritorios, repisas o rincones con buena luz.",
+    story: "Una planta pequeña con carácter fuerte: se ve ordenada, firme y muy limpia visualmente. Es ideal para quienes quieren empezar con algo resistente, pero que igual se sienta especial en una repisa o escritorio.",
     image: "/suculenta-haworthia-verde.webp",
     light: "media",
     water: "Bajo",
@@ -56,10 +58,11 @@ const plants: Plant[] = [
     id: "orejitas",
     name: "Suculenta Orejitas",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
     short: "Suave, curiosa y decorativa.",
     description: "Planta pequeña con hojas redondeadas. Muy linda para regalar o decorar espacios chicos.",
+    story: "Sus hojas redondeadas le dan una personalidad tierna y suave. Queda muy bien en espacios pequeños, veladores o escritorios donde quieres sumar un detalle vivo sin sobrecargar el lugar.",
     image: "/suculenta-orejitas.webp",
     light: "media",
     water: "Bajo",
@@ -72,10 +75,11 @@ const plants: Plant[] = [
     id: "rosada",
     name: "Suculenta Rosada",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
     short: "Color suave y estilo delicado.",
     description: "Suculenta de tonos rosados, ideal para quienes buscan una planta diferente y decorativa.",
+    story: "Tiene tonos cálidos y delicados que la hacen destacar sin ser exagerada. Es una buena opción para regalar o para darle un toque más dulce y decorativo a un rincón del hogar.",
     image: "/suculenta-rosada.webp",
     light: "media",
     water: "Bajo",
@@ -92,6 +96,7 @@ const plants: Plant[] = [
     category: "Fácil cuidado",
     short: "Compacta y de bajo mantenimiento.",
     description: "Perfecta para comenzar con plantas. Requiere poco riego y se adapta bien a espacios luminosos.",
+    story: "Compacta, simple y fácil de ubicar. Es de esas plantas que se adaptan bien a la rutina y ayudan a que un espacio se vea más cuidado sin exigir demasiada atención.",
     image: "/suculenta-haworthia-clara.webp",
     light: "media",
     water: "Bajo",
@@ -108,6 +113,7 @@ const plants: Plant[] = [
     category: "Fácil cuidado",
     short: "Textura marcada y look moderno.",
     description: "Suculenta llamativa por sus líneas y textura. Buena opción para espacios modernos y luminosos.",
+    story: "Su textura marcada y sus líneas naturales le dan un aspecto moderno. Funciona muy bien para personas que buscan una planta pequeña, resistente y con una forma distinta.",
     image: "/suculenta-haworthia-cebra.webp",
     light: "media",
     water: "Bajo",
@@ -124,6 +130,7 @@ const plants: Plant[] = [
     category: "Exterior",
     short: "Tonos claros y presencia alegre.",
     description: "Ideal para lugares con buena luz. Sus tonos verdes y dorados aportan frescura y calidez.",
+    story: "Sus tonos claros transmiten calidez y luz. Es una planta alegre, perfecta para espacios luminosos donde quieres sumar un detalle fresco y natural.",
     image: "/suculenta-dorada.webp",
     light: "alta",
     water: "Bajo",
@@ -136,10 +143,11 @@ const plants: Plant[] = [
     id: "vertical",
     name: "Suculenta Vertical",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Exterior",
     short: "Forma alta y mucho carácter.",
     description: "Suculenta con silueta más alta, ideal para destacar en terraza, repisa o entrada luminosa.",
+    story: "Tiene una silueta más alta y llamativa, por eso destaca más que otras suculentas. Es buena para entradas, terrazas protegidas o repisas donde quieres que la planta tenga presencia.",
     image: "/suculenta-vertical.webp",
     light: "alta",
     water: "Bajo",
@@ -151,17 +159,18 @@ const plants: Plant[] = [
   {
     id: "mini-verde",
     name: "Suculenta Mini Verde",
-    price: "$1.000",
-    potSize: "Macetero: 5 cm",
+    price: "$2.000",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
-    short: "Pequeña, fresca y delicada.",
+    short: "Fresca, delicada y decorativa.",
     description: "Opción mini para detalles decorativos, escritorios o regalos simples.",
+    story: "Pequeña y delicada, pensada para detalles simples. Es ideal para regalos, escritorios o rincones chicos donde una planta grande no calza, pero igual quieres sumar vida.",
     image: "/suculenta-mini-verde.webp",
     light: "media",
     water: "Bajo",
     care: "facil",
     bestFor: ["regalo", "decorar", "principiante"],
-    tags: ["Mini", "Regalo", "Decorativa"],
+    tags: ["Decorativa", "Regalo", "Interior"],
     badge: "Mini",
   },
   {
@@ -172,6 +181,7 @@ const plants: Plant[] = [
     category: "Interior",
     short: "Clara, suave y elegante.",
     description: "Suculenta de tonos claros, perfecta para decorar con un estilo limpio y natural.",
+    story: "Su forma ordenada y color suave la hacen sentir elegante. Queda muy bien en espacios limpios, minimalistas o donde buscas una planta decorativa pero tranquila.",
     image: "/suculenta-echeveria-clara.webp",
     light: "media",
     water: "Bajo",
@@ -184,10 +194,11 @@ const plants: Plant[] = [
     id: "rosario",
     name: "Suculenta Rosario",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
     short: "Colgante, delicada y muy llamativa.",
     description: "Suculenta tipo rosario, ideal para repisas, maceteros altos o espacios donde pueda caer con gracia.",
+    story: "Su forma colgante la hace muy especial. Es perfecta para repisas o lugares donde pueda caer de forma natural, creando un efecto más vivo y orgánico.",
     image: "/suculenta-rosario.webp",
     light: "media",
     water: "Bajo",
@@ -200,10 +211,11 @@ const plants: Plant[] = [
     id: "jade",
     name: "Suculenta Jade",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
     short: "Hojas brillantes y forma elegante.",
     description: "Planta de hojas verdes con borde sutil, ideal para decorar interiores luminosos.",
+    story: "De hojas brillantes y forma amable, transmite frescura y buena energía. Es una planta muy decorativa para interiores luminosos y también funciona muy bien como regalo.",
     image: "/suculenta-jade.webp",
     light: "media",
     water: "Bajo",
@@ -220,6 +232,7 @@ const plants: Plant[] = [
     category: "Interior",
     short: "Forma de roseta y tono suave.",
     description: "Suculenta pequeña de aspecto delicado, perfecta para detalles decorativos o regalos simples.",
+    story: "Tiene una forma de roseta muy delicada, como una pequeña flor verde. Es ideal para quienes buscan una planta sencilla, bonita y con un toque elegante.",
     image: "/suculenta-roseta-gris.webp",
     light: "media",
     water: "Bajo",
@@ -236,6 +249,7 @@ const plants: Plant[] = [
     category: "Interior",
     short: "Hojas redondas, fresca y muy decorativa.",
     description: "Planta conocida por sus hojas redondas tipo cucharita. El tamaño indicado corresponde al macetero, no a la altura total de la planta.",
+    story: "Sus hojas redondas tipo cucharita la hacen muy reconocible y entretenida visualmente. Es una planta con más presencia, ideal para convertir un rincón simple en un punto verde protagonista.",
     image: "/planta-cucharita-11cm.webp",
     light: "media",
     water: "Medio",
@@ -248,10 +262,11 @@ const plants: Plant[] = [
     id: "echeveria-verde",
     name: "Echeveria Verde",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Interior",
     short: "Verde clara, fresca y elegante.",
     description: "Suculenta de forma armónica y color verde suave, ideal para dar un toque natural al hogar.",
+    story: "De forma armónica y color verde claro, tiene una presencia fresca y luminosa. Es una buena opción para decorar con un estilo natural y limpio.",
     image: "/suculenta-echeveria-verde.webp",
     light: "media",
     water: "Bajo",
@@ -264,10 +279,11 @@ const plants: Plant[] = [
     id: "sedum-verde",
     name: "Suculenta Sedum",
     price: "$2.000",
-    potSize: "Macetero: 8 cm",
+    potSize: "Macetero: 7 cm",
     category: "Exterior",
     short: "Vertical, fresca y de bajo riego.",
     description: "Suculenta de hojas alargadas y tonos verdes claros, ideal para espacios luminosos.",
+    story: "Sus hojas alargadas y crecimiento vertical le dan movimiento. Es una planta alegre para espacios luminosos, perfecta para sumar altura y textura.",
     image: "/suculenta-sedum-verde.webp",
     light: "alta",
     water: "Bajo",
@@ -384,14 +400,41 @@ function ProductTile({ plant, onClick, large = false }: { plant: Plant; onClick:
   )
 }
 
-function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean }) {
+function PlantCard({
+  plant,
+  compact = false,
+  onOpen,
+}: {
+  plant: Plant
+  compact?: boolean
+  onOpen?: (plant: Plant) => void
+}) {
   return (
-    <article className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-200/60">
+    <article
+      onClick={() => onOpen?.(plant)}
+      onKeyDown={(event) => {
+        if ((event.key === "Enter" || event.key === " ") && onOpen) {
+          event.preventDefault()
+          onOpen(plant)
+        }
+      }}
+      tabIndex={onOpen ? 0 : undefined}
+      role={onOpen ? "button" : undefined}
+      className={[
+        "overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-200/60",
+        onOpen ? "cursor-pointer focus:outline-none focus:ring-4 focus:ring-emerald-100" : "",
+      ].join(" ")}
+    >
       <div className={compact ? "relative h-64 overflow-hidden bg-emerald-50" : "relative h-80 overflow-hidden bg-emerald-50"}>
         <img src={plant.image} alt={plant.name} className="h-full w-full object-contain p-2" />
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
           {plant.category}
         </div>
+        {onOpen && (
+          <div className="absolute bottom-4 right-4 rounded-full bg-emerald-950 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+            Ver detalle
+          </div>
+        )}
       </div>
 
       <div className={compact ? "p-5" : "p-6"}>
@@ -437,7 +480,22 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
           <span className="font-semibold">Incluye guía de cuidado:</span> ubicación, riego y consejos simples para mantenerla bonita.
         </div>
 
-        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+        {onOpen && (
+          <button
+            onClick={(event) => {
+              event.stopPropagation()
+              onOpen(plant)
+            }}
+            className="mt-4 w-full rounded-full bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 ring-1 ring-emerald-100 transition hover:bg-emerald-100"
+          >
+            Ver fotos y detalles
+          </button>
+        )}
+
+        <div
+          onClick={(event) => event.stopPropagation()}
+          className="mt-5 grid gap-2 sm:grid-cols-2"
+        >
           <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
           <Button href={BRAND.instagramUrl} variant="light" className="w-full">Instagram</Button>
         </div>
@@ -489,7 +547,104 @@ function DeliveryMap() {
   )
 }
 
-function HomeView({ setView }: { setView: (view: View) => void }) {
+
+function DetailView({
+  plant,
+  setView,
+}: {
+  plant: Plant
+  setView: (view: View) => void
+}) {
+  return (
+    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <button
+        onClick={() => setView("catalogo")}
+        className="mb-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
+      >
+        ← Volver al catálogo
+      </button>
+
+      <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="overflow-hidden rounded-[2.5rem] border border-emerald-100 bg-white shadow-2xl shadow-emerald-200/50">
+          <div className="relative min-h-[520px] bg-emerald-50 p-4">
+            <img src={plant.image} alt={plant.name} className="h-full max-h-[680px] w-full object-contain" />
+            <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
+              {plant.category}
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[2.5rem] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/70 sm:p-8">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
+              {plant.potSize}
+            </span>
+            <span className="rounded-full bg-lime-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-lime-100">
+              Incluye guía de cuidado
+            </span>
+          </div>
+
+          <div className="mt-5 flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Detalle de planta</p>
+              <h1 className="mt-2 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">
+                {plant.name}
+              </h1>
+              <p className="mt-3 text-base leading-7 text-zinc-600">{plant.short}</p>
+            </div>
+            <p className="shrink-0 rounded-full bg-emerald-950 px-4 py-2 text-base font-semibold text-white">
+              {plant.price}
+            </p>
+          </div>
+
+          <div className="mt-6 rounded-[1.6rem] bg-emerald-50 p-5 ring-1 ring-emerald-100">
+            <p className="text-sm font-semibold text-emerald-950">Historia de esta planta</p>
+            <p className="mt-2 text-sm leading-7 text-zinc-700">{plant.story}</p>
+          </div>
+
+          <p className="mt-5 text-sm leading-7 text-zinc-600">{plant.description}</p>
+
+          <div className="mt-6 grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-2xl bg-emerald-50 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Luz</p>
+              <p className="mt-1 text-xs font-semibold text-emerald-950">{lightLabel(plant.light)}</p>
+            </div>
+            <div className="rounded-2xl bg-emerald-50 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Riego</p>
+              <p className="mt-1 text-xs font-semibold text-emerald-950">{plant.water}</p>
+            </div>
+            <div className="rounded-2xl bg-emerald-50 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Cuidado</p>
+              <p className="mt-1 text-xs font-semibold text-emerald-950">{careLabel(plant.care)}</p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {plant.tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100">
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-6 rounded-[1.6rem] border border-emerald-100 bg-white p-5">
+            <p className="text-sm font-semibold text-emerald-950">Con tu compra te entregamos</p>
+            <p className="mt-2 text-sm leading-7 text-zinc-600">
+              Un instructivo simple con ubicación recomendada, frecuencia de riego y consejos para mantener tu planta bonita desde el primer día.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar por WhatsApp</Button>
+            <Button href={BRAND.instagramUrl} variant="light" className="w-full">Ver Instagram</Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HomeView({ setView, openDetail }: { setView: (view: View) => void; openDetail: (plant: Plant) => void }) {
   const featured = plants.slice(0, 6)
 
   return (
@@ -555,7 +710,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
             {featured.map((plant, index) => (
-              <ProductTile key={plant.id} plant={plant} large={index === 0} onClick={() => setView("catalogo")} />
+              <ProductTile key={plant.id} plant={plant} large={index === 0} onClick={() => openDetail(plant)} />
             ))}
           </div>
 
@@ -577,7 +732,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
   )
 }
 
-function CatalogView() {
+function CatalogView({ openDetail }: { openDetail: (plant: Plant) => void }) {
   const [category, setCategory] = useState<Category>("Todas")
   const [query, setQuery] = useState("")
 
@@ -601,9 +756,7 @@ function CatalogView() {
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Plantas disponibles</h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-            
-          </p>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">Explora las plantas disponibles. Puedes abrir cada planta para ver su foto más grande, historia, cuidados y precio.</p>
         </div>
 
         <input
@@ -631,14 +784,14 @@ function CatalogView() {
 
       <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {filteredPlants.map((plant) => (
-          <PlantCard key={plant.id} plant={plant} />
+          <PlantCard key={plant.id} plant={plant} onOpen={openDetail} />
         ))}
       </div>
     </section>
   )
 }
 
-function RecommenderView() {
+function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void }) {
   const [light, setLight] = useState<Light>("media")
   const [care, setCare] = useState<Care>("facil")
   const [useCase, setUseCase] = useState<UseCase>("principiante")
@@ -712,7 +865,7 @@ function RecommenderView() {
         <div className="mt-6">
           <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Mejor calce</h3>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {bestMatches.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact />)}
+            {bestMatches.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact onOpen={openDetail} />)}
           </div>
         </div>
 
@@ -720,7 +873,7 @@ function RecommenderView() {
           <div className="mt-8">
             <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">También podrían servirte</h3>
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {otherOptions.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact />)}
+              {otherOptions.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact onOpen={openDetail} />)}
             </div>
           </div>
         )}
@@ -761,6 +914,14 @@ function DeliveryView() {
 
 export default function Home() {
   const [view, setView] = useState<View>("inicio")
+  const [selectedPlantId, setSelectedPlantId] = useState(plants[0]?.id ?? "")
+
+  const selectedPlant = plants.find((plant) => plant.id === selectedPlantId) ?? plants[0]
+
+  function openDetail(plant: Plant) {
+    setSelectedPlantId(plant.id)
+    setView("detalle")
+  }
 
   return (
     <main
@@ -792,16 +953,17 @@ export default function Home() {
 
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8">
           <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
-          <NavButton active={view === "catalogo"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
+          <NavButton active={view === "catalogo" || view === "detalle"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
           <NavButton active={view === "elegir"} onClick={() => setView("elegir")}>Elegir</NavButton>
           <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
         </div>
       </header>
 
       <div className="relative">
-        {view === "inicio" && <HomeView setView={setView} />}
-        {view === "catalogo" && <CatalogView />}
-        {view === "elegir" && <RecommenderView />}
+        {view === "inicio" && <HomeView setView={setView} openDetail={openDetail} />}
+        {view === "catalogo" && <CatalogView openDetail={openDetail} />}
+        {view === "elegir" && <RecommenderView openDetail={openDetail} />}
+        {view === "detalle" && selectedPlant && <DetailView plant={selectedPlant} setView={setView} />}
         {view === "entrega" && <DeliveryView />}
       </div>
 
