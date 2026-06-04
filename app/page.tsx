@@ -40,7 +40,7 @@ const plants: Plant[] = [
     id: "haworthia-verde",
     name: "Suculenta Haworthia",
     price: "$3.000",
-    potSize: "Macetero 8 cm",
+    potSize: "Macetero: 8 cm",
     category: "Fácil cuidado",
     short: "Firme, compacta y resistente.",
     description: "Suculenta compacta y decorativa, ideal para escritorios, repisas o rincones con buena luz.",
@@ -49,14 +49,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar", "regalo"],
-    tags: ["8 cm", "Bajo riego", "Fácil"],
-    badge: "8 cm",
+    tags: ["Bajo riego", "Fácil", "Interior"],
+    badge: "Disponible",
   },
   {
     id: "orejitas",
     name: "Suculenta Orejitas",
     price: "$3.000",
-    potSize: "Macetero 8 cm",
+    potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Suave, curiosa y decorativa.",
     description: "Planta pequeña con hojas redondeadas. Muy linda para regalar o decorar espacios chicos.",
@@ -65,14 +65,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo", "principiante"],
-    tags: ["8 cm", "Interior", "Regalo"],
-    badge: "8 cm",
+    tags: ["Interior", "Regalo", "Decorativa"],
+    badge: "Nueva",
   },
   {
     id: "rosada",
     name: "Suculenta Rosada",
     price: "$3.000",
-    potSize: "Macetero 8 cm",
+    potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Color suave y estilo delicado.",
     description: "Suculenta de tonos rosados, ideal para quienes buscan una planta diferente y decorativa.",
@@ -81,14 +81,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo"],
-    tags: ["8 cm", "Rosada", "Decorativa"],
-    badge: "8 cm",
+    tags: ["Decorativa", "Color suave", "Bajo riego"],
+    badge: "Especial",
   },
   {
     id: "haworthia-clara",
     name: "Haworthia Clara",
     price: "$2.000",
-    potSize: "Macetero 7 cm",
+    potSize: "Macetero: 7 cm",
     category: "Fácil cuidado",
     short: "Compacta y de bajo mantenimiento.",
     description: "Perfecta para comenzar con plantas. Requiere poco riego y se adapta bien a espacios luminosos.",
@@ -97,14 +97,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["principiante", "decorar"],
-    tags: ["7 cm", "Fácil", "Bajo riego"],
-    badge: "7 cm",
+    tags: ["Fácil", "Bajo riego", "Compacta"],
+    badge: "Fácil",
   },
   {
     id: "haworthia-cebra",
     name: "Suculenta Cebra",
     price: "$3.000",
-    potSize: "Macetero 8 cm",
+    potSize: "Macetero: 8 cm",
     category: "Fácil cuidado",
     short: "Textura marcada y look moderno.",
     description: "Suculenta llamativa por sus líneas y textura. Buena opción para espacios modernos y luminosos.",
@@ -113,14 +113,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "principiante"],
-    tags: ["8 cm", "Moderna", "Resistente"],
-    badge: "8 cm",
+    tags: ["Moderna", "Resistente", "Bajo riego"],
+    badge: "Top",
   },
   {
     id: "dorada",
     name: "Suculenta Dorada",
     price: "$2.000",
-    potSize: "Macetero 7 cm",
+    potSize: "Macetero: 7 cm",
     category: "Exterior",
     short: "Tonos claros y presencia alegre.",
     description: "Ideal para lugares con buena luz. Sus tonos verdes y dorados aportan frescura y calidez.",
@@ -129,14 +129,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["terraza", "decorar", "regalo"],
-    tags: ["7 cm", "Buena luz", "Exterior"],
-    badge: "7 cm",
+    tags: ["Buena luz", "Exterior", "Color claro"],
+    badge: "Exterior",
   },
   {
     id: "vertical",
     name: "Suculenta Vertical",
     price: "$3.000",
-    potSize: "Macetero 8 cm",
+    potSize: "Macetero: 8 cm",
     category: "Exterior",
     short: "Forma alta y mucho carácter.",
     description: "Suculenta con silueta más alta, ideal para destacar en terraza, repisa o entrada luminosa.",
@@ -145,14 +145,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["terraza", "decorar"],
-    tags: ["8 cm", "Vertical", "Luminosa"],
-    badge: "8 cm",
+    tags: ["Vertical", "Luminosa", "Bajo riego"],
+    badge: "Destacada",
   },
   {
     id: "mini-verde",
     name: "Suculenta Mini Verde",
     price: "$1.000",
-    potSize: "Macetero 5 cm",
+    potSize: "Macetero: 5 cm",
     category: "Interior",
     short: "Pequeña, fresca y delicada.",
     description: "Opción mini para detalles decorativos, escritorios o regalos simples.",
@@ -161,14 +161,14 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["regalo", "decorar", "principiante"],
-    tags: ["5 cm", "Mini", "Regalo"],
-    badge: "5 cm",
+    tags: ["Mini", "Regalo", "Decorativa"],
+    badge: "Mini",
   },
   {
     id: "echeveria-clara",
     name: "Suculenta Echeveria",
     price: "$1.000",
-    potSize: "Macetero 5 cm",
+    potSize: "Macetero: 5 cm",
     category: "Interior",
     short: "Clara, suave y elegante.",
     description: "Suculenta de tonos claros, perfecta para decorar con un estilo limpio y natural.",
@@ -177,8 +177,104 @@ const plants: Plant[] = [
     water: "Bajo",
     care: "facil",
     bestFor: ["decorar", "regalo"],
-    tags: ["5 cm", "Elegante", "Interior"],
-    badge: "5 cm",
+    tags: ["Elegante", "Interior", "Bajo riego"],
+    badge: "Favorita",
+  },
+  {
+    id: "rosario",
+    name: "Suculenta Rosario",
+    price: "$3.000",
+    potSize: "Macetero: 8 cm",
+    category: "Interior",
+    short: "Colgante, delicada y muy llamativa.",
+    description: "Suculenta tipo rosario, ideal para repisas, maceteros altos o espacios donde pueda caer con gracia.",
+    image: "/suculenta-rosario.webp",
+    light: "media",
+    water: "Bajo",
+    care: "media",
+    bestFor: ["decorar", "regalo"],
+    tags: ["Colgante", "Decorativa", "Luz indirecta"],
+    badge: "Nueva",
+  },
+  {
+    id: "jade",
+    name: "Suculenta Jade",
+    price: "$3.000",
+    potSize: "Macetero: 8 cm",
+    category: "Interior",
+    short: "Hojas brillantes y forma elegante.",
+    description: "Planta de hojas verdes con borde sutil, ideal para decorar interiores luminosos.",
+    image: "/suculenta-jade.webp",
+    light: "media",
+    water: "Bajo",
+    care: "facil",
+    bestFor: ["decorar", "regalo", "principiante"],
+    tags: ["Interior", "Decorativa", "Fácil"],
+    badge: "Nueva",
+  },
+  {
+    id: "roseta-gris",
+    name: "Suculenta Roseta",
+    price: "$2.000",
+    potSize: "Macetero: 7 cm",
+    category: "Interior",
+    short: "Forma de roseta y tono suave.",
+    description: "Suculenta pequeña de aspecto delicado, perfecta para detalles decorativos o regalos simples.",
+    image: "/suculenta-roseta-gris.webp",
+    light: "media",
+    water: "Bajo",
+    care: "facil",
+    bestFor: ["regalo", "decorar"],
+    tags: ["Roseta", "Decorativa", "Bajo riego"],
+    badge: "Nueva",
+  },
+  {
+    id: "cucharita",
+    name: "Planta Cucharita",
+    price: "Consultar",
+    potSize: "Macetero: 11 cm",
+    category: "Interior",
+    short: "Hojas redondas, fresca y muy decorativa.",
+    description: "Planta conocida por sus hojas redondas tipo cucharita. El tamaño indicado corresponde al macetero, no a la altura total de la planta.",
+    image: "/planta-cucharita-11cm.webp",
+    light: "media",
+    water: "Medio",
+    care: "media",
+    bestFor: ["decorar", "regalo"],
+    tags: ["Macetero 11 cm", "Interior", "Decorativa"],
+    badge: "11 cm",
+  },
+  {
+    id: "echeveria-verde",
+    name: "Echeveria Verde",
+    price: "$3.000",
+    potSize: "Macetero: 8 cm",
+    category: "Interior",
+    short: "Verde clara, fresca y elegante.",
+    description: "Suculenta de forma armónica y color verde suave, ideal para dar un toque natural al hogar.",
+    image: "/suculenta-echeveria-verde.webp",
+    light: "media",
+    water: "Bajo",
+    care: "facil",
+    bestFor: ["decorar", "regalo"],
+    tags: ["Echeveria", "Decorativa", "Bajo riego"],
+    badge: "Nueva",
+  },
+  {
+    id: "sedum-verde",
+    name: "Suculenta Sedum",
+    price: "$3.000",
+    potSize: "Macetero: 8 cm",
+    category: "Exterior",
+    short: "Vertical, fresca y de bajo riego.",
+    description: "Suculenta de hojas alargadas y tonos verdes claros, ideal para espacios luminosos.",
+    image: "/suculenta-sedum-verde.webp",
+    light: "alta",
+    water: "Bajo",
+    care: "facil",
+    bestFor: ["terraza", "decorar"],
+    tags: ["Buena luz", "Bajo riego", "Exterior"],
+    badge: "Nueva",
   },
 ]
 
@@ -225,16 +321,14 @@ function Button({
   children: ReactNode
   onClick?: () => void
   href?: string
-  variant?: "dark" | "light" | "green" | "rose"
+  variant?: "dark" | "light" | "green"
   className?: string
 }) {
   const variants = {
     dark: "bg-emerald-950 text-white hover:bg-emerald-900 shadow-lg shadow-emerald-950/10",
     light: "bg-white text-emerald-950 hover:bg-emerald-50 ring-1 ring-emerald-100",
     green: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20",
-    rose: "bg-rose-100 text-rose-700 hover:bg-rose-200 ring-1 ring-rose-200",
   }
-
   const classes = `inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition active:scale-[0.98] ${variants[variant]} ${className}`
 
   if (href) {
@@ -273,7 +367,7 @@ function ProductTile({ plant, onClick, large = false }: { plant: Plant; onClick:
     >
       <div className={large ? "relative h-52 overflow-hidden bg-emerald-50 sm:h-52" : "relative h-44 overflow-hidden bg-emerald-50 sm:h-52"}>
         <img src={plant.image} alt={plant.name} className="h-full w-full object-contain p-2 transition duration-300 group-hover:scale-105" />
-        <span className="absolute left-3 top-3 rounded-full bg-rose-50/95 px-2.5 py-1 text-[11px] font-bold text-rose-700 backdrop-blur">
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-emerald-700 backdrop-blur">
           {plant.badge}
         </span>
       </div>
@@ -281,8 +375,7 @@ function ProductTile({ plant, onClick, large = false }: { plant: Plant; onClick:
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="text-base font-semibold tracking-tight text-emerald-950">{plant.name}</h3>
-            <p className="mt-1 text-xs text-zinc-500">{plant.category}</p>
-            <p className="mt-1 text-[11px] font-semibold text-rose-500">{plant.potSize}</p>
+            <p className="mt-1 text-xs text-zinc-500">{plant.potSize}</p>
           </div>
           <p className="text-sm font-bold text-emerald-700">{plant.price}</p>
         </div>
@@ -299,9 +392,6 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
           {plant.category}
         </div>
-        <div className="absolute bottom-4 left-4 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-800 shadow-sm">
-          {plant.badge}
-        </div>
       </div>
 
       <div className={compact ? "p-5" : "p-6"}>
@@ -309,7 +399,7 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
           <div>
             <h3 className="text-xl font-semibold tracking-tight text-zinc-950">{plant.name}</h3>
             <p className="mt-1 text-sm text-zinc-500">{plant.short}</p>
-            <p className="mt-2 inline-flex rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 ring-1 ring-rose-100">
+            <p className="mt-2 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
               {plant.potSize}
             </p>
           </div>
@@ -336,7 +426,7 @@ function PlantCard({ plant, compact = false }: { plant: Plant; compact?: boolean
         {!compact && (
           <div className="mt-4 flex flex-wrap gap-2">
             {plant.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-600 ring-1 ring-rose-100">
+              <span key={tag} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100">
                 {tag}
               </span>
             ))}
@@ -369,13 +459,13 @@ function SelectCard({ active, title, subtitle, onClick }: { active: boolean; tit
 
 function DeliveryMap() {
   return (
-    <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-rose-50 to-lime-50 p-6 ring-1 ring-emerald-100">
+    <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-100 via-lime-50 to-teal-50 p-6 ring-1 ring-emerald-100">
       <div className="absolute left-6 top-6 rounded-3xl bg-white/85 p-4 shadow-lg backdrop-blur">
-        <p className="text-xs font-semibold uppercase tracking-wide text-rose-500">Zona de entrega</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Zona de entrega</p>
         <p className="mt-1 text-lg font-semibold text-emerald-950">Maipú</p>
       </div>
       <div className="absolute left-[18%] top-[35%] flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-2xl text-white shadow-xl">🏡</div>
-      <div className="absolute right-[18%] bottom-[30%] flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-400 text-2xl text-white shadow-xl">🚇</div>
+      <div className="absolute right-[18%] bottom-[30%] flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-600 text-2xl text-white shadow-xl">🚇</div>
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 340" fill="none">
         <path d="M145 140 C230 90, 330 125, 405 190 C440 220, 470 235, 500 255" stroke="#047857" strokeWidth="5" strokeLinecap="round" strokeDasharray="10 12" />
       </svg>
@@ -400,8 +490,8 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
     <section className="mx-auto max-w-7xl px-5 py-6 sm:px-8 sm:py-8">
       <div className="grid items-start gap-8 lg:grid-cols-[0.78fr_1.22fr]">
         <div>
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm ring-1 ring-rose-100 sm:text-sm">
-            <span className="h-2 w-2 rounded-full bg-rose-400" />
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm ring-1 ring-emerald-100 sm:text-sm">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
             Plantas reales disponibles
           </div>
 
@@ -413,14 +503,14 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
             Suculentas y plantas de fácil cuidado para hacer tu espacio más fresco, acogedor y vivo.
           </p>
 
-          <div className="mt-5 rounded-[1.7rem] border border-rose-100 bg-white/85 p-4 shadow-sm">
-            <p className="text-sm font-semibold text-emerald-950">Precios por tamaño</p>
-            <p className="mt-1 text-sm leading-6 text-zinc-600">5 cm: $1.000 · 7 cm: $2.000 · 8 cm: $3.000</p>
+          <div className="mt-5 rounded-[1.7rem] border border-emerald-100 bg-white/85 p-4 shadow-sm">
+            <p className="text-sm font-semibold text-emerald-950">Precios según diámetro del macetero</p>
+            <p className="mt-1 text-sm leading-6 text-zinc-600">Macetero 5 cm: $1.000 · 7 cm: $2.000 · 8 cm: $3.000 · 11 cm: consultar</p>
           </div>
 
           <div className="mt-5 grid gap-3 sm:flex">
             <Button onClick={() => setView("catalogo")} variant="dark" className="w-full sm:w-auto">Ver catálogo</Button>
-            <Button onClick={() => setView("elegir")} variant="rose" className="w-full sm:w-auto">Te ayudamos a elegir</Button>
+            <Button onClick={() => setView("elegir")} variant="light" className="w-full sm:w-auto">Te ayudamos a elegir</Button>
           </div>
 
           <div className="mt-5 rounded-[1.7rem] border border-emerald-100 bg-white p-4 shadow-sm">
@@ -437,7 +527,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
         <div>
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-500">Destacadas</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">Destacadas</p>
               <h2 className="mt-1 text-2xl font-semibold tracking-tight text-emerald-950">Disponibles ahora</h2>
             </div>
             <button onClick={() => setView("catalogo")} className="shrink-0 text-sm font-semibold text-emerald-700 transition hover:text-emerald-900">
@@ -453,14 +543,14 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-[1.8rem] bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/10">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-rose-200">Nuevo stock</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">Nuevo stock</p>
               <p className="mt-2 text-xl font-semibold">Suculentas reales disponibles</p>
               <p className="mt-2 text-sm leading-6 text-emerald-50">Elige entre modelos pequeños, decorativos y fáciles de cuidar.</p>
             </div>
-            <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-rose-100">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-rose-500">Identidad Mary</p>
-              <p className="mt-2 text-xl font-semibold text-emerald-950">Verde con un toque rosado</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">Natural, fresco y con una identidad más cálida y distinta.</p>
+            <div className="rounded-[1.8rem] bg-white p-5 shadow-sm ring-1 ring-emerald-100">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Importante</p>
+              <p className="mt-2 text-xl font-semibold text-emerald-950">El cm corresponde al macetero</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">La medida indicada es el diámetro del macetero, no la altura total de la planta.</p>
             </div>
           </div>
         </div>
@@ -491,18 +581,18 @@ function CatalogView() {
     <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-500">Catálogo</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Plantas disponibles</h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-            Precios por tamaño: macetero 8 cm $3.000, 7 cm $2.000 y 5 cm $1.000.
+            Precios según diámetro del macetero: 5 cm $1.000, 7 cm $2.000, 8 cm $3.000 y 11 cm consultar.
           </p>
         </div>
 
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Buscar planta o tamaño..."
-          className="w-full rounded-full border border-rose-100 bg-white px-5 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-rose-300 focus:ring-4 focus:ring-rose-100 md:max-w-sm"
+          placeholder="Buscar planta o macetero..."
+          className="w-full rounded-full border border-emerald-100 bg-white px-5 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100 md:max-w-sm"
         />
       </div>
 
@@ -513,7 +603,7 @@ function CatalogView() {
             onClick={() => setCategory(item)}
             className={[
               "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-              category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-rose-100 hover:text-emerald-950",
+              category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
             ].join(" ")}
           >
             {item}
@@ -560,8 +650,8 @@ function RecommenderView() {
     <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
       <div className="rounded-[2.5rem] border border-white bg-white/80 p-4 shadow-2xl shadow-emerald-200/60 backdrop-blur-xl sm:p-6">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-rose-900 p-7 text-white">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-200">Te ayudamos a elegir</p>
+          <div className="rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-7 text-white">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">Te ayudamos a elegir</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight">Elige según tu espacio.</h2>
             <p className="mt-4 text-sm leading-7 text-emerald-50">
               Esto ordena el catálogo según luz, facilidad y uso. Como son suculentas, varias pueden servirte bien.
@@ -575,12 +665,12 @@ function RecommenderView() {
                 <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{useText}</span>
               </div>
               <p className="mt-3 text-xs leading-5 text-emerald-50">
-                También considera el tamaño: 5 cm, 7 cm u 8 cm.
+                También considera el diámetro del macetero: 5 cm, 7 cm, 8 cm u 11 cm.
               </p>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-rose-100 bg-white p-5 sm:p-7">
+          <div className="rounded-[2rem] border border-emerald-100 bg-white p-5 sm:p-7">
             <p className="text-sm font-semibold text-emerald-950">¿Cuánta luz tiene el lugar?</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <SelectCard active={light === "baja"} title="Poca luz" subtitle="Interior suave." onClick={() => setLight("baja")} />
@@ -604,13 +694,13 @@ function RecommenderView() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-[2rem] border border-rose-100 bg-rose-50 p-5">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-500">Resultado</p>
+        <div className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Resultado</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             Estas plantas calzan mejor con tus elecciones
           </h3>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">
-            Priorizamos las opciones según lo que marcaste. Si quieres, también puedes escribir por WhatsApp y confirmar stock, tamaño y entrega.
+            Priorizamos las opciones según lo que marcaste. Si quieres, también puedes escribir por WhatsApp y confirmar stock, tamaño del macetero y entrega.
           </p>
         </div>
 
@@ -637,8 +727,8 @@ function RecommenderView() {
 function DeliveryView() {
   return (
     <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">
-      <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-rose-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-rose-200">Método de entrega</p>
+      <div className="rounded-[2.5rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 p-8 text-white shadow-2xl shadow-emerald-300/50 sm:p-12">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">Método de entrega</p>
         <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">Entregas simples dentro de Maipú.</h2>
         <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50">Coordinamos por mensaje para que puedas recibir o retirar tu planta de forma cómoda.</p>
 
@@ -669,19 +759,19 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen overflow-x-hidden bg-[#f6faf5] text-zinc-950"
+      className="min-h-screen overflow-x-hidden bg-[#f3f8f4] text-zinc-950"
       style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", sans-serif' }}
     >
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-[-16rem] h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-emerald-200/45 blur-3xl" />
-        <div className="absolute right-[-12rem] top-[18rem] h-[30rem] w-[30rem] rounded-full bg-rose-200/35 blur-3xl" />
-        <div className="absolute bottom-[-16rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-lime-200/35 blur-3xl" />
+        <div className="absolute left-1/2 top-[-16rem] h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-emerald-200/50 blur-3xl" />
+        <div className="absolute right-[-12rem] top-[20rem] h-[30rem] w-[30rem] rounded-full bg-lime-200/50 blur-3xl" />
+        <div className="absolute bottom-[-16rem] left-[-10rem] h-[34rem] w-[34rem] rounded-full bg-teal-200/40 blur-3xl" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f6faf5]/90 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/90 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
-            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-rose-200/60 ring-1 ring-rose-100">
+            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
               <img src={BRAND.logo} alt="Logo Plantas Mary" className="h-full w-full object-cover" />
             </div>
             <div>
@@ -710,7 +800,7 @@ export default function Home() {
         {view === "entrega" && <DeliveryView />}
       </div>
 
-      <footer className="relative border-t border-rose-100 px-5 py-6 sm:px-8">
+      <footer className="relative border-t border-emerald-100 px-5 py-6 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between">
           <p>© {BRAND.name} — Plantas para tu hogar.</p>
           <p>{BRAND.delivery}</p>
