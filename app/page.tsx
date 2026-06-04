@@ -39,7 +39,7 @@ const plants: Plant[] = [
   {
     id: "haworthia-verde",
     name: "Suculenta Haworthia",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Fácil cuidado",
     short: "Firme, compacta y resistente.",
@@ -55,7 +55,7 @@ const plants: Plant[] = [
   {
     id: "orejitas",
     name: "Suculenta Orejitas",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Suave, curiosa y decorativa.",
@@ -71,7 +71,7 @@ const plants: Plant[] = [
   {
     id: "rosada",
     name: "Suculenta Rosada",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Color suave y estilo delicado.",
@@ -103,7 +103,7 @@ const plants: Plant[] = [
   {
     id: "haworthia-cebra",
     name: "Suculenta Cebra",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Fácil cuidado",
     short: "Textura marcada y look moderno.",
@@ -135,7 +135,7 @@ const plants: Plant[] = [
   {
     id: "vertical",
     name: "Suculenta Vertical",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Exterior",
     short: "Forma alta y mucho carácter.",
@@ -183,7 +183,7 @@ const plants: Plant[] = [
   {
     id: "rosario",
     name: "Suculenta Rosario",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Colgante, delicada y muy llamativa.",
@@ -199,7 +199,7 @@ const plants: Plant[] = [
   {
     id: "jade",
     name: "Suculenta Jade",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Hojas brillantes y forma elegante.",
@@ -231,7 +231,7 @@ const plants: Plant[] = [
   {
     id: "cucharita",
     name: "Planta Cucharita",
-    price: "Consultar",
+    price: "$4.000",
     potSize: "Macetero: 11 cm",
     category: "Interior",
     short: "Hojas redondas, fresca y muy decorativa.",
@@ -247,7 +247,7 @@ const plants: Plant[] = [
   {
     id: "echeveria-verde",
     name: "Echeveria Verde",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Interior",
     short: "Verde clara, fresca y elegante.",
@@ -263,7 +263,7 @@ const plants: Plant[] = [
   {
     id: "sedum-verde",
     name: "Suculenta Sedum",
-    price: "$3.000",
+    price: "$2.000",
     potSize: "Macetero: 8 cm",
     category: "Exterior",
     short: "Vertical, fresca y de bajo riego.",
@@ -447,12 +447,14 @@ function SelectCard({ active, title, subtitle, onClick }: { active: boolean; tit
     <button
       onClick={onClick}
       className={[
-        "rounded-[1.4rem] border p-4 text-left transition",
-        active ? "border-emerald-800 bg-emerald-950 text-white shadow-xl shadow-emerald-200" : "border-emerald-100 bg-white text-zinc-950 hover:bg-emerald-50",
+        "rounded-2xl border px-3 py-3 text-left transition",
+        active
+          ? "border-emerald-800 bg-emerald-950 text-white shadow-md shadow-emerald-200"
+          : "border-emerald-100 bg-white text-zinc-950 hover:bg-emerald-50",
       ].join(" ")}
     >
-      <p className="text-sm font-semibold">{title}</p>
-      <p className={["mt-1 text-xs leading-5", active ? "text-emerald-100" : "text-zinc-500"].join(" ")}>{subtitle}</p>
+      <p className="text-sm font-semibold leading-tight">{title}</p>
+      <p className={["mt-1 text-[11px] leading-4", active ? "text-emerald-100" : "text-zinc-500"].join(" ")}>{subtitle}</p>
     </button>
   )
 }
@@ -504,8 +506,8 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
           </p>
 
           <div className="mt-5 rounded-[1.7rem] border border-emerald-100 bg-white/85 p-4 shadow-sm">
-            <p className="text-sm font-semibold text-emerald-950">Precios según diámetro del macetero</p>
-            <p className="mt-1 text-sm leading-6 text-zinc-600">Macetero 5 cm: $1.000 · 7 cm: $2.000 · 8 cm: $3.000 · 11 cm: consultar</p>
+            <p className="text-sm font-semibold text-emerald-950">Elige tu próxima planta</p>
+            <p className="mt-1 text-sm leading-6 text-zinc-600">Suculentas y plantas seleccionadas para decorar, regalar o darle vida a tu hogar.</p>
           </div>
 
           <div className="mt-5 grid gap-3 sm:flex">
@@ -584,7 +586,7 @@ function CatalogView() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Plantas disponibles</h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-            Precios según diámetro del macetero: 5 cm $1.000, 7 cm $2.000, 8 cm $3.000 y 11 cm consultar.
+            Elige tu próxima planta: 5 cm $1.000, 7 cm $2.000, 8 cm $3.000 y 11 cm consultar.
           </p>
         </div>
 
@@ -654,38 +656,27 @@ function RecommenderView() {
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">Te ayudamos a elegir</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight">Elige según tu espacio.</h2>
             <p className="mt-4 text-sm leading-7 text-emerald-50">
-              Esto ordena el catálogo según luz, facilidad y uso. Como son suculentas, varias pueden servirte bien.
+              Elige lo que más se parece a tu espacio y te mostramos opciones recomendadas.
             </p>
 
-            <div className="mt-8 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
-              <p className="text-sm font-semibold">Tu búsqueda actual</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{lightText}</span>
-                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{careText}</span>
-                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{useText}</span>
-              </div>
-              <p className="mt-3 text-xs leading-5 text-emerald-50">
-                También considera el diámetro del macetero: 5 cm, 7 cm, 8 cm u 11 cm.
-              </p>
-            </div>
           </div>
 
           <div className="rounded-[2rem] border border-emerald-100 bg-white p-5 sm:p-7">
-            <p className="text-sm font-semibold text-emerald-950">¿Cuánta luz tiene el lugar?</p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <p className="text-sm font-semibold text-emerald-950">Luz del lugar</p>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
               <SelectCard active={light === "baja"} title="Poca luz" subtitle="Interior suave." onClick={() => setLight("baja")} />
               <SelectCard active={light === "media"} title="Luz indirecta" subtitle="Claro, sin sol fuerte." onClick={() => setLight("media")} />
               <SelectCard active={light === "alta"} title="Mucha luz" subtitle="Terraza o exterior." onClick={() => setLight("alta")} />
             </div>
 
-            <p className="mt-6 text-sm font-semibold text-emerald-950">¿Qué tan fácil la quieres?</p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <p className="mt-6 text-sm font-semibold text-emerald-950">Cuidado</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
               <SelectCard active={care === "facil"} title="Muy fácil" subtitle="Bajo riego." onClick={() => setCare("facil")} />
               <SelectCard active={care === "media"} title="Cuidado medio" subtitle="Puedo estar pendiente." onClick={() => setCare("media")} />
             </div>
 
-            <p className="mt-6 text-sm font-semibold text-emerald-950">¿Para qué la quieres?</p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-4">
+            <p className="mt-6 text-sm font-semibold text-emerald-950">Uso</p>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               <SelectCard active={useCase === "principiante"} title="Empezar" subtitle="Algo resistente." onClick={() => setUseCase("principiante")} />
               <SelectCard active={useCase === "decorar"} title="Decorar" subtitle="Que se vea linda." onClick={() => setUseCase("decorar")} />
               <SelectCard active={useCase === "terraza"} title="Exterior" subtitle="Terraza." onClick={() => setUseCase("terraza")} />
@@ -699,9 +690,7 @@ function RecommenderView() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             Estas plantas calzan mejor con tus elecciones
           </h3>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">
-            Priorizamos las opciones según lo que marcaste. Si quieres, también puedes escribir por WhatsApp y confirmar stock, tamaño del macetero y entrega.
-          </p>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Opciones ordenadas según tus elecciones. Para confirmar stock y entrega, escríbenos por WhatsApp.</p>
         </div>
 
         <div className="mt-6">
