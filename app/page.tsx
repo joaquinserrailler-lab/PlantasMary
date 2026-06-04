@@ -586,7 +586,7 @@ function CatalogView() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Catálogo</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Plantas disponibles</h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-            Elige tu próxima planta: 5 cm $1.000, 7 cm $2.000, 8 cm $3.000 y 11 cm consultar.
+            
           </p>
         </div>
 
