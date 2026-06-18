@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { useMemo, useState, useRef, useEffect } from "react"
+import { useMemo, useState } from "react"
 
 type View = "inicio" | "catalogo" | "elegir" | "entrega" | "detalle"
 type Category = "Todas" | "Interior" | "Exterior" | "Fácil cuidado"
@@ -25,7 +25,6 @@ type Plant = {
   bestFor: UseCase[]
   tags: string[]
   badge: string
-  available?: boolean
 }
 
 const BRAND = {
@@ -54,7 +53,6 @@ const plants: Plant[] = [
     bestFor: ["principiante", "decorar", "regalo"],
     tags: ["Bajo riego", "Fácil", "Interior"],
     badge: "Disponible",
-    available: true,
   },
   {
     id: "orejitas",
@@ -72,7 +70,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo", "principiante"],
     tags: ["Interior", "Regalo", "Decorativa"],
     badge: "Nueva",
-    available: true,
   },
   {
     id: "rosada",
@@ -90,7 +87,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Decorativa", "Color suave", "Bajo riego"],
     badge: "Especial",
-    available: true,
   },
   {
     id: "haworthia-clara",
@@ -108,7 +104,6 @@ const plants: Plant[] = [
     bestFor: ["principiante", "decorar"],
     tags: ["Fácil", "Bajo riego", "Compacta"],
     badge: "Fácil",
-    available: true,
   },
   {
     id: "haworthia-cebra",
@@ -126,7 +121,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "principiante"],
     tags: ["Moderna", "Resistente", "Bajo riego"],
     badge: "Top",
-    available: true,
   },
   {
     id: "dorada",
@@ -144,7 +138,6 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar", "regalo"],
     tags: ["Buena luz", "Exterior", "Color claro"],
     badge: "Exterior",
-    available: true,
   },
   {
     id: "vertical",
@@ -162,7 +155,6 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar"],
     tags: ["Vertical", "Luminosa", "Bajo riego"],
     badge: "Destacada",
-    available: true,
   },
   {
     id: "mini-verde",
@@ -180,7 +172,6 @@ const plants: Plant[] = [
     bestFor: ["regalo", "decorar", "principiante"],
     tags: ["Decorativa", "Regalo", "Interior"],
     badge: "Mini",
-    available: true,
   },
   {
     id: "echeveria-clara",
@@ -198,7 +189,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Elegante", "Interior", "Bajo riego"],
     badge: "Favorita",
-    available: true,
   },
   {
     id: "rosario",
@@ -216,7 +206,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Colgante", "Decorativa", "Luz indirecta"],
     badge: "Nueva",
-    available: false,
   },
   {
     id: "jade",
@@ -234,7 +223,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo", "principiante"],
     tags: ["Interior", "Decorativa", "Fácil"],
     badge: "Nueva",
-    available: true,
   },
   {
     id: "roseta-gris",
@@ -252,7 +240,6 @@ const plants: Plant[] = [
     bestFor: ["regalo", "decorar"],
     tags: ["Roseta", "Decorativa", "Bajo riego"],
     badge: "Nueva",
-    available: true,
   },
   {
     id: "cucharita",
@@ -270,7 +257,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Macetero 11 cm", "Interior", "Decorativa"],
     badge: "11 cm",
-    available: true,
   },
   {
     id: "echeveria-verde",
@@ -288,7 +274,6 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Echeveria", "Decorativa", "Bajo riego"],
     badge: "Nueva",
-    available: true,
   },
   {
     id: "sedum-verde",
@@ -306,7 +291,6 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar"],
     tags: ["Buena luz", "Bajo riego", "Exterior"],
     badge: "Nueva",
-    available: true,
   },
 ]
 
@@ -314,7 +298,7 @@ const categories: Category[] = ["Todas", "Interior", "Exterior", "Fácil cuidado
 
 function whatsappLink(plant?: Plant) {
   const message = plant
-    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) a ${plant.price} de Plantas Mary. ¿Hay stock disponible? También me interesa el instructivo de cuidado.`
+    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) de Plantas Mary. ¿Hay stock disponible? También me interesa el instructivo de cuidado.`
     : "Hola, quiero consultar por las plantas disponibles de Plantas Mary. También vi que entregan un instructivo de cuidado."
   return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`
 }
@@ -451,11 +435,6 @@ function PlantCard({
             Ver detalle
           </div>
         )}
-        {plant.available === false && (
-          <div className="absolute inset-0 flex items-end justify-center bg-white/60 pb-4 backdrop-blur-[2px]">
-            <span className="rounded-full bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-white shadow">Sin stock</span>
-          </div>
-        )}
       </div>
 
       <div className={compact ? "p-5" : "p-6"}>
@@ -517,11 +496,7 @@ function PlantCard({
           onClick={(event) => event.stopPropagation()}
           className="mt-5 grid gap-2 sm:grid-cols-2"
         >
-          {plant.available !== false ? (
-            <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
-          ) : (
-            <Button href={whatsappLink(plant)} variant="light" className="w-full">Consultar stock</Button>
-          )}
+          <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
           <Button href={BRAND.instagramUrl} variant="light" className="w-full">Instagram</Button>
         </div>
       </div>
@@ -573,271 +548,30 @@ function DeliveryMap() {
 }
 
 
-function PlantViewer({ plant, isAvailable }: { plant: Plant; isAvailable: boolean }) {
-  const stageRef = useRef<HTMLDivElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
-  const bgRef = useRef<HTMLDivElement>(null)
-  const shadowRef = useRef<HTMLDivElement>(null)
-  const infoPanelRef = useRef<HTMLDivElement>(null)
-  const badgeRef = useRef<HTMLDivElement>(null)
-  const cursorRef = useRef<HTMLDivElement>(null)
-  const hintRef = useRef<HTMLDivElement>(null)
-  const rafRef = useRef<number>(0)
-  const mouseRef = useRef({ mx: 0, my: 0, lx: 0, ly: 0 })
-
-  useEffect(() => {
-    const stage = stageRef.current
-    if (!stage) return
-
-    function onMove(e: MouseEvent) {
-      const r = stage!.getBoundingClientRect()
-      mouseRef.current.mx = ((e.clientX - r.left) / r.width - 0.5) * 2
-      mouseRef.current.my = ((e.clientY - r.top) / r.height - 0.5) * 2
-      if (cursorRef.current) {
-        cursorRef.current.style.left = (e.clientX - r.left) + "px"
-        cursorRef.current.style.top = (e.clientY - r.top) + "px"
-        cursorRef.current.style.opacity = "1"
-      }
-      if (hintRef.current) hintRef.current.style.opacity = "0"
-    }
-
-    function onLeave() {
-      mouseRef.current.mx = 0
-      mouseRef.current.my = 0
-      if (cursorRef.current) cursorRef.current.style.opacity = "0"
-    }
-
-    function tick() {
-      const m = mouseRef.current
-      m.lx += (m.mx - m.lx) * 0.07
-      m.ly += (m.my - m.ly) * 0.07
-      const lx = m.lx, ly = m.ly
-
-      if (bgRef.current) bgRef.current.style.transform = `translate(${lx * -14}px, ${ly * -10}px)`
-      if (shadowRef.current) shadowRef.current.style.transform = `translate(${lx * 9}px, ${ly * 6}px)`
-      if (imgRef.current) imgRef.current.style.transform = `perspective(900px) rotateY(${lx * 7}deg) rotateX(${-ly * 5}deg) scale(1.04) translate(${lx * 16}px, ${ly * 10}px)`
-      if (infoPanelRef.current) infoPanelRef.current.style.transform = `translate(${lx * -7}px, ${ly * -5}px)`
-      if (badgeRef.current) badgeRef.current.style.transform = `translate(${lx * -10}px, ${ly * -7}px)`
-
-      rafRef.current = requestAnimationFrame(tick)
-    }
-
-    stage.addEventListener("mousemove", onMove)
-    stage.addEventListener("mouseleave", onLeave)
-    rafRef.current = requestAnimationFrame(tick)
-
-    return () => {
-      stage.removeEventListener("mousemove", onMove)
-      stage.removeEventListener("mouseleave", onLeave)
-      cancelAnimationFrame(rafRef.current)
-    }
-  }, [])
-
-  return (
-    <div
-      ref={stageRef}
-      className="relative overflow-hidden rounded-[2.5rem]"
-      style={{
-        minHeight: "520px",
-        background: "radial-gradient(ellipse 85% 65% at 50% 65%, #1a3d20 0%, #0a1a0e 100%)",
-        cursor: "none",
-      }}
-    >
-      <div
-        ref={bgRef}
-        className="absolute inset-0 rounded-[2.5rem]"
-        style={{
-          background: "radial-gradient(ellipse 60% 50% at 50% 55%, #1e4a25 0%, transparent 70%)",
-          transition: "transform 0.12s ease-out",
-        }}
-      />
-
-      <div
-        ref={shadowRef}
-        className="absolute bottom-0 left-0 right-0"
-        style={{
-          height: "50%",
-          background: "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 100%)",
-          transition: "transform 0.1s ease-out",
-        }}
-      />
-
-      <div className="absolute inset-0 flex items-center justify-center">
-        <img
-          ref={imgRef}
-          src={plant.image}
-          alt={plant.name}
-          className={isAvailable ? "" : "opacity-40 grayscale"}
-          style={{
-            maxHeight: "82%",
-            maxWidth: "70%",
-            objectFit: "contain",
-            display: "block",
-            filter: isAvailable
-              ? "drop-shadow(0 16px 40px rgba(0,0,0,0.6)) drop-shadow(0 3px 10px rgba(0,0,0,0.45))"
-              : "grayscale(1) drop-shadow(0 8px 20px rgba(0,0,0,0.4))",
-            willChange: "transform",
-            transition: "transform 0.07s ease-out",
-          }}
-        />
-      </div>
-
-      <div ref={badgeRef} className="absolute left-5 top-5" style={{ transition: "transform 0.08s ease-out" }}>
-        <span
-          className="rounded-full px-4 py-2 text-xs font-semibold backdrop-blur-md"
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            color: "rgba(255,255,255,0.9)",
-            border: "0.5px solid rgba(255,255,255,0.18)",
-          }}
-        >
-          {plant.category}
-        </span>
-      </div>
-
-      {!isAvailable && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="rounded-2xl bg-white/90 px-6 py-4 text-center shadow-xl backdrop-blur-sm">
-            <p className="text-lg font-semibold text-zinc-700">Sin stock</p>
-            <p className="mt-1 text-sm text-zinc-500">Consulta disponibilidad futura</p>
-          </div>
-        </div>
-      )}
-
-      <div
-        ref={infoPanelRef}
-        className="absolute bottom-5 left-5 right-5 flex gap-2"
-        style={{ transition: "transform 0.08s ease-out" }}
-      >
-        {[
-          { label: "Luz", value: plant.light === "baja" ? "Poca luz" : plant.light === "media" ? "Luz indirecta" : "Mucha luz" },
-          { label: "Riego", value: plant.water },
-          { label: "Cuidado", value: plant.care === "facil" ? "Muy fácil" : "Media" },
-        ].map(({ label, value }) => (
-          <div
-            key={label}
-            className="flex-1 rounded-2xl px-3 py-2 text-center backdrop-blur-md"
-            style={{ background: "rgba(0,0,0,0.45)", border: "0.5px solid rgba(255,255,255,0.1)" }}
-          >
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.45)", marginBottom: "2px" }}>{label}</p>
-            <p style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.9)" }}>{value}</p>
-          </div>
-        ))}
-        <div
-          className="rounded-2xl px-4 py-2 text-center backdrop-blur-md"
-          style={{ background: "rgba(20,90,35,0.7)", border: "0.5px solid rgba(80,180,100,0.25)" }}
-        >
-          <p style={{ fontSize: "10px", color: "rgba(167,240,184,0.7)", marginBottom: "2px" }}>Precio</p>
-          <p style={{ fontSize: "16px", fontWeight: 500, color: "#7df09a", whiteSpace: "nowrap" }}>{plant.price}</p>
-        </div>
-      </div>
-
-      <div
-        ref={cursorRef}
-        style={{
-          position: "absolute",
-          width: "28px",
-          height: "28px",
-          border: "1.5px solid rgba(255,255,255,0.3)",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          transform: "translate(-50%, -50%)",
-          opacity: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "opacity 0.2s",
-        }}
-      >
-        <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
-      </div>
-
-      <div
-        ref={hintRef}
-        style={{
-          position: "absolute",
-          bottom: "60px",
-          right: "18px",
-          fontSize: "10px",
-          color: "rgba(255,255,255,0.22)",
-          pointerEvents: "none",
-          transition: "opacity 0.4s",
-        }}
-      >
-        mueve el cursor
-      </div>
-    </div>
-  )
-}
-
 function DetailView({
   plant,
-  allPlants,
   setView,
-  openDetail,
 }: {
   plant: Plant
-  allPlants: Plant[]
   setView: (view: View) => void
-  openDetail: (plant: Plant) => void
 }) {
-  const currentIndex = allPlants.findIndex((p) => p.id === plant.id)
-  const prevPlant = currentIndex > 0 ? allPlants[currentIndex - 1] : null
-  const nextPlant = currentIndex < allPlants.length - 1 ? allPlants[currentIndex + 1] : null
-  const isAvailable = plant.available !== false
-
-  const [copied, setCopied] = useState(false)
-
-  function copyLink() {
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href)
-      url.searchParams.set("planta", plant.id)
-      navigator.clipboard.writeText(url.toString()).then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      })
-    }
-  }
-
   return (
     <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <button
-          onClick={() => setView("catalogo")}
-          className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
-        >
-          ← Volver al catálogo
-        </button>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={copyLink}
-            className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-600 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
-          >
-            {copied ? "✓ Link copiado" : "Compartir"}
-          </button>
-          <button
-            onClick={() => prevPlant && openDetail(prevPlant)}
-            disabled={!prevPlant}
-            title={prevPlant ? `Anterior: ${prevPlant.name}` : undefined}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            ←
-          </button>
-          <span className="text-xs text-zinc-400">{currentIndex + 1} / {allPlants.length}</span>
-          <button
-            onClick={() => nextPlant && openDetail(nextPlant)}
-            disabled={!nextPlant}
-            title={nextPlant ? `Siguiente: ${nextPlant.name}` : undefined}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            →
-          </button>
-        </div>
-      </div>
+      <button
+        onClick={() => setView("catalogo")}
+        className="mb-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
+      >
+        ← Volver al catálogo
+      </button>
 
       <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className={["overflow-hidden rounded-[2.5rem] border shadow-2xl", isAvailable ? "border-emerald-100 shadow-emerald-200/50" : "border-zinc-200 shadow-zinc-200/50"].join(" ")}>
-          <PlantViewer plant={plant} isAvailable={isAvailable} />
+        <div className="overflow-hidden rounded-[2.5rem] border border-emerald-100 bg-white shadow-2xl shadow-emerald-200/50">
+          <div className="relative min-h-[520px] bg-emerald-50 p-4">
+            <img src={plant.image} alt={plant.name} className="h-full max-h-[680px] w-full object-contain" />
+            <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
+              {plant.category}
+            </div>
+          </div>
         </div>
 
         <div className="rounded-[2.5rem] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/70 sm:p-8">
@@ -848,11 +582,6 @@ function DetailView({
             <span className="rounded-full bg-lime-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-lime-100">
               Incluye guía de cuidado
             </span>
-            {!isAvailable && (
-              <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-600 ring-1 ring-zinc-200">
-                Sin stock
-              </span>
-            )}
           </div>
 
           <div className="mt-5 flex items-start justify-between gap-4">
@@ -906,38 +635,9 @@ function DetailView({
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {isAvailable ? (
-              <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar por WhatsApp</Button>
-            ) : (
-              <Button href={whatsappLink(plant)} variant="light" className="w-full">Consultar disponibilidad futura</Button>
-            )}
+            <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar por WhatsApp</Button>
             <Button href={BRAND.instagramUrl} variant="light" className="w-full">Ver Instagram</Button>
           </div>
-
-          {(prevPlant || nextPlant) && (
-            <div className="mt-6 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-5">
-              {prevPlant ? (
-                <button
-                  onClick={() => openDetail(prevPlant)}
-                  className="flex flex-col items-start rounded-2xl bg-emerald-50 p-3 text-left transition hover:bg-emerald-100 ring-1 ring-emerald-100"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">← Anterior</p>
-                  <p className="mt-1 text-sm font-semibold text-emerald-950 leading-tight">{prevPlant.name}</p>
-                  <p className="text-xs text-zinc-500">{prevPlant.price}</p>
-                </button>
-              ) : <div />}
-              {nextPlant ? (
-                <button
-                  onClick={() => openDetail(nextPlant)}
-                  className="flex flex-col items-end rounded-2xl bg-emerald-50 p-3 text-right transition hover:bg-emerald-100 ring-1 ring-emerald-100"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Siguiente →</p>
-                  <p className="mt-1 text-sm font-semibold text-emerald-950 leading-tight">{nextPlant.name}</p>
-                  <p className="text-xs text-zinc-500">{nextPlant.price}</p>
-                </button>
-              ) : <div />}
-            </div>
-          )}
         </div>
       </div>
     </section>
@@ -1067,46 +767,25 @@ function CatalogView({ openDetail }: { openDetail: (plant: Plant) => void }) {
         />
       </div>
 
-      <div className="mt-7 flex items-center justify-between gap-4">
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {categories.map((item) => (
-            <button
-              key={item}
-              onClick={() => setCategory(item)}
-              className={[
-                "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-                category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
-              ].join(" ")}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-        <p className="shrink-0 text-sm text-zinc-500">
-          {filteredPlants.length} {filteredPlants.length === 1 ? "planta" : "plantas"}
-        </p>
+      <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
+        {categories.map((item) => (
+          <button
+            key={item}
+            onClick={() => setCategory(item)}
+            className={[
+              "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
+              category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
+            ].join(" ")}
+          >
+            {item}
+          </button>
+        ))}
       </div>
 
       <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {filteredPlants.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center rounded-[2rem] border border-emerald-100 bg-white py-20 text-center shadow-sm">
-            <p className="text-4xl">🌿</p>
-            <p className="mt-4 text-lg font-semibold text-emerald-950">Sin resultados</p>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-500">
-              No encontramos plantas que coincidan con <span className="font-semibold">"{query}"</span>. Prueba con otro nombre o borra el filtro.
-            </p>
-            <button
-              onClick={() => { setQuery(""); setCategory("Todas") }}
-              className="mt-5 rounded-full bg-emerald-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
-            >
-              Ver todas las plantas
-            </button>
-          </div>
-        ) : (
-          filteredPlants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} onOpen={openDetail} />
-          ))
-        )}
+        {filteredPlants.map((plant) => (
+          <PlantCard key={plant.id} plant={plant} onOpen={openDetail} />
+        ))}
       </div>
     </section>
   )
@@ -1126,8 +805,6 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
   const topScore = recommended[0]?.score ?? 0
   const bestMatches = recommended.filter((item) => item.score >= topScore - 1).slice(0, 3)
   const otherOptions = recommended.filter((item) => item.score < topScore - 1).slice(0, 6)
-
-  const resultKey = `${light}-${care}-${useCase}`
 
   const lightText = light === "baja" ? "poca luz" : light === "media" ? "luz indirecta" : "mucha luz"
   const careText = care === "facil" ? "muy fácil cuidado" : "cuidado medio"
@@ -1177,7 +854,7 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
           </div>
         </div>
 
-        <div key={resultKey} className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 transition-all duration-300">
+        <div className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Resultado</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             Estas plantas calzan mejor con tus elecciones
@@ -1185,7 +862,7 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
           <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Opciones ordenadas según tus elecciones. Para confirmar stock y entrega, escríbenos por WhatsApp.</p>
         </div>
 
-        <div key={resultKey + "-results"} className="mt-6">
+        <div className="mt-6">
           <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Mejor calce</h3>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {bestMatches.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact onOpen={openDetail} />)}
@@ -1236,40 +913,14 @@ function DeliveryView() {
 }
 
 export default function Home() {
-  const getInitialState = (): { view: View; plantId: string } => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search)
-      const plantaParam = params.get("planta")
-      if (plantaParam && plants.find((p) => p.id === plantaParam)) {
-        return { view: "detalle", plantId: plantaParam }
-      }
-    }
-    return { view: "inicio", plantId: plants[0]?.id ?? "" }
-  }
-
-  const initial = getInitialState()
-  const [view, setView] = useState<View>(initial.view)
-  const [selectedPlantId, setSelectedPlantId] = useState(initial.plantId)
+  const [view, setView] = useState<View>("inicio")
+  const [selectedPlantId, setSelectedPlantId] = useState(plants[0]?.id ?? "")
 
   const selectedPlant = plants.find((plant) => plant.id === selectedPlantId) ?? plants[0]
 
   function openDetail(plant: Plant) {
     setSelectedPlantId(plant.id)
     setView("detalle")
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href)
-      url.searchParams.set("planta", plant.id)
-      window.history.pushState({}, "", url.toString())
-    }
-  }
-
-  function handleSetView(v: View) {
-    setView(v)
-    if (v !== "detalle" && typeof window !== "undefined") {
-      const url = new URL(window.location.href)
-      url.searchParams.delete("planta")
-      window.history.pushState({}, "", url.toString())
-    }
   }
 
   return (
@@ -1285,7 +936,7 @@ export default function Home() {
 
       <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/90 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-          <button onClick={() => handleSetView("inicio")} className="flex items-center gap-3 text-left">
+          <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
               <img src={BRAND.logo} alt="Logo Plantas Mary" className="h-full w-full object-cover" />
             </div>
@@ -1301,18 +952,18 @@ export default function Home() {
         </div>
 
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8">
-          <NavButton active={view === "inicio"} onClick={() => handleSetView("inicio")}>Inicio</NavButton>
-          <NavButton active={view === "catalogo" || view === "detalle"} onClick={() => handleSetView("catalogo")}>Catálogo</NavButton>
-          <NavButton active={view === "elegir"} onClick={() => handleSetView("elegir")}>Elegir</NavButton>
-          <NavButton active={view === "entrega"} onClick={() => handleSetView("entrega")}>Entrega</NavButton>
+          <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
+          <NavButton active={view === "catalogo" || view === "detalle"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
+          <NavButton active={view === "elegir"} onClick={() => setView("elegir")}>Elegir</NavButton>
+          <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
         </div>
       </header>
 
       <div className="relative">
-        {view === "inicio" && <HomeView setView={handleSetView} openDetail={openDetail} />}
+        {view === "inicio" && <HomeView setView={setView} openDetail={openDetail} />}
         {view === "catalogo" && <CatalogView openDetail={openDetail} />}
         {view === "elegir" && <RecommenderView openDetail={openDetail} />}
-        {view === "detalle" && selectedPlant && <DetailView plant={selectedPlant} allPlants={plants} setView={handleSetView} openDetail={openDetail} />}
+        {view === "detalle" && selectedPlant && <DetailView plant={selectedPlant} setView={setView} />}
         {view === "entrega" && <DeliveryView />}
       </div>
 
@@ -1325,4 +976,3 @@ export default function Home() {
     </main>
   )
 }
- 
