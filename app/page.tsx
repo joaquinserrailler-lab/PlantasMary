@@ -18,6 +18,7 @@ type Plant = {
   short: string
   description: string
   story: string
+  growthMood: "compacta" | "colgante" | "vertical" | "roseta" | "cucharita"
   image: string
   light: Light
   water: "Bajo" | "Medio"
@@ -46,6 +47,7 @@ const plants: Plant[] = [
     short: "Firme, compacta y resistente.",
     description: "Suculenta compacta y decorativa, ideal para escritorios, repisas o rincones con buena luz.",
     story: "Una planta pequeña con carácter fuerte: se ve ordenada, firme y muy limpia visualmente. Es ideal para quienes quieren empezar con algo resistente, pero que igual se sienta especial en una repisa o escritorio.",
+    growthMood: "compacta",
     image: "/suculenta-haworthia-verde.webp",
     light: "media",
     water: "Bajo",
@@ -63,6 +65,7 @@ const plants: Plant[] = [
     short: "Suave, curiosa y decorativa.",
     description: "Planta pequeña con hojas redondeadas. Muy linda para regalar o decorar espacios chicos.",
     story: "Sus hojas redondeadas le dan una personalidad tierna y suave. Queda muy bien en espacios pequeños, veladores o escritorios donde quieres sumar un detalle vivo sin sobrecargar el lugar.",
+    growthMood: "compacta",
     image: "/suculenta-orejitas.webp",
     light: "media",
     water: "Bajo",
@@ -80,6 +83,7 @@ const plants: Plant[] = [
     short: "Color suave y estilo delicado.",
     description: "Suculenta de tonos rosados, ideal para quienes buscan una planta diferente y decorativa.",
     story: "Tiene tonos cálidos y delicados que la hacen destacar sin ser exagerada. Es una buena opción para regalar o para darle un toque más dulce y decorativo a un rincón del hogar.",
+    growthMood: "roseta",
     image: "/suculenta-rosada.webp",
     light: "media",
     water: "Bajo",
@@ -97,6 +101,7 @@ const plants: Plant[] = [
     short: "Compacta y de bajo mantenimiento.",
     description: "Perfecta para comenzar con plantas. Requiere poco riego y se adapta bien a espacios luminosos.",
     story: "Compacta, simple y fácil de ubicar. Es de esas plantas que se adaptan bien a la rutina y ayudan a que un espacio se vea más cuidado sin exigir demasiada atención.",
+    growthMood: "compacta",
     image: "/suculenta-haworthia-clara.webp",
     light: "media",
     water: "Bajo",
@@ -114,6 +119,7 @@ const plants: Plant[] = [
     short: "Textura marcada y look moderno.",
     description: "Suculenta llamativa por sus líneas y textura. Buena opción para espacios modernos y luminosos.",
     story: "Su textura marcada y sus líneas naturales le dan un aspecto moderno. Funciona muy bien para personas que buscan una planta pequeña, resistente y con una forma distinta.",
+    growthMood: "compacta",
     image: "/suculenta-haworthia-cebra.webp",
     light: "media",
     water: "Bajo",
@@ -131,6 +137,7 @@ const plants: Plant[] = [
     short: "Tonos claros y presencia alegre.",
     description: "Ideal para lugares con buena luz. Sus tonos verdes y dorados aportan frescura y calidez.",
     story: "Sus tonos claros transmiten calidez y luz. Es una planta alegre, perfecta para espacios luminosos donde quieres sumar un detalle fresco y natural.",
+    growthMood: "roseta",
     image: "/suculenta-dorada.webp",
     light: "alta",
     water: "Bajo",
@@ -148,6 +155,7 @@ const plants: Plant[] = [
     short: "Forma alta y mucho carácter.",
     description: "Suculenta con silueta más alta, ideal para destacar en terraza, repisa o entrada luminosa.",
     story: "Tiene una silueta más alta y llamativa, por eso destaca más que otras suculentas. Es buena para entradas, terrazas protegidas o repisas donde quieres que la planta tenga presencia.",
+    growthMood: "vertical",
     image: "/suculenta-vertical.webp",
     light: "alta",
     water: "Bajo",
@@ -165,6 +173,7 @@ const plants: Plant[] = [
     short: "Fresca, delicada y decorativa.",
     description: "Opción mini para detalles decorativos, escritorios o regalos simples.",
     story: "Pequeña y delicada, pensada para detalles simples. Es ideal para regalos, escritorios o rincones chicos donde una planta grande no calza, pero igual quieres sumar vida.",
+    growthMood: "vertical",
     image: "/suculenta-mini-verde.webp",
     light: "media",
     water: "Bajo",
@@ -182,6 +191,7 @@ const plants: Plant[] = [
     short: "Clara, suave y elegante.",
     description: "Suculenta de tonos claros, perfecta para decorar con un estilo limpio y natural.",
     story: "Su forma ordenada y color suave la hacen sentir elegante. Queda muy bien en espacios limpios, minimalistas o donde buscas una planta decorativa pero tranquila.",
+    growthMood: "roseta",
     image: "/suculenta-echeveria-clara.webp",
     light: "media",
     water: "Bajo",
@@ -199,6 +209,7 @@ const plants: Plant[] = [
     short: "Colgante, delicada y muy llamativa.",
     description: "Suculenta tipo rosario, ideal para repisas, maceteros altos o espacios donde pueda caer con gracia.",
     story: "Su forma colgante la hace muy especial. Es perfecta para repisas o lugares donde pueda caer de forma natural, creando un efecto más vivo y orgánico.",
+    growthMood: "colgante",
     image: "/suculenta-rosario.webp",
     light: "media",
     water: "Bajo",
@@ -216,6 +227,7 @@ const plants: Plant[] = [
     short: "Hojas brillantes y forma elegante.",
     description: "Planta de hojas verdes con borde sutil, ideal para decorar interiores luminosos.",
     story: "De hojas brillantes y forma amable, transmite frescura y buena energía. Es una planta muy decorativa para interiores luminosos y también funciona muy bien como regalo.",
+    growthMood: "cucharita",
     image: "/suculenta-jade.webp",
     light: "media",
     water: "Bajo",
@@ -233,6 +245,7 @@ const plants: Plant[] = [
     short: "Forma de roseta y tono suave.",
     description: "Suculenta pequeña de aspecto delicado, perfecta para detalles decorativos o regalos simples.",
     story: "Tiene una forma de roseta muy delicada, como una pequeña flor verde. Es ideal para quienes buscan una planta sencilla, bonita y con un toque elegante.",
+    growthMood: "roseta",
     image: "/suculenta-roseta-gris.webp",
     light: "media",
     water: "Bajo",
@@ -250,6 +263,7 @@ const plants: Plant[] = [
     short: "Hojas redondas, fresca y muy decorativa.",
     description: "Planta conocida por sus hojas redondas tipo cucharita. El tamaño indicado corresponde al macetero, no a la altura total de la planta.",
     story: "Sus hojas redondas tipo cucharita la hacen muy reconocible y entretenida visualmente. Es una planta con más presencia, ideal para convertir un rincón simple en un punto verde protagonista.",
+    growthMood: "cucharita",
     image: "/planta-cucharita-11cm.webp",
     light: "media",
     water: "Medio",
@@ -267,6 +281,7 @@ const plants: Plant[] = [
     short: "Verde clara, fresca y elegante.",
     description: "Suculenta de forma armónica y color verde suave, ideal para dar un toque natural al hogar.",
     story: "De forma armónica y color verde claro, tiene una presencia fresca y luminosa. Es una buena opción para decorar con un estilo natural y limpio.",
+    growthMood: "roseta",
     image: "/suculenta-echeveria-verde.webp",
     light: "media",
     water: "Bajo",
@@ -284,6 +299,7 @@ const plants: Plant[] = [
     short: "Vertical, fresca y de bajo riego.",
     description: "Suculenta de hojas alargadas y tonos verdes claros, ideal para espacios luminosos.",
     story: "Sus hojas alargadas y crecimiento vertical le dan movimiento. Es una planta alegre para espacios luminosos, perfecta para sumar altura y textura.",
+    growthMood: "vertical",
     image: "/suculenta-sedum-verde.webp",
     light: "alta",
     water: "Bajo",
@@ -548,6 +564,161 @@ function DeliveryMap() {
 }
 
 
+
+const growthStages = [
+  {
+    id: "1m",
+    label: "1 mes",
+    title: "Adaptación",
+    note: "Se mantiene similar. Lo más importante es ubicarla bien y no excederse con el riego.",
+  },
+  {
+    id: "6m",
+    label: "6 meses",
+    title: "Nuevos brotes",
+    note: "Con buena luz puede verse más firme, con hojas nuevas o pequeñas señales de crecimiento.",
+  },
+  {
+    id: "1y",
+    label: "1 año",
+    title: "Más presencia",
+    note: "Podría necesitar revisión de sustrato o cambio de macetero según su crecimiento y cuidados.",
+  },
+] as const
+
+type GrowthStageId = (typeof growthStages)[number]["id"]
+
+function growthVisualClass(mood: Plant["growthMood"], stage: GrowthStageId) {
+  const styles: Record<Plant["growthMood"], Record<GrowthStageId, string>> = {
+    compacta: {
+      "1m": "scale-90 rotate-[-1deg]",
+      "6m": "scale-100 rotate-[0deg]",
+      "1y": "scale-110 rotate-[1deg]",
+    },
+    colgante: {
+      "1m": "scale-90 translate-y-[-0.4rem]",
+      "6m": "scale-100 translate-y-[0.2rem]",
+      "1y": "scale-110 translate-y-[1rem]",
+    },
+    vertical: {
+      "1m": "scale-90 translate-y-[0.8rem]",
+      "6m": "scale-100 translate-y-[0.2rem]",
+      "1y": "scale-110 translate-y-[-0.4rem]",
+    },
+    roseta: {
+      "1m": "scale-90 rotate-[-2deg]",
+      "6m": "scale-100 rotate-[0deg]",
+      "1y": "scale-112 rotate-[2deg]",
+    },
+    cucharita: {
+      "1m": "scale-90 translate-y-[0.5rem]",
+      "6m": "scale-100 translate-y-[0rem]",
+      "1y": "scale-108 translate-y-[-0.3rem]",
+    },
+  }
+
+  return styles[mood][stage]
+}
+
+function growthText(plant: Plant, stage: GrowthStageId) {
+  if (stage === "1m") {
+    return `${plant.name} debería mantenerse estable mientras se adapta al lugar. Busca buena luz y evita exceso de agua.`
+  }
+
+  if (stage === "6m") {
+    return `Con cuidados constantes, ${plant.name} puede mostrar hojas nuevas, más firmeza o pequeños brotes. El avance depende de luz, riego y temperatura.`
+  }
+
+  return `En un año podría verse con más volumen o presencia. Revisa si el macetero sigue cómodo y considera renovar sustrato si notas poco crecimiento.`
+}
+
+function GrowthPreview({ plant }: { plant: Plant }) {
+  const [stage, setStage] = useState<GrowthStageId>("1m")
+  const selected = growthStages.find((item) => item.id === stage) ?? growthStages[0]
+
+  return (
+    <div className="mt-6 rounded-[1.8rem] border border-emerald-100 bg-white p-5 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+            Crecimiento estimado
+          </p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
+            Mira cómo podría evolucionar
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">
+            Vista referencial. El crecimiento puede variar según luz, riego, clima y cuidado.
+          </p>
+        </div>
+
+        <div className="flex shrink-0 gap-2 rounded-full bg-emerald-50 p-1 ring-1 ring-emerald-100">
+          {growthStages.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setStage(item.id)}
+              className={[
+                "rounded-full px-3 py-2 text-xs font-semibold transition",
+                stage === item.id
+                  ? "bg-emerald-950 text-white shadow-sm"
+                  : "text-emerald-800 hover:bg-white",
+              ].join(" ")}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-50 via-lime-50 to-white p-5 ring-1 ring-emerald-100">
+          <div className="pointer-events-none absolute inset-x-10 bottom-8 h-10 rounded-full bg-emerald-900/10 blur-xl" />
+          <div className="flex h-72 items-center justify-center">
+            <img
+              src={plant.image}
+              alt={`${plant.name} crecimiento ${selected.label}`}
+              className={[
+                "max-h-full max-w-full object-contain drop-shadow-2xl transition duration-500 ease-out",
+                growthVisualClass(plant.growthMood, stage),
+              ].join(" ")}
+            />
+          </div>
+
+          <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
+            {selected.label}
+          </div>
+        </div>
+
+        <div className="rounded-[1.5rem] bg-emerald-50 p-5 ring-1 ring-emerald-100">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            {selected.title}
+          </p>
+          <p className="mt-3 text-lg font-semibold text-emerald-950">
+            {selected.note}
+          </p>
+          <p className="mt-3 text-sm leading-7 text-zinc-700">
+            {growthText(plant, stage)}
+          </p>
+
+          <div className="mt-5 grid gap-2 text-sm">
+            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
+              <span className="font-semibold text-emerald-900">Luz:</span>{" "}
+              <span className="text-zinc-600">{lightLabel(plant.light)}</span>
+            </div>
+            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
+              <span className="font-semibold text-emerald-900">Riego:</span>{" "}
+              <span className="text-zinc-600">{plant.water}</span>
+            </div>
+            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
+              <span className="font-semibold text-emerald-900">Macetero actual:</span>{" "}
+              <span className="text-zinc-600">{plant.potSize}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function DetailView({
   plant,
   setView,
@@ -640,6 +811,9 @@ function DetailView({
           </div>
         </div>
       </div>
+
+
+      <GrowthPreview plant={plant} />
     </section>
   )
 }
