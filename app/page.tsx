@@ -570,96 +570,358 @@ const growthStages = [
     id: "1m",
     label: "1 mes",
     title: "Adaptación",
-    note: "La planta aún se está acomodando a su nuevo espacio.",
+    note: "La planta se mantiene más compacta mientras se adapta a su nuevo lugar.",
     focus: "Ubicación correcta y riego medido.",
   },
   {
     id: "6m",
     label: "6 meses",
     title: "Desarrollo",
-    note: "Empieza a verse más firme, con mejor volumen o nuevos brotes.",
-    focus: "Buena luz y rutina constante.",
+    note: "Puede ganar más volumen, brotes o una forma más definida.",
+    focus: "Luz estable y rutina constante.",
   },
   {
     id: "1y",
     label: "1 año",
     title: "Más presencia",
-    note: "Puede verse más grande, con más personalidad y mejor forma.",
-    focus: "Posible cambio de sustrato o macetero según evolución.",
+    note: "Podría verse más armada, con más altura, caída o volumen.",
+    focus: "Revisar sustrato y espacio del macetero.",
   },
 ] as const
 
 type GrowthStageId = (typeof growthStages)[number]["id"]
 
+function stageScale(stage: GrowthStageId) {
+  if (stage === "1m") return 0.78
+  if (stage === "6m") return 1
+  return 1.22
+}
+
+function stageLeafCount(stage: GrowthStageId, base: number) {
+  if (stage === "1m") return Math.max(5, Math.round(base * 0.65))
+  if (stage === "6m") return base
+  return Math.round(base * 1.35)
+}
+
 function growthText(plant: Plant, stage: GrowthStageId) {
   if (stage === "1m") {
-    return `${plant.name} podría verse muy parecida a como la recibes, enfocando su energía en adaptarse al lugar. La clave aquí es evitar exceso de riego y darle la luz adecuada.`
+    return `${plant.name} podría mantenerse compacta mientras se adapta. La clave es no excederse con el agua y ubicarla en un lugar adecuado.`
   }
 
   if (stage === "6m") {
-    return `Con buenos cuidados, ${plant.name} podría mostrar una forma más definida, hojas nuevas o una apariencia más firme. En esta etapa ya se empieza a notar mejor su carácter.`
+    return `Con cuidados constantes, ${plant.name} podría mostrar más hojas, más firmeza o una forma más definida.`
   }
 
-  return `En un año, ${plant.name} podría verse con más presencia y mejor estructura. Dependiendo del ambiente, incluso podría agradecer una revisión de sustrato o un macetero más cómodo.`
+  return `En un año, ${plant.name} podría ganar más presencia. Según su crecimiento, puede ser buena idea revisar sustrato o espacio del macetero.`
 }
 
-function growthCareHint(plant: Plant, stage: GrowthStageId) {
-  if (stage === "1m") {
-    return `Durante el primer mes, prioriza ${lightLabel(plant.light).toLowerCase()} y riego ${plant.water.toLowerCase()}.`
+function Leaf({
+  angle,
+  distance,
+  width,
+  height,
+  color = "green",
+  z = 0,
+  tilt = 58,
+}: {
+  angle: number
+  distance: number
+  width: number
+  height: number
+  color?: "green" | "light" | "dark" | "rose"
+  z?: number
+  tilt?: number
+}) {
+  const gradients = {
+    green: "linear-gradient(135deg, #166534 0%, #22c55e 55%, #86efac 100%)",
+    light: "linear-gradient(135deg, #65a30d 0%, #bef264 70%, #ecfccb 100%)",
+    dark: "linear-gradient(135deg, #052e16 0%, #166534 60%, #4ade80 100%)",
+    rose: "linear-gradient(135deg, #166534 0%, #84cc16 45%, #fda4af 100%)",
   }
 
-  if (stage === "6m") {
-    return `A los seis meses, mantener la rutina suele marcar la diferencia: luz estable, riego ${plant.water.toLowerCase()} y observación.`
-  }
-
-  return `Al año, revisa raíces, sustrato y espacio disponible para que siga creciendo de forma sana.`
+  return (
+    <div
+      className="absolute left-1/2 top-1/2 origin-bottom shadow-lg shadow-emerald-950/10"
+      style={{
+        width,
+        height,
+        borderRadius: "70% 70% 55% 55%",
+        background: gradients[color],
+        transform: `translate(-50%, -100%) rotateZ(${angle}deg) translateY(-${distance}px) rotateX(${tilt}deg) translateZ(${z}px)`,
+        transformStyle: "preserve-3d",
+      }}
+    />
+  )
 }
 
-function growthSceneConfig(mood: Plant["growthMood"], stage: GrowthStageId) {
-  const byMood: Record<Plant["growthMood"], Record<GrowthStageId, {
-    mainScale: number
-    frontY: number
-    frontRotate: number
-    back1Scale: number
-    back2Scale: number
-    orbitScale: number
-    pedestalScale: number
-    glow: string
-  }>> = {
-    compacta: {
-      "1m": { mainScale: 0.92, frontY: 12, frontRotate: -4, back1Scale: 0.82, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.92, glow: "from-emerald-100 via-lime-50 to-white" },
-      "6m": { mainScale: 1.02, frontY: 2, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-emerald-100 via-lime-50 to-white" },
-      "1y": { mainScale: 1.12, frontY: -8, frontRotate: 2, back1Scale: 0.98, back2Scale: 0.88, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-emerald-100 via-teal-50 to-white" },
-    },
-    colgante: {
-      "1m": { mainScale: 0.9, frontY: 0, frontRotate: -6, back1Scale: 0.82, back2Scale: 0.74, orbitScale: 0.92, pedestalScale: 0.92, glow: "from-lime-100 via-emerald-50 to-white" },
-      "6m": { mainScale: 1.0, frontY: 12, frontRotate: -2, back1Scale: 0.9, back2Scale: 0.82, orbitScale: 1.02, pedestalScale: 1.0, glow: "from-lime-100 via-emerald-50 to-white" },
-      "1y": { mainScale: 1.14, frontY: 24, frontRotate: 3, back1Scale: 1.0, back2Scale: 0.9, orbitScale: 1.12, pedestalScale: 1.04, glow: "from-emerald-100 via-lime-50 to-white" },
-    },
-    vertical: {
-      "1m": { mainScale: 0.9, frontY: 18, frontRotate: -4, back1Scale: 0.82, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-teal-100 via-emerald-50 to-white" },
-      "6m": { mainScale: 1.02, frontY: 6, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-teal-100 via-emerald-50 to-white" },
-      "1y": { mainScale: 1.16, frontY: -8, frontRotate: 2, back1Scale: 1.0, back2Scale: 0.9, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-teal-100 via-lime-50 to-white" },
-    },
-    roseta: {
-      "1m": { mainScale: 0.9, frontY: 14, frontRotate: -8, back1Scale: 0.8, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-emerald-100 via-white to-lime-50" },
-      "6m": { mainScale: 1.03, frontY: 2, frontRotate: -2, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-emerald-100 via-white to-lime-50" },
-      "1y": { mainScale: 1.18, frontY: -6, frontRotate: 4, back1Scale: 1.02, back2Scale: 0.92, orbitScale: 1.1, pedestalScale: 1.08, glow: "from-emerald-100 via-teal-50 to-white" },
-    },
-    cucharita: {
-      "1m": { mainScale: 0.88, frontY: 10, frontRotate: -5, back1Scale: 0.8, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-lime-100 via-white to-emerald-50" },
-      "6m": { mainScale: 1.0, frontY: 0, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-lime-100 via-white to-emerald-50" },
-      "1y": { mainScale: 1.12, frontY: -6, frontRotate: 2, back1Scale: 0.98, back2Scale: 0.88, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-emerald-100 via-lime-50 to-white" },
-    },
-  }
+function Stem({
+  angle,
+  height,
+  z = 0,
+}: {
+  angle: number
+  height: number
+  z?: number
+}) {
+  return (
+    <div
+      className="absolute left-1/2 top-1/2 origin-bottom rounded-full bg-emerald-700"
+      style={{
+        width: 5,
+        height,
+        transform: `translate(-50%, -100%) rotateZ(${angle}deg) rotateX(55deg) translateZ(${z}px)`,
+      }}
+    />
+  )
+}
 
-  return byMood[mood][stage]
+function Bead({
+  x,
+  y,
+  size,
+  z = 0,
+}: {
+  x: number
+  y: number
+  size: number
+  z?: number
+}) {
+  return (
+    <div
+      className="absolute rounded-full bg-gradient-to-br from-lime-300 via-emerald-400 to-emerald-700 shadow-lg shadow-emerald-900/20 ring-1 ring-white/60"
+      style={{
+        width: size,
+        height: size,
+        left: `calc(50% + ${x}px)`,
+        top: `calc(50% + ${y}px)`,
+        transform: `translate(-50%, -50%) translateZ(${z}px)`,
+      }}
+    />
+  )
+}
+
+function Pot3D({ scale }: { scale: number }) {
+  return (
+    <div
+      className="absolute left-1/2 top-[60%] h-40 w-44 -translate-x-1/2"
+      style={{
+        transform: `translateX(-50%) scale(${scale}) rotateX(4deg)`,
+        transformStyle: "preserve-3d",
+      }}
+    >
+      <div className="absolute left-1/2 top-0 h-10 w-44 -translate-x-1/2 rounded-[999px] bg-gradient-to-b from-orange-500 to-orange-700 shadow-xl ring-2 ring-orange-300/50" />
+      <div
+        className="absolute left-1/2 top-5 h-28 w-36 -translate-x-1/2 bg-gradient-to-br from-orange-500 via-orange-700 to-orange-900 shadow-2xl"
+        style={{
+          clipPath: "polygon(4% 0%, 96% 0%, 78% 100%, 22% 100%)",
+          borderRadius: "0 0 28px 28px",
+        }}
+      />
+      <div className="absolute left-1/2 top-3 h-7 w-36 -translate-x-1/2 rounded-[999px] bg-[#3b2115] shadow-inner" />
+      <div className="absolute left-[30%] top-7 h-20 w-5 rounded-full bg-white/10 blur-[1px]" />
+    </div>
+  )
+}
+
+function RosetteModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
+  const count = stageLeafCount(stage, 14)
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => {
+        const ring = index % 3
+        const angle = (360 / count) * index
+        const distance = 10 + ring * 10 * scale
+        const width = (24 + ring * 5) * scale
+        const height = (66 + ring * 14) * scale
+        return (
+          <Leaf
+            key={index}
+            angle={angle}
+            distance={distance}
+            width={width}
+            height={height}
+            color={index % 4 === 0 ? "rose" : index % 3 === 0 ? "light" : "green"}
+            z={ring * 8}
+            tilt={62}
+          />
+        )
+      })}
+      <Leaf angle={0} distance={0} width={30 * scale} height={60 * scale} color="light" z={40} tilt={72} />
+    </>
+  )
+}
+
+function VerticalModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
+  const count = stageLeafCount(stage, 11)
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => {
+        const angle = -62 + (124 / Math.max(1, count - 1)) * index
+        const height = (95 + (index % 3) * 20) * scale
+        const width = (18 + (index % 2) * 5) * scale
+        return (
+          <Leaf
+            key={index}
+            angle={angle}
+            distance={6 * scale}
+            width={width}
+            height={height}
+            color={index % 3 === 0 ? "dark" : "green"}
+            z={index * 3}
+            tilt={38}
+          />
+        )
+      })}
+    </>
+  )
+}
+
+function CompactModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
+  const count = stageLeafCount(stage, 12)
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => {
+        const angle = (360 / count) * index
+        return (
+          <Leaf
+            key={index}
+            angle={angle}
+            distance={8 * scale}
+            width={(18 + (index % 2) * 5) * scale}
+            height={(78 + (index % 3) * 12) * scale}
+            color={index % 3 === 0 ? "dark" : "green"}
+            z={(index % 4) * 8}
+            tilt={52}
+          />
+        )
+      })}
+    </>
+  )
+}
+
+function CucharitaModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
+  const count = stageLeafCount(stage, 9)
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => {
+        const angle = -75 + (150 / Math.max(1, count - 1)) * index
+        const stemHeight = (78 + (index % 3) * 22) * scale
+        return (
+          <div key={index}>
+            <Stem angle={angle} height={stemHeight} z={index * 5} />
+            <div
+              className="absolute left-1/2 top-1/2 rounded-full bg-gradient-to-br from-lime-300 via-green-400 to-emerald-700 shadow-xl shadow-emerald-950/10 ring-1 ring-white/60"
+              style={{
+                width: 42 * scale,
+                height: 46 * scale,
+                transform: `translate(-50%, -50%) rotateZ(${angle}deg) translateY(-${stemHeight + 18}px) rotateX(48deg) translateZ(${index * 8}px)`,
+              }}
+            />
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+function ColganteModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
+  const count = stageLeafCount(stage, 18)
+  const drop = stage === "1m" ? 32 : stage === "6m" ? 58 : 88
+  return (
+    <>
+      {Array.from({ length: 8 }).map((_, index) => (
+        <Leaf
+          key={`top-${index}`}
+          angle={(360 / 8) * index}
+          distance={8 * scale}
+          width={20 * scale}
+          height={56 * scale}
+          color="green"
+          z={index * 4}
+          tilt={58}
+        />
+      ))}
+
+      {Array.from({ length: count }).map((_, index) => {
+        const strand = index % 4
+        const row = Math.floor(index / 4)
+        const x = [-50, -22, 22, 50][strand]
+        const y = 8 + row * (drop / 4)
+        return (
+          <Bead
+            key={index}
+            x={x * scale + Math.sin(row) * 8}
+            y={y * scale}
+            size={(17 + (index % 3) * 3) * scale}
+            z={row * 6}
+          />
+        )
+      })}
+    </>
+  )
+}
+
+function PlantModel3D({ plant, stage }: { plant: Plant; stage: GrowthStageId }) {
+  const scale = stageScale(stage)
+  const potScale = stage === "1m" ? 0.9 : stage === "6m" ? 1 : 1.06
+
+  return (
+    <div className="relative h-[430px] overflow-hidden rounded-[1.7rem] bg-gradient-to-br from-emerald-50 via-lime-50 to-white ring-1 ring-emerald-100 [perspective:1300px]">
+      <div className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.22),transparent_28%),radial-gradient(circle_at_80%_70%,rgba(132,204,22,0.18),transparent_30%)]" />
+
+      <div
+        className="absolute left-1/2 top-[50%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-200/80"
+        style={{ transform: "translate(-50%, -50%) rotateX(72deg) rotateZ(-12deg)" }}
+      />
+      <div
+        className="absolute left-1/2 top-[54%] h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full border border-lime-200/70"
+        style={{ transform: "translate(-50%, -50%) rotateX(72deg) rotateZ(16deg)" }}
+      />
+      <div className="absolute left-1/2 top-[69%] h-16 w-72 -translate-x-1/2 rounded-full bg-emerald-950/10 blur-2xl" />
+
+      <div className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
+        {growthStages.find((item) => item.id === stage)?.label}
+      </div>
+      <div className="absolute right-5 top-5 rounded-full bg-emerald-950 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white shadow-sm">
+        Modelo 3D referencial
+      </div>
+
+      <div
+        className="absolute left-1/2 top-[43%] h-0 w-0 [transform-style:preserve-3d]"
+        style={{
+          transform: "translate(-50%, -50%) rotateX(18deg) rotateY(-22deg)",
+        }}
+      >
+        {plant.growthMood === "roseta" && <RosetteModel scale={scale} stage={stage} />}
+        {plant.growthMood === "vertical" && <VerticalModel scale={scale} stage={stage} />}
+        {plant.growthMood === "compacta" && <CompactModel scale={scale} stage={stage} />}
+        {plant.growthMood === "cucharita" && <CucharitaModel scale={scale} stage={stage} />}
+        {plant.growthMood === "colgante" && <ColganteModel scale={scale} stage={stage} />}
+      </div>
+
+      <Pot3D scale={potScale} />
+
+      <div className="absolute bottom-5 left-5 right-5 grid grid-cols-3 gap-2">
+        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Etapa</p>
+          <p className="mt-1 text-xs font-semibold text-emerald-950">{growthStages.find((item) => item.id === stage)?.title}</p>
+        </div>
+        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Vista</p>
+          <p className="mt-1 text-xs font-semibold text-emerald-950">Referencial</p>
+        </div>
+        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Macetero</p>
+          <p className="mt-1 text-xs font-semibold text-emerald-950">{plant.potSize.replace("Macetero: ", "")}</p>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function GrowthPreview({ plant }: { plant: Plant }) {
   const [stage, setStage] = useState<GrowthStageId>("1m")
   const selected = growthStages.find((item) => item.id === stage) ?? growthStages[0]
-  const scene = growthSceneConfig(plant.growthMood, stage)
 
   return (
     <div className="mt-6 rounded-[1.8rem] border border-emerald-100 bg-white p-5 shadow-sm sm:p-6">
@@ -672,7 +934,7 @@ function GrowthPreview({ plant }: { plant: Plant }) {
             Mira cómo podría evolucionar
           </h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
-            Vista referencial. El crecimiento puede variar según luz, riego, clima y cuidado.
+            Modelo visual referencial, creado para imaginar su evolución. No reemplaza la foto real del producto.
           </p>
         </div>
 
@@ -695,76 +957,7 @@ function GrowthPreview({ plant }: { plant: Plant }) {
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_0.95fr]">
-        <div className="relative overflow-hidden rounded-[2rem] border border-emerald-100 bg-gradient-to-br p-5 ring-1 ring-white/60 [perspective:1400px] sm:p-6">
-          <div className={["absolute inset-0 bg-gradient-to-br opacity-90", scene.glow].join(" ")} />
-          <div className="absolute left-6 top-6 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
-            {selected.label}
-          </div>
-          <div className="absolute right-6 top-6 rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-700 shadow-sm ring-1 ring-emerald-100">
-            Vista 3D
-          </div>
-
-          <div className="relative z-10 flex h-[360px] items-center justify-center [transform-style:preserve-3d]">
-            <div
-              className="absolute h-52 w-52 rounded-full bg-white/60 blur-3xl"
-              style={{ transform: `translate3d(0, -30px, -80px) scale(${scene.orbitScale})` }}
-            />
-            <div
-              className="absolute h-64 w-64 rounded-full border border-white/70"
-              style={{ transform: `rotateX(72deg) rotateZ(-8deg) scale(${scene.orbitScale}) translate3d(0, 115px, -10px)` }}
-            />
-            <div
-              className="absolute h-72 w-72 rounded-full border border-emerald-200/80"
-              style={{ transform: `rotateX(72deg) rotateZ(10deg) scale(${scene.orbitScale * 1.08}) translate3d(0, 105px, -30px)` }}
-            />
-            <div
-              className="absolute h-14 w-56 rounded-full bg-emerald-950/12 blur-2xl"
-              style={{ transform: `translate3d(0, 130px, -20px) scale(${scene.pedestalScale})` }}
-            />
-            <div
-              className="absolute h-10 w-44 rounded-[999px] bg-white/70 ring-1 ring-emerald-100"
-              style={{ transform: `rotateX(72deg) translate3d(0, 80px, 0) scale(${scene.pedestalScale})` }}
-            />
-            <img
-              src={plant.image}
-              alt=""
-              aria-hidden="true"
-              className="absolute max-h-[270px] max-w-[250px] object-contain opacity-15 blur-[6px]"
-              style={{ transform: `translate3d(-44px, ${scene.frontY + 6}px, -110px) rotateY(30deg) scale(${scene.back2Scale})` }}
-            />
-            <img
-              src={plant.image}
-              alt=""
-              aria-hidden="true"
-              className="absolute max-h-[290px] max-w-[270px] object-contain opacity-25 blur-[3px]"
-              style={{ transform: `translate3d(-20px, ${scene.frontY + 2}px, -60px) rotateY(18deg) scale(${scene.back1Scale})` }}
-            />
-            <img
-              src={plant.image}
-              alt={`${plant.name} crecimiento ${selected.label}`}
-              className="relative max-h-[320px] max-w-[290px] object-contain drop-shadow-[0_18px_40px_rgba(5,46,22,0.24)] transition duration-500 ease-out"
-              style={{
-                transform: `translate3d(0, ${scene.frontY}px, 30px) rotateY(-14deg) rotateX(6deg) rotateZ(${scene.frontRotate}deg) scale(${scene.mainScale})`,
-                transformStyle: "preserve-3d",
-              }}
-            />
-          </div>
-
-          <div className="relative z-10 mt-2 grid gap-2 sm:grid-cols-3">
-            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Etapa</p>
-              <p className="mt-1 text-sm font-semibold text-emerald-950">{selected.title}</p>
-            </div>
-            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Enfoque</p>
-              <p className="mt-1 text-sm font-semibold text-emerald-950">{selected.focus}</p>
-            </div>
-            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Macetero</p>
-              <p className="mt-1 text-sm font-semibold text-emerald-950">{plant.potSize}</p>
-            </div>
-          </div>
-        </div>
+        <PlantModel3D plant={plant} stage={stage} />
 
         <div className="rounded-[2rem] bg-emerald-50 p-5 ring-1 ring-emerald-100 sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
@@ -780,7 +973,7 @@ function GrowthPreview({ plant }: { plant: Plant }) {
           <div className="mt-5 rounded-[1.4rem] bg-white p-4 ring-1 ring-emerald-100">
             <p className="text-sm font-semibold text-emerald-950">Qué mirar en esta etapa</p>
             <p className="mt-2 text-sm leading-7 text-zinc-600">
-              {growthCareHint(plant, stage)}
+              {selected.focus}
             </p>
           </div>
 
