@@ -570,83 +570,108 @@ const growthStages = [
     id: "1m",
     label: "1 mes",
     title: "Adaptación",
-    note: "Se mantiene similar. Lo más importante es ubicarla bien y no excederse con el riego.",
+    note: "La planta aún se está acomodando a su nuevo espacio.",
+    focus: "Ubicación correcta y riego medido.",
   },
   {
     id: "6m",
     label: "6 meses",
-    title: "Nuevos brotes",
-    note: "Con buena luz puede verse más firme, con hojas nuevas o pequeñas señales de crecimiento.",
+    title: "Desarrollo",
+    note: "Empieza a verse más firme, con mejor volumen o nuevos brotes.",
+    focus: "Buena luz y rutina constante.",
   },
   {
     id: "1y",
     label: "1 año",
     title: "Más presencia",
-    note: "Podría necesitar revisión de sustrato o cambio de macetero según su crecimiento y cuidados.",
+    note: "Puede verse más grande, con más personalidad y mejor forma.",
+    focus: "Posible cambio de sustrato o macetero según evolución.",
   },
 ] as const
 
 type GrowthStageId = (typeof growthStages)[number]["id"]
 
-function growthVisualClass(mood: Plant["growthMood"], stage: GrowthStageId) {
-  const styles: Record<Plant["growthMood"], Record<GrowthStageId, string>> = {
-    compacta: {
-      "1m": "scale-90 rotate-[-1deg]",
-      "6m": "scale-100 rotate-[0deg]",
-      "1y": "scale-110 rotate-[1deg]",
-    },
-    colgante: {
-      "1m": "scale-90 translate-y-[-0.4rem]",
-      "6m": "scale-100 translate-y-[0.2rem]",
-      "1y": "scale-110 translate-y-[1rem]",
-    },
-    vertical: {
-      "1m": "scale-90 translate-y-[0.8rem]",
-      "6m": "scale-100 translate-y-[0.2rem]",
-      "1y": "scale-110 translate-y-[-0.4rem]",
-    },
-    roseta: {
-      "1m": "scale-90 rotate-[-2deg]",
-      "6m": "scale-100 rotate-[0deg]",
-      "1y": "scale-112 rotate-[2deg]",
-    },
-    cucharita: {
-      "1m": "scale-90 translate-y-[0.5rem]",
-      "6m": "scale-100 translate-y-[0rem]",
-      "1y": "scale-108 translate-y-[-0.3rem]",
-    },
-  }
-
-  return styles[mood][stage]
-}
-
 function growthText(plant: Plant, stage: GrowthStageId) {
   if (stage === "1m") {
-    return `${plant.name} debería mantenerse estable mientras se adapta al lugar. Busca buena luz y evita exceso de agua.`
+    return `${plant.name} podría verse muy parecida a como la recibes, enfocando su energía en adaptarse al lugar. La clave aquí es evitar exceso de riego y darle la luz adecuada.`
   }
 
   if (stage === "6m") {
-    return `Con cuidados constantes, ${plant.name} puede mostrar hojas nuevas, más firmeza o pequeños brotes. El avance depende de luz, riego y temperatura.`
+    return `Con buenos cuidados, ${plant.name} podría mostrar una forma más definida, hojas nuevas o una apariencia más firme. En esta etapa ya se empieza a notar mejor su carácter.`
   }
 
-  return `En un año podría verse con más volumen o presencia. Revisa si el macetero sigue cómodo y considera renovar sustrato si notas poco crecimiento.`
+  return `En un año, ${plant.name} podría verse con más presencia y mejor estructura. Dependiendo del ambiente, incluso podría agradecer una revisión de sustrato o un macetero más cómodo.`
+}
+
+function growthCareHint(plant: Plant, stage: GrowthStageId) {
+  if (stage === "1m") {
+    return `Durante el primer mes, prioriza ${lightLabel(plant.light).toLowerCase()} y riego ${plant.water.toLowerCase()}.`
+  }
+
+  if (stage === "6m") {
+    return `A los seis meses, mantener la rutina suele marcar la diferencia: luz estable, riego ${plant.water.toLowerCase()} y observación.`
+  }
+
+  return `Al año, revisa raíces, sustrato y espacio disponible para que siga creciendo de forma sana.`
+}
+
+function growthSceneConfig(mood: Plant["growthMood"], stage: GrowthStageId) {
+  const byMood: Record<Plant["growthMood"], Record<GrowthStageId, {
+    mainScale: number
+    frontY: number
+    frontRotate: number
+    back1Scale: number
+    back2Scale: number
+    orbitScale: number
+    pedestalScale: number
+    glow: string
+  }>> = {
+    compacta: {
+      "1m": { mainScale: 0.92, frontY: 12, frontRotate: -4, back1Scale: 0.82, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.92, glow: "from-emerald-100 via-lime-50 to-white" },
+      "6m": { mainScale: 1.02, frontY: 2, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-emerald-100 via-lime-50 to-white" },
+      "1y": { mainScale: 1.12, frontY: -8, frontRotate: 2, back1Scale: 0.98, back2Scale: 0.88, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-emerald-100 via-teal-50 to-white" },
+    },
+    colgante: {
+      "1m": { mainScale: 0.9, frontY: 0, frontRotate: -6, back1Scale: 0.82, back2Scale: 0.74, orbitScale: 0.92, pedestalScale: 0.92, glow: "from-lime-100 via-emerald-50 to-white" },
+      "6m": { mainScale: 1.0, frontY: 12, frontRotate: -2, back1Scale: 0.9, back2Scale: 0.82, orbitScale: 1.02, pedestalScale: 1.0, glow: "from-lime-100 via-emerald-50 to-white" },
+      "1y": { mainScale: 1.14, frontY: 24, frontRotate: 3, back1Scale: 1.0, back2Scale: 0.9, orbitScale: 1.12, pedestalScale: 1.04, glow: "from-emerald-100 via-lime-50 to-white" },
+    },
+    vertical: {
+      "1m": { mainScale: 0.9, frontY: 18, frontRotate: -4, back1Scale: 0.82, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-teal-100 via-emerald-50 to-white" },
+      "6m": { mainScale: 1.02, frontY: 6, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-teal-100 via-emerald-50 to-white" },
+      "1y": { mainScale: 1.16, frontY: -8, frontRotate: 2, back1Scale: 1.0, back2Scale: 0.9, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-teal-100 via-lime-50 to-white" },
+    },
+    roseta: {
+      "1m": { mainScale: 0.9, frontY: 14, frontRotate: -8, back1Scale: 0.8, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-emerald-100 via-white to-lime-50" },
+      "6m": { mainScale: 1.03, frontY: 2, frontRotate: -2, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-emerald-100 via-white to-lime-50" },
+      "1y": { mainScale: 1.18, frontY: -6, frontRotate: 4, back1Scale: 1.02, back2Scale: 0.92, orbitScale: 1.1, pedestalScale: 1.08, glow: "from-emerald-100 via-teal-50 to-white" },
+    },
+    cucharita: {
+      "1m": { mainScale: 0.88, frontY: 10, frontRotate: -5, back1Scale: 0.8, back2Scale: 0.72, orbitScale: 0.9, pedestalScale: 0.9, glow: "from-lime-100 via-white to-emerald-50" },
+      "6m": { mainScale: 1.0, frontY: 0, frontRotate: -1, back1Scale: 0.9, back2Scale: 0.8, orbitScale: 1.0, pedestalScale: 1.0, glow: "from-lime-100 via-white to-emerald-50" },
+      "1y": { mainScale: 1.12, frontY: -6, frontRotate: 2, back1Scale: 0.98, back2Scale: 0.88, orbitScale: 1.08, pedestalScale: 1.08, glow: "from-emerald-100 via-lime-50 to-white" },
+    },
+  }
+
+  return byMood[mood][stage]
 }
 
 function GrowthPreview({ plant }: { plant: Plant }) {
   const [stage, setStage] = useState<GrowthStageId>("1m")
   const selected = growthStages.find((item) => item.id === stage) ?? growthStages[0]
+  const scene = growthSceneConfig(plant.growthMood, stage)
 
   return (
-    <div className="mt-6 rounded-[1.8rem] border border-emerald-100 bg-white p-5 shadow-sm">
+    <div className="mt-6 rounded-[1.8rem] border border-emerald-100 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
-            Crecimiento estimado
+            Simulación 3D de crecimiento
           </p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             Mira cómo podría evolucionar
           </h3>
-          <p className="mt-2 text-sm leading-6 text-zinc-600">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
             Vista referencial. El crecimiento puede variar según luz, riego, clima y cuidado.
           </p>
         </div>
@@ -669,48 +694,108 @@ function GrowthPreview({ plant }: { plant: Plant }) {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-50 via-lime-50 to-white p-5 ring-1 ring-emerald-100">
-          <div className="pointer-events-none absolute inset-x-10 bottom-8 h-10 rounded-full bg-emerald-900/10 blur-xl" />
-          <div className="flex h-72 items-center justify-center">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_0.95fr]">
+        <div className="relative overflow-hidden rounded-[2rem] border border-emerald-100 bg-gradient-to-br p-5 ring-1 ring-white/60 [perspective:1400px] sm:p-6">
+          <div className={["absolute inset-0 bg-gradient-to-br opacity-90", scene.glow].join(" ")} />
+          <div className="absolute left-6 top-6 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
+            {selected.label}
+          </div>
+          <div className="absolute right-6 top-6 rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-700 shadow-sm ring-1 ring-emerald-100">
+            Vista 3D
+          </div>
+
+          <div className="relative z-10 flex h-[360px] items-center justify-center [transform-style:preserve-3d]">
+            <div
+              className="absolute h-52 w-52 rounded-full bg-white/60 blur-3xl"
+              style={{ transform: `translate3d(0, -30px, -80px) scale(${scene.orbitScale})` }}
+            />
+            <div
+              className="absolute h-64 w-64 rounded-full border border-white/70"
+              style={{ transform: `rotateX(72deg) rotateZ(-8deg) scale(${scene.orbitScale}) translate3d(0, 115px, -10px)` }}
+            />
+            <div
+              className="absolute h-72 w-72 rounded-full border border-emerald-200/80"
+              style={{ transform: `rotateX(72deg) rotateZ(10deg) scale(${scene.orbitScale * 1.08}) translate3d(0, 105px, -30px)` }}
+            />
+            <div
+              className="absolute h-14 w-56 rounded-full bg-emerald-950/12 blur-2xl"
+              style={{ transform: `translate3d(0, 130px, -20px) scale(${scene.pedestalScale})` }}
+            />
+            <div
+              className="absolute h-10 w-44 rounded-[999px] bg-white/70 ring-1 ring-emerald-100"
+              style={{ transform: `rotateX(72deg) translate3d(0, 80px, 0) scale(${scene.pedestalScale})` }}
+            />
+            <img
+              src={plant.image}
+              alt=""
+              aria-hidden="true"
+              className="absolute max-h-[270px] max-w-[250px] object-contain opacity-15 blur-[6px]"
+              style={{ transform: `translate3d(-44px, ${scene.frontY + 6}px, -110px) rotateY(30deg) scale(${scene.back2Scale})` }}
+            />
+            <img
+              src={plant.image}
+              alt=""
+              aria-hidden="true"
+              className="absolute max-h-[290px] max-w-[270px] object-contain opacity-25 blur-[3px]"
+              style={{ transform: `translate3d(-20px, ${scene.frontY + 2}px, -60px) rotateY(18deg) scale(${scene.back1Scale})` }}
+            />
             <img
               src={plant.image}
               alt={`${plant.name} crecimiento ${selected.label}`}
-              className={[
-                "max-h-full max-w-full object-contain drop-shadow-2xl transition duration-500 ease-out",
-                growthVisualClass(plant.growthMood, stage),
-              ].join(" ")}
+              className="relative max-h-[320px] max-w-[290px] object-contain drop-shadow-[0_18px_40px_rgba(5,46,22,0.24)] transition duration-500 ease-out"
+              style={{
+                transform: `translate3d(0, ${scene.frontY}px, 30px) rotateY(-14deg) rotateX(6deg) rotateZ(${scene.frontRotate}deg) scale(${scene.mainScale})`,
+                transformStyle: "preserve-3d",
+              }}
             />
           </div>
 
-          <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
-            {selected.label}
+          <div className="relative z-10 mt-2 grid gap-2 sm:grid-cols-3">
+            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Etapa</p>
+              <p className="mt-1 text-sm font-semibold text-emerald-950">{selected.title}</p>
+            </div>
+            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Enfoque</p>
+              <p className="mt-1 text-sm font-semibold text-emerald-950">{selected.focus}</p>
+            </div>
+            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Macetero</p>
+              <p className="mt-1 text-sm font-semibold text-emerald-950">{plant.potSize}</p>
+            </div>
           </div>
         </div>
 
-        <div className="rounded-[1.5rem] bg-emerald-50 p-5 ring-1 ring-emerald-100">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">
-            {selected.title}
+        <div className="rounded-[2rem] bg-emerald-50 p-5 ring-1 ring-emerald-100 sm:p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+            {selected.label}
           </p>
-          <p className="mt-3 text-lg font-semibold text-emerald-950">
+          <h4 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             {selected.note}
-          </p>
-          <p className="mt-3 text-sm leading-7 text-zinc-700">
+          </h4>
+          <p className="mt-4 text-sm leading-7 text-zinc-700">
             {growthText(plant, stage)}
           </p>
 
-          <div className="mt-5 grid gap-2 text-sm">
-            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
-              <span className="font-semibold text-emerald-900">Luz:</span>{" "}
+          <div className="mt-5 rounded-[1.4rem] bg-white p-4 ring-1 ring-emerald-100">
+            <p className="text-sm font-semibold text-emerald-950">Qué mirar en esta etapa</p>
+            <p className="mt-2 text-sm leading-7 text-zinc-600">
+              {growthCareHint(plant, stage)}
+            </p>
+          </div>
+
+          <div className="mt-5 grid gap-3">
+            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
+              <span className="font-semibold text-emerald-900">Luz recomendada:</span>{" "}
               <span className="text-zinc-600">{lightLabel(plant.light)}</span>
             </div>
-            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
+            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
               <span className="font-semibold text-emerald-900">Riego:</span>{" "}
               <span className="text-zinc-600">{plant.water}</span>
             </div>
-            <div className="rounded-2xl bg-white p-3 ring-1 ring-emerald-100">
-              <span className="font-semibold text-emerald-900">Macetero actual:</span>{" "}
-              <span className="text-zinc-600">{plant.potSize}</span>
+            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
+              <span className="font-semibold text-emerald-900">Cuidado:</span>{" "}
+              <span className="text-zinc-600">{careLabel(plant.care)}</span>
             </div>
           </div>
         </div>
@@ -718,6 +803,7 @@ function GrowthPreview({ plant }: { plant: Plant }) {
     </div>
   )
 }
+
 
 function DetailView({
   plant,
