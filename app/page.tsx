@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useRef, useEffect } from "react"
 
 type View = "inicio" | "catalogo" | "elegir" | "entrega" | "detalle"
 type Category = "Todas" | "Interior" | "Exterior" | "Fácil cuidado"
@@ -18,7 +18,6 @@ type Plant = {
   short: string
   description: string
   story: string
-  growthMood: "compacta" | "colgante" | "vertical" | "roseta" | "cucharita"
   image: string
   light: Light
   water: "Bajo" | "Medio"
@@ -26,6 +25,7 @@ type Plant = {
   bestFor: UseCase[]
   tags: string[]
   badge: string
+  available?: boolean
 }
 
 const BRAND = {
@@ -47,7 +47,6 @@ const plants: Plant[] = [
     short: "Firme, compacta y resistente.",
     description: "Suculenta compacta y decorativa, ideal para escritorios, repisas o rincones con buena luz.",
     story: "Una planta pequeña con carácter fuerte: se ve ordenada, firme y muy limpia visualmente. Es ideal para quienes quieren empezar con algo resistente, pero que igual se sienta especial en una repisa o escritorio.",
-    growthMood: "compacta",
     image: "/suculenta-haworthia-verde.webp",
     light: "media",
     water: "Bajo",
@@ -55,6 +54,7 @@ const plants: Plant[] = [
     bestFor: ["principiante", "decorar", "regalo"],
     tags: ["Bajo riego", "Fácil", "Interior"],
     badge: "Disponible",
+    available: true,
   },
   {
     id: "orejitas",
@@ -65,7 +65,6 @@ const plants: Plant[] = [
     short: "Suave, curiosa y decorativa.",
     description: "Planta pequeña con hojas redondeadas. Muy linda para regalar o decorar espacios chicos.",
     story: "Sus hojas redondeadas le dan una personalidad tierna y suave. Queda muy bien en espacios pequeños, veladores o escritorios donde quieres sumar un detalle vivo sin sobrecargar el lugar.",
-    growthMood: "compacta",
     image: "/suculenta-orejitas.webp",
     light: "media",
     water: "Bajo",
@@ -73,6 +72,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo", "principiante"],
     tags: ["Interior", "Regalo", "Decorativa"],
     badge: "Nueva",
+    available: true,
   },
   {
     id: "rosada",
@@ -83,7 +83,6 @@ const plants: Plant[] = [
     short: "Color suave y estilo delicado.",
     description: "Suculenta de tonos rosados, ideal para quienes buscan una planta diferente y decorativa.",
     story: "Tiene tonos cálidos y delicados que la hacen destacar sin ser exagerada. Es una buena opción para regalar o para darle un toque más dulce y decorativo a un rincón del hogar.",
-    growthMood: "roseta",
     image: "/suculenta-rosada.webp",
     light: "media",
     water: "Bajo",
@@ -91,6 +90,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Decorativa", "Color suave", "Bajo riego"],
     badge: "Especial",
+    available: true,
   },
   {
     id: "haworthia-clara",
@@ -101,7 +101,6 @@ const plants: Plant[] = [
     short: "Compacta y de bajo mantenimiento.",
     description: "Perfecta para comenzar con plantas. Requiere poco riego y se adapta bien a espacios luminosos.",
     story: "Compacta, simple y fácil de ubicar. Es de esas plantas que se adaptan bien a la rutina y ayudan a que un espacio se vea más cuidado sin exigir demasiada atención.",
-    growthMood: "compacta",
     image: "/suculenta-haworthia-clara.webp",
     light: "media",
     water: "Bajo",
@@ -109,6 +108,7 @@ const plants: Plant[] = [
     bestFor: ["principiante", "decorar"],
     tags: ["Fácil", "Bajo riego", "Compacta"],
     badge: "Fácil",
+    available: true,
   },
   {
     id: "haworthia-cebra",
@@ -119,7 +119,6 @@ const plants: Plant[] = [
     short: "Textura marcada y look moderno.",
     description: "Suculenta llamativa por sus líneas y textura. Buena opción para espacios modernos y luminosos.",
     story: "Su textura marcada y sus líneas naturales le dan un aspecto moderno. Funciona muy bien para personas que buscan una planta pequeña, resistente y con una forma distinta.",
-    growthMood: "compacta",
     image: "/suculenta-haworthia-cebra.webp",
     light: "media",
     water: "Bajo",
@@ -127,6 +126,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "principiante"],
     tags: ["Moderna", "Resistente", "Bajo riego"],
     badge: "Top",
+    available: true,
   },
   {
     id: "dorada",
@@ -137,7 +137,6 @@ const plants: Plant[] = [
     short: "Tonos claros y presencia alegre.",
     description: "Ideal para lugares con buena luz. Sus tonos verdes y dorados aportan frescura y calidez.",
     story: "Sus tonos claros transmiten calidez y luz. Es una planta alegre, perfecta para espacios luminosos donde quieres sumar un detalle fresco y natural.",
-    growthMood: "roseta",
     image: "/suculenta-dorada.webp",
     light: "alta",
     water: "Bajo",
@@ -145,6 +144,7 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar", "regalo"],
     tags: ["Buena luz", "Exterior", "Color claro"],
     badge: "Exterior",
+    available: true,
   },
   {
     id: "vertical",
@@ -155,7 +155,6 @@ const plants: Plant[] = [
     short: "Forma alta y mucho carácter.",
     description: "Suculenta con silueta más alta, ideal para destacar en terraza, repisa o entrada luminosa.",
     story: "Tiene una silueta más alta y llamativa, por eso destaca más que otras suculentas. Es buena para entradas, terrazas protegidas o repisas donde quieres que la planta tenga presencia.",
-    growthMood: "vertical",
     image: "/suculenta-vertical.webp",
     light: "alta",
     water: "Bajo",
@@ -163,6 +162,7 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar"],
     tags: ["Vertical", "Luminosa", "Bajo riego"],
     badge: "Destacada",
+    available: true,
   },
   {
     id: "mini-verde",
@@ -173,7 +173,6 @@ const plants: Plant[] = [
     short: "Fresca, delicada y decorativa.",
     description: "Opción mini para detalles decorativos, escritorios o regalos simples.",
     story: "Pequeña y delicada, pensada para detalles simples. Es ideal para regalos, escritorios o rincones chicos donde una planta grande no calza, pero igual quieres sumar vida.",
-    growthMood: "vertical",
     image: "/suculenta-mini-verde.webp",
     light: "media",
     water: "Bajo",
@@ -181,6 +180,7 @@ const plants: Plant[] = [
     bestFor: ["regalo", "decorar", "principiante"],
     tags: ["Decorativa", "Regalo", "Interior"],
     badge: "Mini",
+    available: true,
   },
   {
     id: "echeveria-clara",
@@ -191,7 +191,6 @@ const plants: Plant[] = [
     short: "Clara, suave y elegante.",
     description: "Suculenta de tonos claros, perfecta para decorar con un estilo limpio y natural.",
     story: "Su forma ordenada y color suave la hacen sentir elegante. Queda muy bien en espacios limpios, minimalistas o donde buscas una planta decorativa pero tranquila.",
-    growthMood: "roseta",
     image: "/suculenta-echeveria-clara.webp",
     light: "media",
     water: "Bajo",
@@ -199,6 +198,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Elegante", "Interior", "Bajo riego"],
     badge: "Favorita",
+    available: true,
   },
   {
     id: "rosario",
@@ -209,7 +209,6 @@ const plants: Plant[] = [
     short: "Colgante, delicada y muy llamativa.",
     description: "Suculenta tipo rosario, ideal para repisas, maceteros altos o espacios donde pueda caer con gracia.",
     story: "Su forma colgante la hace muy especial. Es perfecta para repisas o lugares donde pueda caer de forma natural, creando un efecto más vivo y orgánico.",
-    growthMood: "colgante",
     image: "/suculenta-rosario.webp",
     light: "media",
     water: "Bajo",
@@ -217,6 +216,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Colgante", "Decorativa", "Luz indirecta"],
     badge: "Nueva",
+    available: false,
   },
   {
     id: "jade",
@@ -227,7 +227,6 @@ const plants: Plant[] = [
     short: "Hojas brillantes y forma elegante.",
     description: "Planta de hojas verdes con borde sutil, ideal para decorar interiores luminosos.",
     story: "De hojas brillantes y forma amable, transmite frescura y buena energía. Es una planta muy decorativa para interiores luminosos y también funciona muy bien como regalo.",
-    growthMood: "cucharita",
     image: "/suculenta-jade.webp",
     light: "media",
     water: "Bajo",
@@ -235,6 +234,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo", "principiante"],
     tags: ["Interior", "Decorativa", "Fácil"],
     badge: "Nueva",
+    available: true,
   },
   {
     id: "roseta-gris",
@@ -245,7 +245,6 @@ const plants: Plant[] = [
     short: "Forma de roseta y tono suave.",
     description: "Suculenta pequeña de aspecto delicado, perfecta para detalles decorativos o regalos simples.",
     story: "Tiene una forma de roseta muy delicada, como una pequeña flor verde. Es ideal para quienes buscan una planta sencilla, bonita y con un toque elegante.",
-    growthMood: "roseta",
     image: "/suculenta-roseta-gris.webp",
     light: "media",
     water: "Bajo",
@@ -253,6 +252,7 @@ const plants: Plant[] = [
     bestFor: ["regalo", "decorar"],
     tags: ["Roseta", "Decorativa", "Bajo riego"],
     badge: "Nueva",
+    available: true,
   },
   {
     id: "cucharita",
@@ -263,7 +263,6 @@ const plants: Plant[] = [
     short: "Hojas redondas, fresca y muy decorativa.",
     description: "Planta conocida por sus hojas redondas tipo cucharita. El tamaño indicado corresponde al macetero, no a la altura total de la planta.",
     story: "Sus hojas redondas tipo cucharita la hacen muy reconocible y entretenida visualmente. Es una planta con más presencia, ideal para convertir un rincón simple en un punto verde protagonista.",
-    growthMood: "cucharita",
     image: "/planta-cucharita-11cm.webp",
     light: "media",
     water: "Medio",
@@ -271,6 +270,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Macetero 11 cm", "Interior", "Decorativa"],
     badge: "11 cm",
+    available: true,
   },
   {
     id: "echeveria-verde",
@@ -281,7 +281,6 @@ const plants: Plant[] = [
     short: "Verde clara, fresca y elegante.",
     description: "Suculenta de forma armónica y color verde suave, ideal para dar un toque natural al hogar.",
     story: "De forma armónica y color verde claro, tiene una presencia fresca y luminosa. Es una buena opción para decorar con un estilo natural y limpio.",
-    growthMood: "roseta",
     image: "/suculenta-echeveria-verde.webp",
     light: "media",
     water: "Bajo",
@@ -289,6 +288,7 @@ const plants: Plant[] = [
     bestFor: ["decorar", "regalo"],
     tags: ["Echeveria", "Decorativa", "Bajo riego"],
     badge: "Nueva",
+    available: true,
   },
   {
     id: "sedum-verde",
@@ -299,7 +299,6 @@ const plants: Plant[] = [
     short: "Vertical, fresca y de bajo riego.",
     description: "Suculenta de hojas alargadas y tonos verdes claros, ideal para espacios luminosos.",
     story: "Sus hojas alargadas y crecimiento vertical le dan movimiento. Es una planta alegre para espacios luminosos, perfecta para sumar altura y textura.",
-    growthMood: "vertical",
     image: "/suculenta-sedum-verde.webp",
     light: "alta",
     water: "Bajo",
@@ -307,6 +306,7 @@ const plants: Plant[] = [
     bestFor: ["terraza", "decorar"],
     tags: ["Buena luz", "Bajo riego", "Exterior"],
     badge: "Nueva",
+    available: true,
   },
 ]
 
@@ -314,7 +314,7 @@ const categories: Category[] = ["Todas", "Interior", "Exterior", "Fácil cuidado
 
 function whatsappLink(plant?: Plant) {
   const message = plant
-    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) de Plantas Mary. ¿Hay stock disponible? También me interesa el instructivo de cuidado.`
+    ? `Hola, quiero consultar por ${plant.name} (${plant.potSize}) a ${plant.price} de Plantas Mary. ¿Hay stock disponible? También me interesa el instructivo de cuidado.`
     : "Hola, quiero consultar por las plantas disponibles de Plantas Mary. También vi que entregan un instructivo de cuidado."
   return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`
 }
@@ -451,6 +451,11 @@ function PlantCard({
             Ver detalle
           </div>
         )}
+        {plant.available === false && (
+          <div className="absolute inset-0 flex items-end justify-center bg-white/60 pb-4 backdrop-blur-[2px]">
+            <span className="rounded-full bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-white shadow">Sin stock</span>
+          </div>
+        )}
       </div>
 
       <div className={compact ? "p-5" : "p-6"}>
@@ -512,7 +517,11 @@ function PlantCard({
           onClick={(event) => event.stopPropagation()}
           className="mt-5 grid gap-2 sm:grid-cols-2"
         >
-          <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
+          {plant.available !== false ? (
+            <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar</Button>
+          ) : (
+            <Button href={whatsappLink(plant)} variant="light" className="w-full">Consultar stock</Button>
+          )}
           <Button href={BRAND.instagramUrl} variant="light" className="w-full">Instagram</Button>
         </div>
       </div>
@@ -564,464 +573,271 @@ function DeliveryMap() {
 }
 
 
+function PlantViewer({ plant, isAvailable }: { plant: Plant; isAvailable: boolean }) {
+  const stageRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
+  const shadowRef = useRef<HTMLDivElement>(null)
+  const infoPanelRef = useRef<HTMLDivElement>(null)
+  const badgeRef = useRef<HTMLDivElement>(null)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const hintRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number>(0)
+  const mouseRef = useRef({ mx: 0, my: 0, lx: 0, ly: 0 })
 
-const growthStages = [
-  {
-    id: "1m",
-    label: "1 mes",
-    title: "Adaptación",
-    note: "La planta se mantiene más compacta mientras se adapta a su nuevo lugar.",
-    focus: "Ubicación correcta y riego medido.",
-  },
-  {
-    id: "6m",
-    label: "6 meses",
-    title: "Desarrollo",
-    note: "Puede ganar más volumen, brotes o una forma más definida.",
-    focus: "Luz estable y rutina constante.",
-  },
-  {
-    id: "1y",
-    label: "1 año",
-    title: "Más presencia",
-    note: "Podría verse más armada, con más altura, caída o volumen.",
-    focus: "Revisar sustrato y espacio del macetero.",
-  },
-] as const
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
 
-type GrowthStageId = (typeof growthStages)[number]["id"]
+    function onMove(e: MouseEvent) {
+      const r = stage!.getBoundingClientRect()
+      mouseRef.current.mx = ((e.clientX - r.left) / r.width - 0.5) * 2
+      mouseRef.current.my = ((e.clientY - r.top) / r.height - 0.5) * 2
+      if (cursorRef.current) {
+        cursorRef.current.style.left = (e.clientX - r.left) + "px"
+        cursorRef.current.style.top = (e.clientY - r.top) + "px"
+        cursorRef.current.style.opacity = "1"
+      }
+      if (hintRef.current) hintRef.current.style.opacity = "0"
+    }
 
-function stageScale(stage: GrowthStageId) {
-  if (stage === "1m") return 0.78
-  if (stage === "6m") return 1
-  return 1.22
-}
+    function onLeave() {
+      mouseRef.current.mx = 0
+      mouseRef.current.my = 0
+      if (cursorRef.current) cursorRef.current.style.opacity = "0"
+    }
 
-function stageLeafCount(stage: GrowthStageId, base: number) {
-  if (stage === "1m") return Math.max(5, Math.round(base * 0.65))
-  if (stage === "6m") return base
-  return Math.round(base * 1.35)
-}
+    function tick() {
+      const m = mouseRef.current
+      m.lx += (m.mx - m.lx) * 0.07
+      m.ly += (m.my - m.ly) * 0.07
+      const lx = m.lx, ly = m.ly
 
-function growthText(plant: Plant, stage: GrowthStageId) {
-  if (stage === "1m") {
-    return `${plant.name} podría mantenerse compacta mientras se adapta. La clave es no excederse con el agua y ubicarla en un lugar adecuado.`
-  }
+      if (bgRef.current) bgRef.current.style.transform = `translate(${lx * -14}px, ${ly * -10}px)`
+      if (shadowRef.current) shadowRef.current.style.transform = `translate(${lx * 9}px, ${ly * 6}px)`
+      if (imgRef.current) imgRef.current.style.transform = `perspective(900px) rotateY(${lx * 7}deg) rotateX(${-ly * 5}deg) scale(1.04) translate(${lx * 16}px, ${ly * 10}px)`
+      if (infoPanelRef.current) infoPanelRef.current.style.transform = `translate(${lx * -7}px, ${ly * -5}px)`
+      if (badgeRef.current) badgeRef.current.style.transform = `translate(${lx * -10}px, ${ly * -7}px)`
 
-  if (stage === "6m") {
-    return `Con cuidados constantes, ${plant.name} podría mostrar más hojas, más firmeza o una forma más definida.`
-  }
+      rafRef.current = requestAnimationFrame(tick)
+    }
 
-  return `En un año, ${plant.name} podría ganar más presencia. Según su crecimiento, puede ser buena idea revisar sustrato o espacio del macetero.`
-}
+    stage.addEventListener("mousemove", onMove)
+    stage.addEventListener("mouseleave", onLeave)
+    rafRef.current = requestAnimationFrame(tick)
 
-function Leaf({
-  angle,
-  distance,
-  width,
-  height,
-  color = "green",
-  z = 0,
-  tilt = 58,
-}: {
-  angle: number
-  distance: number
-  width: number
-  height: number
-  color?: "green" | "light" | "dark" | "rose"
-  z?: number
-  tilt?: number
-}) {
-  const gradients = {
-    green: "linear-gradient(135deg, #166534 0%, #22c55e 55%, #86efac 100%)",
-    light: "linear-gradient(135deg, #65a30d 0%, #bef264 70%, #ecfccb 100%)",
-    dark: "linear-gradient(135deg, #052e16 0%, #166534 60%, #4ade80 100%)",
-    rose: "linear-gradient(135deg, #166534 0%, #84cc16 45%, #fda4af 100%)",
-  }
+    return () => {
+      stage.removeEventListener("mousemove", onMove)
+      stage.removeEventListener("mouseleave", onLeave)
+      cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
 
   return (
     <div
-      className="absolute left-1/2 top-1/2 origin-bottom shadow-lg shadow-emerald-950/10"
+      ref={stageRef}
+      className="relative overflow-hidden rounded-[2.5rem]"
       style={{
-        width,
-        height,
-        borderRadius: "70% 70% 55% 55%",
-        background: gradients[color],
-        transform: `translate(-50%, -100%) rotateZ(${angle}deg) translateY(-${distance}px) rotateX(${tilt}deg) translateZ(${z}px)`,
-        transformStyle: "preserve-3d",
-      }}
-    />
-  )
-}
-
-function Stem({
-  angle,
-  height,
-  z = 0,
-}: {
-  angle: number
-  height: number
-  z?: number
-}) {
-  return (
-    <div
-      className="absolute left-1/2 top-1/2 origin-bottom rounded-full bg-emerald-700"
-      style={{
-        width: 5,
-        height,
-        transform: `translate(-50%, -100%) rotateZ(${angle}deg) rotateX(55deg) translateZ(${z}px)`,
-      }}
-    />
-  )
-}
-
-function Bead({
-  x,
-  y,
-  size,
-  z = 0,
-}: {
-  x: number
-  y: number
-  size: number
-  z?: number
-}) {
-  return (
-    <div
-      className="absolute rounded-full bg-gradient-to-br from-lime-300 via-emerald-400 to-emerald-700 shadow-lg shadow-emerald-900/20 ring-1 ring-white/60"
-      style={{
-        width: size,
-        height: size,
-        left: `calc(50% + ${x}px)`,
-        top: `calc(50% + ${y}px)`,
-        transform: `translate(-50%, -50%) translateZ(${z}px)`,
-      }}
-    />
-  )
-}
-
-function Pot3D({ scale }: { scale: number }) {
-  return (
-    <div
-      className="absolute left-1/2 top-[60%] h-40 w-44 -translate-x-1/2"
-      style={{
-        transform: `translateX(-50%) scale(${scale}) rotateX(4deg)`,
-        transformStyle: "preserve-3d",
+        minHeight: "520px",
+        background: "radial-gradient(ellipse 85% 65% at 50% 65%, #1a3d20 0%, #0a1a0e 100%)",
+        cursor: "none",
       }}
     >
-      <div className="absolute left-1/2 top-0 h-10 w-44 -translate-x-1/2 rounded-[999px] bg-gradient-to-b from-orange-500 to-orange-700 shadow-xl ring-2 ring-orange-300/50" />
       <div
-        className="absolute left-1/2 top-5 h-28 w-36 -translate-x-1/2 bg-gradient-to-br from-orange-500 via-orange-700 to-orange-900 shadow-2xl"
+        ref={bgRef}
+        className="absolute inset-0 rounded-[2.5rem]"
         style={{
-          clipPath: "polygon(4% 0%, 96% 0%, 78% 100%, 22% 100%)",
-          borderRadius: "0 0 28px 28px",
+          background: "radial-gradient(ellipse 60% 50% at 50% 55%, #1e4a25 0%, transparent 70%)",
+          transition: "transform 0.12s ease-out",
         }}
       />
-      <div className="absolute left-1/2 top-3 h-7 w-36 -translate-x-1/2 rounded-[999px] bg-[#3b2115] shadow-inner" />
-      <div className="absolute left-[30%] top-7 h-20 w-5 rounded-full bg-white/10 blur-[1px]" />
-    </div>
-  )
-}
-
-function RosetteModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
-  const count = stageLeafCount(stage, 14)
-  return (
-    <>
-      {Array.from({ length: count }).map((_, index) => {
-        const ring = index % 3
-        const angle = (360 / count) * index
-        const distance = 10 + ring * 10 * scale
-        const width = (24 + ring * 5) * scale
-        const height = (66 + ring * 14) * scale
-        return (
-          <Leaf
-            key={index}
-            angle={angle}
-            distance={distance}
-            width={width}
-            height={height}
-            color={index % 4 === 0 ? "rose" : index % 3 === 0 ? "light" : "green"}
-            z={ring * 8}
-            tilt={62}
-          />
-        )
-      })}
-      <Leaf angle={0} distance={0} width={30 * scale} height={60 * scale} color="light" z={40} tilt={72} />
-    </>
-  )
-}
-
-function VerticalModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
-  const count = stageLeafCount(stage, 11)
-  return (
-    <>
-      {Array.from({ length: count }).map((_, index) => {
-        const angle = -62 + (124 / Math.max(1, count - 1)) * index
-        const height = (95 + (index % 3) * 20) * scale
-        const width = (18 + (index % 2) * 5) * scale
-        return (
-          <Leaf
-            key={index}
-            angle={angle}
-            distance={6 * scale}
-            width={width}
-            height={height}
-            color={index % 3 === 0 ? "dark" : "green"}
-            z={index * 3}
-            tilt={38}
-          />
-        )
-      })}
-    </>
-  )
-}
-
-function CompactModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
-  const count = stageLeafCount(stage, 12)
-  return (
-    <>
-      {Array.from({ length: count }).map((_, index) => {
-        const angle = (360 / count) * index
-        return (
-          <Leaf
-            key={index}
-            angle={angle}
-            distance={8 * scale}
-            width={(18 + (index % 2) * 5) * scale}
-            height={(78 + (index % 3) * 12) * scale}
-            color={index % 3 === 0 ? "dark" : "green"}
-            z={(index % 4) * 8}
-            tilt={52}
-          />
-        )
-      })}
-    </>
-  )
-}
-
-function CucharitaModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
-  const count = stageLeafCount(stage, 9)
-  return (
-    <>
-      {Array.from({ length: count }).map((_, index) => {
-        const angle = -75 + (150 / Math.max(1, count - 1)) * index
-        const stemHeight = (78 + (index % 3) * 22) * scale
-        return (
-          <div key={index}>
-            <Stem angle={angle} height={stemHeight} z={index * 5} />
-            <div
-              className="absolute left-1/2 top-1/2 rounded-full bg-gradient-to-br from-lime-300 via-green-400 to-emerald-700 shadow-xl shadow-emerald-950/10 ring-1 ring-white/60"
-              style={{
-                width: 42 * scale,
-                height: 46 * scale,
-                transform: `translate(-50%, -50%) rotateZ(${angle}deg) translateY(-${stemHeight + 18}px) rotateX(48deg) translateZ(${index * 8}px)`,
-              }}
-            />
-          </div>
-        )
-      })}
-    </>
-  )
-}
-
-function ColganteModel({ scale, stage }: { scale: number; stage: GrowthStageId }) {
-  const count = stageLeafCount(stage, 18)
-  const drop = stage === "1m" ? 32 : stage === "6m" ? 58 : 88
-  return (
-    <>
-      {Array.from({ length: 8 }).map((_, index) => (
-        <Leaf
-          key={`top-${index}`}
-          angle={(360 / 8) * index}
-          distance={8 * scale}
-          width={20 * scale}
-          height={56 * scale}
-          color="green"
-          z={index * 4}
-          tilt={58}
-        />
-      ))}
-
-      {Array.from({ length: count }).map((_, index) => {
-        const strand = index % 4
-        const row = Math.floor(index / 4)
-        const x = [-50, -22, 22, 50][strand]
-        const y = 8 + row * (drop / 4)
-        return (
-          <Bead
-            key={index}
-            x={x * scale + Math.sin(row) * 8}
-            y={y * scale}
-            size={(17 + (index % 3) * 3) * scale}
-            z={row * 6}
-          />
-        )
-      })}
-    </>
-  )
-}
-
-function PlantModel3D({ plant, stage }: { plant: Plant; stage: GrowthStageId }) {
-  const scale = stageScale(stage)
-  const potScale = stage === "1m" ? 0.9 : stage === "6m" ? 1 : 1.06
-
-  return (
-    <div className="relative h-[430px] overflow-hidden rounded-[1.7rem] bg-gradient-to-br from-emerald-50 via-lime-50 to-white ring-1 ring-emerald-100 [perspective:1300px]">
-      <div className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.22),transparent_28%),radial-gradient(circle_at_80%_70%,rgba(132,204,22,0.18),transparent_30%)]" />
 
       <div
-        className="absolute left-1/2 top-[50%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-200/80"
-        style={{ transform: "translate(-50%, -50%) rotateX(72deg) rotateZ(-12deg)" }}
-      />
-      <div
-        className="absolute left-1/2 top-[54%] h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full border border-lime-200/70"
-        style={{ transform: "translate(-50%, -50%) rotateX(72deg) rotateZ(16deg)" }}
-      />
-      <div className="absolute left-1/2 top-[69%] h-16 w-72 -translate-x-1/2 rounded-full bg-emerald-950/10 blur-2xl" />
-
-      <div className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
-        {growthStages.find((item) => item.id === stage)?.label}
-      </div>
-      <div className="absolute right-5 top-5 rounded-full bg-emerald-950 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white shadow-sm">
-        Modelo 3D referencial
-      </div>
-
-      <div
-        className="absolute left-1/2 top-[43%] h-0 w-0 [transform-style:preserve-3d]"
+        ref={shadowRef}
+        className="absolute bottom-0 left-0 right-0"
         style={{
-          transform: "translate(-50%, -50%) rotateX(18deg) rotateY(-22deg)",
+          height: "50%",
+          background: "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 100%)",
+          transition: "transform 0.1s ease-out",
+        }}
+      />
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          ref={imgRef}
+          src={plant.image}
+          alt={plant.name}
+          className={isAvailable ? "" : "opacity-40 grayscale"}
+          style={{
+            maxHeight: "82%",
+            maxWidth: "70%",
+            objectFit: "contain",
+            display: "block",
+            filter: isAvailable
+              ? "drop-shadow(0 16px 40px rgba(0,0,0,0.6)) drop-shadow(0 3px 10px rgba(0,0,0,0.45))"
+              : "grayscale(1) drop-shadow(0 8px 20px rgba(0,0,0,0.4))",
+            willChange: "transform",
+            transition: "transform 0.07s ease-out",
+          }}
+        />
+      </div>
+
+      <div ref={badgeRef} className="absolute left-5 top-5" style={{ transition: "transform 0.08s ease-out" }}>
+        <span
+          className="rounded-full px-4 py-2 text-xs font-semibold backdrop-blur-md"
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            color: "rgba(255,255,255,0.9)",
+            border: "0.5px solid rgba(255,255,255,0.18)",
+          }}
+        >
+          {plant.category}
+        </span>
+      </div>
+
+      {!isAvailable && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="rounded-2xl bg-white/90 px-6 py-4 text-center shadow-xl backdrop-blur-sm">
+            <p className="text-lg font-semibold text-zinc-700">Sin stock</p>
+            <p className="mt-1 text-sm text-zinc-500">Consulta disponibilidad futura</p>
+          </div>
+        </div>
+      )}
+
+      <div
+        ref={infoPanelRef}
+        className="absolute bottom-5 left-5 right-5 flex gap-2"
+        style={{ transition: "transform 0.08s ease-out" }}
+      >
+        {[
+          { label: "Luz", value: plant.light === "baja" ? "Poca luz" : plant.light === "media" ? "Luz indirecta" : "Mucha luz" },
+          { label: "Riego", value: plant.water },
+          { label: "Cuidado", value: plant.care === "facil" ? "Muy fácil" : "Media" },
+        ].map(({ label, value }) => (
+          <div
+            key={label}
+            className="flex-1 rounded-2xl px-3 py-2 text-center backdrop-blur-md"
+            style={{ background: "rgba(0,0,0,0.45)", border: "0.5px solid rgba(255,255,255,0.1)" }}
+          >
+            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.45)", marginBottom: "2px" }}>{label}</p>
+            <p style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.9)" }}>{value}</p>
+          </div>
+        ))}
+        <div
+          className="rounded-2xl px-4 py-2 text-center backdrop-blur-md"
+          style={{ background: "rgba(20,90,35,0.7)", border: "0.5px solid rgba(80,180,100,0.25)" }}
+        >
+          <p style={{ fontSize: "10px", color: "rgba(167,240,184,0.7)", marginBottom: "2px" }}>Precio</p>
+          <p style={{ fontSize: "16px", fontWeight: 500, color: "#7df09a", whiteSpace: "nowrap" }}>{plant.price}</p>
+        </div>
+      </div>
+
+      <div
+        ref={cursorRef}
+        style={{
+          position: "absolute",
+          width: "28px",
+          height: "28px",
+          border: "1.5px solid rgba(255,255,255,0.3)",
+          borderRadius: "50%",
+          pointerEvents: "none",
+          transform: "translate(-50%, -50%)",
+          opacity: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "opacity 0.2s",
         }}
       >
-        {plant.growthMood === "roseta" && <RosetteModel scale={scale} stage={stage} />}
-        {plant.growthMood === "vertical" && <VerticalModel scale={scale} stage={stage} />}
-        {plant.growthMood === "compacta" && <CompactModel scale={scale} stage={stage} />}
-        {plant.growthMood === "cucharita" && <CucharitaModel scale={scale} stage={stage} />}
-        {plant.growthMood === "colgante" && <ColganteModel scale={scale} stage={stage} />}
+        <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(255,255,255,0.7)" }} />
       </div>
 
-      <Pot3D scale={potScale} />
-
-      <div className="absolute bottom-5 left-5 right-5 grid grid-cols-3 gap-2">
-        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Etapa</p>
-          <p className="mt-1 text-xs font-semibold text-emerald-950">{growthStages.find((item) => item.id === stage)?.title}</p>
-        </div>
-        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Vista</p>
-          <p className="mt-1 text-xs font-semibold text-emerald-950">Referencial</p>
-        </div>
-        <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-emerald-100 backdrop-blur">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600">Macetero</p>
-          <p className="mt-1 text-xs font-semibold text-emerald-950">{plant.potSize.replace("Macetero: ", "")}</p>
-        </div>
+      <div
+        ref={hintRef}
+        style={{
+          position: "absolute",
+          bottom: "60px",
+          right: "18px",
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.22)",
+          pointerEvents: "none",
+          transition: "opacity 0.4s",
+        }}
+      >
+        mueve el cursor
       </div>
     </div>
   )
 }
-
-function GrowthPreview({ plant }: { plant: Plant }) {
-  const [stage, setStage] = useState<GrowthStageId>("1m")
-  const selected = growthStages.find((item) => item.id === stage) ?? growthStages[0]
-
-  return (
-    <div className="mt-6 rounded-[1.8rem] border border-emerald-100 bg-white p-5 shadow-sm sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
-            Simulación 3D de crecimiento
-          </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
-            Mira cómo podría evolucionar
-          </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
-            Modelo visual referencial, creado para imaginar su evolución. No reemplaza la foto real del producto.
-          </p>
-        </div>
-
-        <div className="flex shrink-0 gap-2 rounded-full bg-emerald-50 p-1 ring-1 ring-emerald-100">
-          {growthStages.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setStage(item.id)}
-              className={[
-                "rounded-full px-3 py-2 text-xs font-semibold transition",
-                stage === item.id
-                  ? "bg-emerald-950 text-white shadow-sm"
-                  : "text-emerald-800 hover:bg-white",
-              ].join(" ")}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_0.95fr]">
-        <PlantModel3D plant={plant} stage={stage} />
-
-        <div className="rounded-[2rem] bg-emerald-50 p-5 ring-1 ring-emerald-100 sm:p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-            {selected.label}
-          </p>
-          <h4 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
-            {selected.note}
-          </h4>
-          <p className="mt-4 text-sm leading-7 text-zinc-700">
-            {growthText(plant, stage)}
-          </p>
-
-          <div className="mt-5 rounded-[1.4rem] bg-white p-4 ring-1 ring-emerald-100">
-            <p className="text-sm font-semibold text-emerald-950">Qué mirar en esta etapa</p>
-            <p className="mt-2 text-sm leading-7 text-zinc-600">
-              {selected.focus}
-            </p>
-          </div>
-
-          <div className="mt-5 grid gap-3">
-            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
-              <span className="font-semibold text-emerald-900">Luz recomendada:</span>{" "}
-              <span className="text-zinc-600">{lightLabel(plant.light)}</span>
-            </div>
-            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
-              <span className="font-semibold text-emerald-900">Riego:</span>{" "}
-              <span className="text-zinc-600">{plant.water}</span>
-            </div>
-            <div className="rounded-2xl bg-white p-4 ring-1 ring-emerald-100">
-              <span className="font-semibold text-emerald-900">Cuidado:</span>{" "}
-              <span className="text-zinc-600">{careLabel(plant.care)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 
 function DetailView({
   plant,
+  allPlants,
   setView,
+  openDetail,
 }: {
   plant: Plant
+  allPlants: Plant[]
   setView: (view: View) => void
+  openDetail: (plant: Plant) => void
 }) {
+  const currentIndex = allPlants.findIndex((p) => p.id === plant.id)
+  const prevPlant = currentIndex > 0 ? allPlants[currentIndex - 1] : null
+  const nextPlant = currentIndex < allPlants.length - 1 ? allPlants[currentIndex + 1] : null
+  const isAvailable = plant.available !== false
+
+  const [copied, setCopied] = useState(false)
+
+  function copyLink() {
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href)
+      url.searchParams.set("planta", plant.id)
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-      <button
-        onClick={() => setView("catalogo")}
-        className="mb-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
-      >
-        ← Volver al catálogo
-      </button>
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <button
+          onClick={() => setView("catalogo")}
+          className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
+        >
+          ← Volver al catálogo
+        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={copyLink}
+            className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-600 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50"
+          >
+            {copied ? "✓ Link copiado" : "Compartir"}
+          </button>
+          <button
+            onClick={() => prevPlant && openDetail(prevPlant)}
+            disabled={!prevPlant}
+            title={prevPlant ? `Anterior: ${prevPlant.name}` : undefined}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            ←
+          </button>
+          <span className="text-xs text-zinc-400">{currentIndex + 1} / {allPlants.length}</span>
+          <button
+            onClick={() => nextPlant && openDetail(nextPlant)}
+            disabled={!nextPlant}
+            title={nextPlant ? `Siguiente: ${nextPlant.name}` : undefined}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-emerald-900 shadow-sm ring-1 ring-emerald-100 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            →
+          </button>
+        </div>
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="overflow-hidden rounded-[2.5rem] border border-emerald-100 bg-white shadow-2xl shadow-emerald-200/50">
-          <div className="relative min-h-[520px] bg-emerald-50 p-4">
-            <img src={plant.image} alt={plant.name} className="h-full max-h-[680px] w-full object-contain" />
-            <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100 backdrop-blur">
-              {plant.category}
-            </div>
-          </div>
+        <div className={["overflow-hidden rounded-[2.5rem] border shadow-2xl", isAvailable ? "border-emerald-100 shadow-emerald-200/50" : "border-zinc-200 shadow-zinc-200/50"].join(" ")}>
+          <PlantViewer plant={plant} isAvailable={isAvailable} />
         </div>
 
         <div className="rounded-[2.5rem] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/70 sm:p-8">
@@ -1032,6 +848,11 @@ function DetailView({
             <span className="rounded-full bg-lime-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-lime-100">
               Incluye guía de cuidado
             </span>
+            {!isAvailable && (
+              <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-600 ring-1 ring-zinc-200">
+                Sin stock
+              </span>
+            )}
           </div>
 
           <div className="mt-5 flex items-start justify-between gap-4">
@@ -1085,14 +906,40 @@ function DetailView({
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar por WhatsApp</Button>
+            {isAvailable ? (
+              <Button href={whatsappLink(plant)} variant="green" className="w-full">Consultar por WhatsApp</Button>
+            ) : (
+              <Button href={whatsappLink(plant)} variant="light" className="w-full">Consultar disponibilidad futura</Button>
+            )}
             <Button href={BRAND.instagramUrl} variant="light" className="w-full">Ver Instagram</Button>
           </div>
+
+          {(prevPlant || nextPlant) && (
+            <div className="mt-6 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-5">
+              {prevPlant ? (
+                <button
+                  onClick={() => openDetail(prevPlant)}
+                  className="flex flex-col items-start rounded-2xl bg-emerald-50 p-3 text-left transition hover:bg-emerald-100 ring-1 ring-emerald-100"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">← Anterior</p>
+                  <p className="mt-1 text-sm font-semibold text-emerald-950 leading-tight">{prevPlant.name}</p>
+                  <p className="text-xs text-zinc-500">{prevPlant.price}</p>
+                </button>
+              ) : <div />}
+              {nextPlant ? (
+                <button
+                  onClick={() => openDetail(nextPlant)}
+                  className="flex flex-col items-end rounded-2xl bg-emerald-50 p-3 text-right transition hover:bg-emerald-100 ring-1 ring-emerald-100"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-500">Siguiente →</p>
+                  <p className="mt-1 text-sm font-semibold text-emerald-950 leading-tight">{nextPlant.name}</p>
+                  <p className="text-xs text-zinc-500">{nextPlant.price}</p>
+                </button>
+              ) : <div />}
+            </div>
+          )}
         </div>
       </div>
-
-
-      <GrowthPreview plant={plant} />
     </section>
   )
 }
@@ -1220,25 +1067,46 @@ function CatalogView({ openDetail }: { openDetail: (plant: Plant) => void }) {
         />
       </div>
 
-      <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
-        {categories.map((item) => (
-          <button
-            key={item}
-            onClick={() => setCategory(item)}
-            className={[
-              "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-              category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
-            ].join(" ")}
-          >
-            {item}
-          </button>
-        ))}
+      <div className="mt-7 flex items-center justify-between gap-4">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {categories.map((item) => (
+            <button
+              key={item}
+              onClick={() => setCategory(item)}
+              className={[
+                "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
+                category === item ? "bg-emerald-950 text-white" : "bg-white text-zinc-600 ring-1 ring-emerald-100 hover:text-emerald-950",
+              ].join(" ")}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        <p className="shrink-0 text-sm text-zinc-500">
+          {filteredPlants.length} {filteredPlants.length === 1 ? "planta" : "plantas"}
+        </p>
       </div>
 
       <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {filteredPlants.map((plant) => (
-          <PlantCard key={plant.id} plant={plant} onOpen={openDetail} />
-        ))}
+        {filteredPlants.length === 0 ? (
+          <div className="col-span-full flex flex-col items-center justify-center rounded-[2rem] border border-emerald-100 bg-white py-20 text-center shadow-sm">
+            <p className="text-4xl">🌿</p>
+            <p className="mt-4 text-lg font-semibold text-emerald-950">Sin resultados</p>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-500">
+              No encontramos plantas que coincidan con <span className="font-semibold">"{query}"</span>. Prueba con otro nombre o borra el filtro.
+            </p>
+            <button
+              onClick={() => { setQuery(""); setCategory("Todas") }}
+              className="mt-5 rounded-full bg-emerald-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            >
+              Ver todas las plantas
+            </button>
+          </div>
+        ) : (
+          filteredPlants.map((plant) => (
+            <PlantCard key={plant.id} plant={plant} onOpen={openDetail} />
+          ))
+        )}
       </div>
     </section>
   )
@@ -1258,6 +1126,8 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
   const topScore = recommended[0]?.score ?? 0
   const bestMatches = recommended.filter((item) => item.score >= topScore - 1).slice(0, 3)
   const otherOptions = recommended.filter((item) => item.score < topScore - 1).slice(0, 6)
+
+  const resultKey = `${light}-${care}-${useCase}`
 
   const lightText = light === "baja" ? "poca luz" : light === "media" ? "luz indirecta" : "mucha luz"
   const careText = care === "facil" ? "muy fácil cuidado" : "cuidado medio"
@@ -1307,7 +1177,7 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
           </div>
         </div>
 
-        <div className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5">
+        <div key={resultKey} className="mt-6 rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 transition-all duration-300">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Resultado</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-emerald-950">
             Estas plantas calzan mejor con tus elecciones
@@ -1315,7 +1185,7 @@ function RecommenderView({ openDetail }: { openDetail: (plant: Plant) => void })
           <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Opciones ordenadas según tus elecciones. Para confirmar stock y entrega, escríbenos por WhatsApp.</p>
         </div>
 
-        <div className="mt-6">
+        <div key={resultKey + "-results"} className="mt-6">
           <h3 className="mb-4 text-xl font-semibold tracking-tight text-emerald-950">Mejor calce</h3>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {bestMatches.map(({ plant }) => <PlantCard key={plant.id} plant={plant} compact onOpen={openDetail} />)}
@@ -1366,14 +1236,40 @@ function DeliveryView() {
 }
 
 export default function Home() {
-  const [view, setView] = useState<View>("inicio")
-  const [selectedPlantId, setSelectedPlantId] = useState(plants[0]?.id ?? "")
+  const getInitialState = (): { view: View; plantId: string } => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      const plantaParam = params.get("planta")
+      if (plantaParam && plants.find((p) => p.id === plantaParam)) {
+        return { view: "detalle", plantId: plantaParam }
+      }
+    }
+    return { view: "inicio", plantId: plants[0]?.id ?? "" }
+  }
+
+  const initial = getInitialState()
+  const [view, setView] = useState<View>(initial.view)
+  const [selectedPlantId, setSelectedPlantId] = useState(initial.plantId)
 
   const selectedPlant = plants.find((plant) => plant.id === selectedPlantId) ?? plants[0]
 
   function openDetail(plant: Plant) {
     setSelectedPlantId(plant.id)
     setView("detalle")
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href)
+      url.searchParams.set("planta", plant.id)
+      window.history.pushState({}, "", url.toString())
+    }
+  }
+
+  function handleSetView(v: View) {
+    setView(v)
+    if (v !== "detalle" && typeof window !== "undefined") {
+      const url = new URL(window.location.href)
+      url.searchParams.delete("planta")
+      window.history.pushState({}, "", url.toString())
+    }
   }
 
   return (
@@ -1389,7 +1285,7 @@ export default function Home() {
 
       <header className="sticky top-0 z-50 border-b border-white/70 bg-[#f3f8f4]/90 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-          <button onClick={() => setView("inicio")} className="flex items-center gap-3 text-left">
+          <button onClick={() => handleSetView("inicio")} className="flex items-center gap-3 text-left">
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-100">
               <img src={BRAND.logo} alt="Logo Plantas Mary" className="h-full w-full object-cover" />
             </div>
@@ -1405,18 +1301,18 @@ export default function Home() {
         </div>
 
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8">
-          <NavButton active={view === "inicio"} onClick={() => setView("inicio")}>Inicio</NavButton>
-          <NavButton active={view === "catalogo" || view === "detalle"} onClick={() => setView("catalogo")}>Catálogo</NavButton>
-          <NavButton active={view === "elegir"} onClick={() => setView("elegir")}>Elegir</NavButton>
-          <NavButton active={view === "entrega"} onClick={() => setView("entrega")}>Entrega</NavButton>
+          <NavButton active={view === "inicio"} onClick={() => handleSetView("inicio")}>Inicio</NavButton>
+          <NavButton active={view === "catalogo" || view === "detalle"} onClick={() => handleSetView("catalogo")}>Catálogo</NavButton>
+          <NavButton active={view === "elegir"} onClick={() => handleSetView("elegir")}>Elegir</NavButton>
+          <NavButton active={view === "entrega"} onClick={() => handleSetView("entrega")}>Entrega</NavButton>
         </div>
       </header>
 
       <div className="relative">
-        {view === "inicio" && <HomeView setView={setView} openDetail={openDetail} />}
+        {view === "inicio" && <HomeView setView={handleSetView} openDetail={openDetail} />}
         {view === "catalogo" && <CatalogView openDetail={openDetail} />}
         {view === "elegir" && <RecommenderView openDetail={openDetail} />}
-        {view === "detalle" && selectedPlant && <DetailView plant={selectedPlant} setView={setView} />}
+        {view === "detalle" && selectedPlant && <DetailView plant={selectedPlant} allPlants={plants} setView={handleSetView} openDetail={openDetail} />}
         {view === "entrega" && <DeliveryView />}
       </div>
 
